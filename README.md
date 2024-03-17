@@ -37,11 +37,10 @@ Ofrezco servicios de desarrollo de aplicaciones móviles y web, adaptando cada p
 
 #### Contacto
 
-Tu apoyo es esencial para mantener y mejorar este proyecto. Si deseas contribuir, puedes hacerlo a través de [Buy Me a Coffee](https://www.buymeacoffee.com/albeirojbtr). Cada contribución es muy apreciada y ayuda a seguir desarrollando y mejorando.
-
 - **LinkedIn**: [Visita mi perfil](http://www.linkedin.com/in/albeiro-jose-burbano-tobar-759ba4297)
 - **GitHub**: [Explora mis proyectos](https://github.com/AlbeiroBurbanoTobar)
 - **Correo**: [Envíame un mensaje](mailto:aburbanot@unal.edu.co)
 
 #### Cómo Contribuir
 
+Tu apoyo es esencial para mantener y mejorar este proyecto. Si deseas contribuir, puedes hacerlo a través de [Buy Me a Coffee](https://www.buymeacoffee.com/albeirojbtr). Cada contribución es muy apreciada y ayuda a seguir desarrollando y mejorando.
