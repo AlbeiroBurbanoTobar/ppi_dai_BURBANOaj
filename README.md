@@ -34,9 +34,9 @@ Soy **Albeiro Jose Burbano Tobar**, un **Desarrollador Freelance** con enfoque e
 #### Servicios
 
 Ofrezco servicios de desarrollo de aplicaciones móviles y web, adaptando cada proyecto a las necesidades específicas de mis clientes para proporcionar soluciones innovadoras y eficientes.
-
+[
 #### Contacto
 
-- **LinkedIn**: [Visita mi perfil](#http://www.linkedin.com/in/albeiro-jose-burbano-tobar-759ba4297)
-- **GitHub**: [Explora mis proyectos](#https://github.com/AlbeiroBurbanoTobar)
+- **LinkedIn**: [Visita mi perfil](http://www.linkedin.com/in/albeiro-jose-burbano-tobar-759ba4297)
+- **GitHub**: [Explora mis proyectos](https://github.com/AlbeiroBurbanoTobar)
 - **Correo**: [Envíame un mensaje](mailto:aburbanot@unal.edu.co)
