@@ -1,24 +1,24 @@
-# RutaÁgil
+# PódiumPro
 
 ## Descripción
 
-RutaÁgil es una aplicación diseñada para analizar y comparar diferentes medios de transporte en Medellín, como autobuses, metro y bicicletas compartida. Su objetivo principal es sugerir al usuario la opción más rápida y económica para llegar a su destino, tomando en cuenta el tiempo de viaje, el costo y la eficiencia de cada medio.
+La app permitirá a organizadores de torneos gestionar equipos, calendarios, resultados y clasificaciones, facilitando la organización y seguimiento de competiciones deportivas.
 
 ## Justificación
 
-Ante el crecimiento urbano y el aumento del tráfico, es vital optimizar los desplazamientos en la ciudad. Esta aplicación ofrece una solución tecnológica para ayudar a los usuarios a tomar decisiones informadas sobre cómo moverse de manera eficiente y económica.
+La gestión eficiente de ligas y torneos es fundamental para organizadores y participantes, y una app que facilita estas tareas tiene un buen potencial de mercado.
 
 ## Tecnologías Utilizadas
 
-- **NumPy**: Para cálculos numéricos complejos relacionados con tiempos y costos.
-- **Pandas**: Para manipulación y análisis de datos sobre medios de transporte.
-- **Matplotlib**: Para visualización de gráficos comparativos.
-- **Scipy**: Para análisis estadísticos sobre eficiencia y confiabilidad.
-- **Geopandas**: Para representación de datos geoespaciales y visualización de mapas.
+- **NumPy**: Se utilizará para realizar cálculos numéricos complejos, como la determinación de clasificaciones basadas en puntos, diferencia de goles o resultados directos, y el análisis estadístico de rendimiento de equipos.
+- **Pandas**: Se emplea para organizar y manipular los datos de equipos, partidos y resultados, facilitando la gestión de la información y la generación de informes y clasificaciones.
+- **Matplotlib**: Se usará para crear visualizaciones claras y atractivas de clasificaciones, estadísticas de equipos y jugadores, y otros datos relevantes, mejorando la presentación de la información.
+- **Scipy**: Se aplicará en el análisis estadístico avanzado y la implementación de modelos predictivos para la planificación de torneos, como la simulación de posibles escenarios o la predicción de resultados.
+- **Geopandas**: Se utilizará para mapear la ubicación de los eventos deportivos y analizar la distribución geográfica de los equipos y partidos, lo que puede ser útil para la planificación logística y la asignación de sedes.
 
 ## Sobre el Desarrollador
 
-Soy **Albeiro Jose Burbano Tobar**, un **Desarrollador Freelance** con enfoque en desarrollo web y móvil. Actualmente, estoy ampliando mis conocimientos y habilidades como estudiante de ingeniería en la **Universidad Nacional de Colombia, Facultad de Minas** y como miembro activo del **Semillero de Ciberseguridad** del Grupo de investigación T&T.
+Soy **Albeiro Jose Burbano Tobar**, un **Desarrollador Freelance** con enfoque en desarrollo web y móvil. 
 
 #### Experiencia y Habilidades
 
@@ -27,9 +27,7 @@ Soy **Albeiro Jose Burbano Tobar**, un **Desarrollador Freelance** con enfoque e
 - **Autonomía**: Habilidad para trabajar de manera independiente, enfrentando diversos desafíos.
 - **Resolución de Problemas**: Fuerte capacidad analítica para encontrar soluciones efectivas.
 
-#### Objetivos Profesionales
 
-- **Desarrollo Profesional**: Busco expandir mi experiencia en desarrollo de software, explorando nuevas tecnologías y marcos de trabajo para permanecer a la vanguardia en mi campo.
 
 #### Servicios
 
