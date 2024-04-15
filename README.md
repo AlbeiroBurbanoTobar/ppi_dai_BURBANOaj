@@ -16,6 +16,15 @@ La gestión eficiente de ligas y torneos es fundamental para organizadores y par
 - **Scipy**: Se aplicará en el análisis estadístico avanzado y la implementación de modelos predictivos para la planificación de torneos, como la simulación de posibles escenarios o la predicción de resultados.
 - **Geopandas**: Se utilizará para mapear la ubicación de los eventos deportivos y analizar la distribución geográfica de los equipos y partidos, lo que puede ser útil para la planificación logística y la asignación de sedes.
 
+## Funcionalidades Básicas
+- **Visualización de Calendarios y Resultados:** Permitir a cualquier visitante ver los calendarios de los torneos, incluyendo fechas, horarios y lugares de los encuentros, así como los resultados de los partidos ya jugados.
+- **Estadísticas Generales:** Acceso a estadísticas básicas de equipos y jugadores, como goles marcados, tarjetas amarillas/rojas, y partidos jugados.
+- **Mapas de Eventos:** Utilizar Geopandas para ofrecer visualizaciones de las ubicaciones de los torneos y partidos, facilitando a los espectadores encontrar dónde se realizan los eventos.
+
+## Funcionalidades Avanzadas
+- **Gestión de Equipos y Jugadores:** Permitir a los usuarios registrados crear y administrar equipos, incluyendo el registro de jugadores.
+- **Programación de Partidos:** Herramientas para programar partidos, asignar árbitros, y configurar los detalles de los encuentros.
+
 ## Sobre el Desarrollador
 
 Soy **Albeiro Jose Burbano Tobar**, un **Desarrollador Freelance** con enfoque en desarrollo web y móvil. 
