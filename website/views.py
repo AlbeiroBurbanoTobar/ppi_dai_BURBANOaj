@@ -6,38 +6,53 @@ import json
 
 views = Blueprint('views', __name__)
 
-
 @views.route('/', methods=['GET', 'POST'])
 @login_required
 def home():
-    if request.method == 'POST': 
-        note = request.form.get('note')#Gets the note from the HTML 
+    """
+    Handles the home page functionality.
 
+    If the request method is POST, it retrieves the note from the form, checks if it is too short,
+    and if not, it creates a new note and adds it to the database. It then flashes a success
+    message and renders the home.html template.
+
+    If the request method is GET, it simply renders the home.html template.
+    """
+    if request.method == 'POST':
+        note = request.form.get('note')  # Gets the note from the HTML
         if len(note) < 1:
-            flash('Note is too short!', category='error') 
+            flash('Note is too short!', category='error')
         else:
-            new_note = Note(data=note, user_id=current_user.id)  #providing the schema for the note 
-            db.session.add(new_note) #adding the note to the database 
+            new_note = Note(data=note, user_id=current_user.id)  # Providing the schema for the note
+            db.session.add(new_note)  # Adding the note to the database
             db.session.commit()
             flash('Note added!', category='success')
-
     return render_template("home.html", user=current_user)
 
 @views.route('/guest')
 def guest():
-    # Asumiendo que quieres pasar la información del usuario si está autenticado,
-    # o None si no hay un usuario autenticado.
+    """
+    Renders the guest.html template, passing the current user if authenticated,
+    or None if there is no authenticated user.
+    """
+    # Assuming you want to pass the user information if authenticated,
+    # or None if there is no authenticated user.
     return render_template("guest.html", user=current_user if current_user.is_authenticated else None)
 
-
 @views.route('/delete-note', methods=['POST'])
-def delete_note():  
-    note = json.loads(request.data) # this function expects a JSON from the INDEX.js file 
+def delete_note():
+    """
+    Deletes a note from the database.
+
+    This function expects a JSON object from the INDEX.js file, with a 'noteId'
+    property. It then retrieves the note with the given ID, and if the note
+    belongs to the current user, it deletes the note from the database.
+    """
+    note = json.loads(request.data)  # this function expects a JSON from the INDEX.js file
     noteId = note['noteId']
     note = Note.query.get(noteId)
     if note:
         if note.user_id == current_user.id:
             db.session.delete(note)
             db.session.commit()
-
     return jsonify({})
