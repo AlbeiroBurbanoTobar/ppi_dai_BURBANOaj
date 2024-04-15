@@ -1,6 +1,27 @@
-{% extends "base.html" %} {% block title %}Home{% endblock %} {% block content
-%}
-<h1 align="center">Notes</h1>
+{% extends "base.html" %}
+
+{% block title %}
+Home
+{% endblock %}
+
+{% block content %}
+
+<!-- Futura Sección de Programación de Partidos -->
+<div id="programacion-partidos">
+    <h2>Match Programming</h2>
+    <p>Programacion de partidos, asignacion de árbitros y configuracion de detalles.</p>
+    <!-- En el futuro, agregar calendario interactivo y formularios de asignación -->
+</div>
+
+<!-- Futura Sección de Gestión de Equipos y Jugadores -->
+<div id="gestion-equipos">
+    <h2>Team and Player Management</h2>
+    <p>Aquí se crearán y administrarán los equipos y jugadores.</p>
+    <!-- En el futuro, agregar formularios y listas dinámicas -->
+</div>
+
+<!-- Sección de Notas -->
+<h3 align="center">Reminders and Tasks</h3>
 <ul class="list-group list-group-flush" id="notes">
   {% for note in user.notes %}
   <li class="list-group-item">
@@ -18,4 +39,30 @@
     <button type="submit" class="btn btn-primary">Add Note</button>
   </div>
 </form>
+<br>
+<br>
+<br>
+<br>
+<div id="mi-firma">
+  <span>Creado por Albeiro Burbano :)  </span>
+  <a href="mailto:aburbanot@unal.edu.co">
+      <img src="../static/email-icon.png" alt="Enviar correo" style="width: 24px; height: 24px; vertical-align: middle;">
+  </a>
+  <a href="https://www.freelancer.com/u/Albeiro73?sb=t">
+    <img src="../static/free-icon .png" alt="Ver perfil en freelancer" style="width: 24px; height: 24px; vertical-align: middle;">
+</a>
+<a href="https://github.com/AlbeiroBurbanoTobar/ppi_pl_BurbanoA">
+  <img src="../static/git-icon.png" alt="Ver repositorio" style="width: 24px; height: 24px; vertical-align: middle;">
+</a>
+</a>
+<a href="https://stackoverflow.com/users/24090991/albeiro-burbano">
+  <img src="../static/stack-icon.png" alt="Mira el perfil de stackoverflow" style="width: 24px; height: 24px; vertical-align: middle;">
+</a>
+<a href="http://www.linkedin.com/in/albeiro-jose-burbano-tobar-759ba4297">
+  <img src="../static/link-icon.png" alt="Mira el perfil de linkedin" style="width: 24px; height: 24px; vertical-align: middle;">
+</a>
+</div>
+
+
 {% endblock %}
+

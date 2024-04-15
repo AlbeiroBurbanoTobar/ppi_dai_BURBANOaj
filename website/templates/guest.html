@@ -1,5 +1,53 @@
-{% extends "base.html" %} {% block title %}Guest{% endblock %} {% block content
-    %}
-    <h1 align="center">Sin registro</h1>
-    {% endblock %}
-    
+{% extends "base.html" %}
+
+{% block title %}
+Guest
+{% endblock %}
+
+{% block content %}
+<h1 align="center">Visitor portal</h1>
+
+<!-- Sección de Calendarios y Resultados -->
+<div id="calendarios-resultados">
+    <h2>Calendars and Results</h2>
+    <p>Aquí se mostrarán los calendarios de los torneos y los resultados de los partidos.</p>
+    <!-- En el futuro, reemplazar con datos dinámicos -->
+</div>
+
+<!-- Sección de Estadísticas Generales -->
+<div id="estadisticas-generales">
+    <h2>General Statistics</h2>
+    <p>Acceso a estadísticas básicas de equipos y jugadores.</p>
+    <!-- En el futuro, reemplazar con datos dinámicos -->
+</div>
+
+<!-- Sección de Mapas de Eventos -->
+<div id="mapas-eventos">
+    <h2>Event Maps</h2>
+    <p>Mapas para localizar los eventos.</p>
+    <!-- En el futuro, reemplazar con mapas generados con Geopandas -->
+</div>
+<br>
+<br>
+<br>
+<br>
+<div id="mi-firma">
+  <span>Creado por Albeiro Burbano :)  </span>
+  <a href="mailto:aburbanot@unal.edu.co">
+      <img src="../static/email-icon.png" alt="Enviar correo" style="width: 24px; height: 24px; vertical-align: middle;">
+  </a>
+  <a href="https://www.freelancer.com/u/Albeiro73?sb=t">
+    <img src="../static/free-icon .png" alt="Ver perfil en freelancer" style="width: 24px; height: 24px; vertical-align: middle;">
+</a>
+<a href="https://github.com/AlbeiroBurbanoTobar/ppi_pl_BurbanoA">
+  <img src="../static/git-icon.png" alt="Ver repositorio" style="width: 24px; height: 24px; vertical-align: middle;">
+</a>
+</a>
+<a href="https://stackoverflow.com/users/24090991/albeiro-burbano">
+  <img src="../static/stack-icon.png" alt="Mira el perfil de stackoverflow" style="width: 24px; height: 24px; vertical-align: middle;">
+</a>
+<a href="http://www.linkedin.com/in/albeiro-jose-burbano-tobar-759ba4297">
+  <img src="../static/link-icon.png" alt="Mira el perfil de linkedin" style="width: 24px; height: 24px; vertical-align: middle;">
+</a>
+</div>
+{% endblock %}
