@@ -23,6 +23,12 @@ def home():
 
     return render_template("home.html", user=current_user)
 
+@views.route('/guest')
+def guest():
+    # Asumiendo que quieres pasar la información del usuario si está autenticado,
+    # o None si no hay un usuario autenticado.
+    return render_template("guest.html", user=current_user if current_user.is_authenticated else None)
+
 
 @views.route('/delete-note', methods=['POST'])
 def delete_note():  
