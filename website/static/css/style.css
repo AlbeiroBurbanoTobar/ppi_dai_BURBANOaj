@@ -1,0 +1,87 @@
+
+.form-change-password {
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 50px;
+    background: #fff;
+    border-radius: 15px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+}
+
+.form-change-password h3 {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.form-change-password label {
+    font-weight: bold;
+}
+
+.form-change-password input {
+    margin-bottom: 20px;
+}
+
+.form-change-password button {
+    width: 100%;
+    padding: 10px;
+    border-radius: 5px;
+    border: none;
+    background-color: #007bff;
+    color: white;
+    font-size: 16px;
+}
+
+.policy-container {
+
+    background-color: #fff;
+    border: 1px solid #ddd;
+    padding: 20px;
+    border-radius: 5px;
+    margin: 20px auto;
+    width: 60%;
+    max-width: 800px;
+}
+
+.policy-container h2 {
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.policy-container p {
+    margin-bottom: 20px;
+}
+
+.policy-container form {
+    text-align: center;
+}
+
+.policy-container form button {
+    margin: 10px;
+    padding: 10px 20px;
+}
+/* Estilos generales para botones en la política de privacidad */
+.policy-container button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    margin: 0 10px;
+}
+
+/* Estilos para el botón Accept */
+.policy-container button.accept {
+    background-color: #4CAF50; /* Verde */
+    color: white;
+}
+
+/* Estilos para el botón Decline */
+.policy-container button.decline {
+    background-color: #f44336; /* Rojo */
+    color: white;
+}
+
+/* Estilos para hover en los botones */
+.policy-container button:hover {
+    opacity: 0.8;
+}

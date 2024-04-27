@@ -45,7 +45,7 @@ def create_app():
 
     # Configure LoginManager
     login_manager = LoginManager()
-    login_manager.login_view = 'auth.login'
+    login_manager.login_view = 'views.guest'
     login_manager.init_app(app)
 
     # User loader function for LoginManager
