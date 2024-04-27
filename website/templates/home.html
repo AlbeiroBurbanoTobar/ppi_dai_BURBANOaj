@@ -5,6 +5,12 @@ Home
 {% endblock %}
 
 {% block content %}
+{% if current_user.is_authenticated %}
+    <!-- Mensaje de bienvenida con el nombre del usuario -->
+    <div class="welcome-message">
+        <h1>Bienvenido, {{ current_user.first_name }}.</h1>
+    </div>
+{% endif %}
 
 <!-- Futura Sección de Programación de Partidos -->
 <div id="programacion-partidos">
