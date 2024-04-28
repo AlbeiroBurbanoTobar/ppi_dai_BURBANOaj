@@ -85,3 +85,36 @@
 .policy-container button:hover {
     opacity: 0.8;
 }
+
+/* Estilos de la barra lateral */
+.sidebar-container {
+    width: 200px;
+    background-color: #fafbfb;
+    padding-top: 60px;
+    float: left;
+    height: 100vh;
+}
+
+/* Estilos de la barra lateral para los enlaces */
+.sidebar a {
+    padding: 10px 15px;
+    text-decoration: none;
+    font-size: 16px;
+    color: #333;
+    display: block;
+    white-space: nowrap;
+}
+
+.sidebar a:hover {
+    background-color: #ddd;
+}
+
+/* Estilo para el contenido principal cuando hay barra lateral */
+.content-with-sidebar {
+    margin-left: 200px;
+}
+
+/* Restablece el margen para el contenido cuando no hay barra lateral */
+.content-no-sidebar {
+    margin-left: 0;
+}

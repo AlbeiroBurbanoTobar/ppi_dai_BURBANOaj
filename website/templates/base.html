@@ -38,6 +38,7 @@
           <a class="nav-item nav-link" id="home" href="/">Home</a>
            <a class="nav-item nav-link" id="changePassword" href="/change-password">Change Password</a>
           <a class="nav-item nav-link" id="logout" href="/logout">Logout</a>
+        </div>
           {% else %}
           <a class="nav-item nav-link" id="login" href="/login">Login</a>
           <a class="nav-item nav-link" id="signUp" href="{{ url_for('auth.privacy_policy') }}">Sign Up</a>
@@ -47,6 +48,22 @@
       </div>
     </nav>
 
+    {% if user.is_authenticated %}
+    <div class="sidebar-container">
+        <div class="sidebar">
+          <a href="{{ url_for('views.tournaments') }}">
+            <i class="fa fa-trophy" aria-hidden="true"></i> Tournaments
+        </a>
+        <a href="{{ url_for('views.calendar') }}">
+            <i class="fa fa-calendar" aria-hidden="true"></i> Calendar
+        </a>
+        <a href="{{ url_for('views.teams') }}">
+            <i class="fa fa-users" aria-hidden="true"></i> Teams
+        </a>
+        </div>
+    </div>
+    {% endif %}
+    
     {% with messages = get_flashed_messages(with_categories=true) %} {% if
     messages %} {% for category, message in messages %} {% if category ==
     'error' %}

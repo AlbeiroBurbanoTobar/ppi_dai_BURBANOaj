@@ -56,3 +56,17 @@ def delete_note():
             db.session.delete(note)
             db.session.commit()
     return jsonify({})
+@views.route('/tournaments')
+@login_required
+def tournaments():
+    return render_template('tournaments.html', user=current_user)
+
+@views.route('/teams')
+@login_required
+def teams():
+    return render_template('teams.html', user=current_user)
+
+@views.route('/calendar')
+@login_required
+def calendar():
+    return render_template('calendar.html', user=current_user)
