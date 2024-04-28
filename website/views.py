@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, request, flash, jsonify, redirect, url_for
 from flask_login import login_required, current_user
-from .models import Note, Torneo
+from .models import Note, Torneo, User
 from . import db
 import json
 
@@ -37,7 +37,10 @@ def guest():
     """
     # Assuming you want to pass the user information if authenticated,
     # or None if there is no authenticated user.
-    return render_template("guest.html", user=current_user if current_user.is_authenticated else None)
+
+    torneos = Torneo.query.all()  # Recupera todos los torneos
+    
+    return render_template("guest.html", user=current_user if current_user.is_authenticated else None, torneos = torneos)
 
 @views.route('/delete-note', methods=['POST'])
 def delete_note():

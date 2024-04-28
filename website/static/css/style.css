@@ -211,3 +211,11 @@
 
 /* Agregar tus estilos personalizados aquí */
 /* Puedes ajustar colores, márgenes, etc. para que coincidan con el diseño deseado */
+
+#tournamentCarousel {
+    max-width: 1000px;
+    margin: auto;
+    position: relative;
+    border-radius: 15px; /* Bordes redondeados */
+    overflow: hidden; /* Esconde cualquier contenido que se extienda fuera del borde redondeado */
+}
