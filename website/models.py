@@ -32,4 +32,18 @@ class User(db.Model, UserMixin):
     email = db.Column(db.String(150), unique=True)
     password = db.Column(db.String(150))
     first_name = db.Column(db.String(150))
+    torneos = db.relationship('Torneo', back_populates='creador')
     notes = db.relationship('Note')
+
+
+class Torneo(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    nombre = db.Column(db.String(150), nullable=False)
+    fecha_inicio = db.Column(db.String(50), nullable=False)
+    fecha_final = db.Column(db.String(50), nullable=False)
+    deporte = db.Column(db.String(50), nullable=False)
+    equipos_participantes = db.Column(db.Integer, nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+
+    # Relación inversa para acceder a los torneos desde el usuario
+    creador = db.relationship('User', back_populates='torneos')

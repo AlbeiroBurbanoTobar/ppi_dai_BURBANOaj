@@ -11,74 +11,82 @@
       <!-- Modal -->
       <div class="modal fade" id="createTournamentModal" tabindex="-1" role="dialog" aria-labelledby="modalTitle" aria-hidden="true">
         <div class="modal-dialog" role="document">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title" id="modalTitle">Nuevo Torneo</h5>
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalTitle">Nuevo Torneo</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <!-- Asegúrate de apuntar el atributo action a la URL que manejará la lógica de guardado -->
+                    <form id="createTournamentForm" method="POST" action="{{ url_for('views.create_tournament') }}">
+                        <div class="form-group">
+                            <label for="tournamentName">Nombre del Torneo</label>
+                            <input type="text" class="form-control" id="tournamentName" name="tournamentName" placeholder="Ingresa el nombre del torneo" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="startDate">Fecha de Inicio</label>
+                            <input type="date" class="form-control" id="startDate" name="startDate" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="endDate">Fecha Final</label>
+                            <input type="date" class="form-control" id="endDate" name="endDate" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="sport">Deporte</label>
+                            <select class="form-control" id="sport" name="sport" required>
+                                <option>Fútbol</option>
+                                <option>Baloncesto</option>
+                                <!-- Agrega más deportes aquí -->
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="teams">Equipos Participantes</label>
+                            <input type="number" class="form-control" id="teams" name="teams" placeholder="Ingresa el número de equipos" required>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                            <!-- Cambia el tipo a 'submit' para enviar el formulario -->
+                            <button type="submit" class="btn btn-primary">Crear Torneo</button>
+                        </div>
+                    </form>
+                </div>
             </div>
-            <div class="modal-body">
-              <form id="createTournamentForm">
-                <div class="form-group">
-                  <label for="tournamentName">Nombre del Torneo</label>
-                  <input type="text" class="form-control" id="tournamentName" placeholder="Ingresa el nombre del torneo">
-                </div>
-                <div class="form-group">
-                  <label for="startDate">Fecha de Inicio</label>
-                  <input type="date" class="form-control" id="startDate">
-                </div>
-                <div class="form-group">
-                  <label for="endDate">Fecha Final</label>
-                  <input type="date" class="form-control" id="endDate">
-                </div>
-                <div class="form-group">
-                  <label for="sport">Deporte</label>
-                  <select class="form-control" id="sport">
-                    <option>Fútbol</option>
-                    <option>Baloncesto</option>
-                    <!-- Agrega más deportes aquí -->
-                  </select>
-                </div>
-                  <div class="form-group">
-                    <label for="teams">Equipos Participantes</label>
-                    <input type="number" class="form-control" id="teams" placeholder="Ingresa el número de equipos">
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                    <button type="button" class="btn btn-primary" id="submitTournament">Crear Torneo</button>
-                  </div>
-                </div>
-              </form>
-            </div>
-
-          </div>
         </div>
-      </div>
+    </div>
     <div class="tabs">
         <button class="tab-button">Mis Torneos</button>
         <button class="tab-button">Torneos de Otros</button>
     </div>
-    
-    <div class="tournament-list">
-        <div class="tournament-item">
-            <h3>Torneo de Fútbol</h3>
-            <p>Fecha: 15 de Junio - 30 de Julio</p>
-            <p>Deporte: Fútbol</p>
-            <p>Participantes: 16</p>
-            <button class="edit-button">Editar</button>
-            <button class="delete-button">Eliminar</button>
-        </div>
-        
-        <div class="tournament-item">
-            <h3>Torneo de Baloncesto</h3>
-            <p>Fecha: 1 de Agosto - 15 de Septiembre</p>
-            <p>Deporte: Baloncesto</p>
-            <p>Participantes: 12</p>
-            <button class="edit-button">Editar</button>
-            <button class="delete-button">Eliminar</button>
-        </div>
-    </div>
+    <div id="tournament-list">
+      <!-- Los torneos se insertarán aquí usando JavaScript -->
+  </div>
+  <script type="text/javascript">
+    document.addEventListener('DOMContentLoaded', function() {
+        fetchTournaments();
+    });
+
+    function fetchTournaments() {
+        fetch('/get-tournaments').then(response => response.json()).then(data => {
+            const tournamentList = document.getElementById('tournament-list');
+            tournamentList.innerHTML = ''; // Limpia la lista actual
+            data.forEach(torneo => {
+                tournamentList.innerHTML += `
+                    <div class="tournament-item">
+                        <h3>${torneo.nombre}</h3>
+                        <p>Fecha: ${torneo.fecha_inicio} - ${torneo.fecha_final}</p>
+                        <p>Deporte: ${torneo.deporte}</p>
+                        <p>Participantes: ${torneo.equipos_participantes}</p>
+                        <!-- Botones de editar y eliminar si es necesario -->
+                    </div>
+                `;
+            });
+        }).catch(error => {
+            console.error('Error fetching tournaments:', error);
+        });
+    }
+</script>
 
     
 </div>

@@ -1,6 +1,6 @@
-from flask import Blueprint, render_template, request, flash, jsonify
+from flask import Blueprint, render_template, request, flash, jsonify, redirect, url_for
 from flask_login import login_required, current_user
-from .models import Note
+from .models import Note, Torneo
 from . import db
 import json
 
@@ -70,5 +70,50 @@ def teams():
 @login_required
 def calendar():
     return render_template('calendar.html', user=current_user)
+
+@views.route('/create-tournament', methods=['POST'])
+@login_required
+def create_tournament():
+    nombre = request.form.get('tournamentName')
+    fecha_inicio = request.form.get('startDate')
+    fecha_final = request.form.get('endDate')
+    deporte = request.form.get('sport')
+    equipos_participantes = request.form.get('teams')
+    
+    if not nombre or not fecha_inicio or not fecha_final or not deporte or not equipos_participantes:
+        flash('Todos los campos son requeridos.', 'error')
+        return redirect(url_for('views.tournaments'))
+
+    nuevo_torneo = Torneo(
+        nombre=nombre, 
+        fecha_inicio=fecha_inicio, 
+        fecha_final=fecha_final, 
+        deporte=deporte, 
+        equipos_participantes=equipos_participantes, 
+        user_id=current_user.id
+    )
+
+    db.session.add(nuevo_torneo)
+    db.session.commit()
+
+    flash('Torneo creado con éxito.', 'success')
+    return redirect(url_for('views.tournaments'))
+
+@views.route('/get-tournaments')
+@login_required
+def get_tournaments():
+    torneos = Torneo.query.filter_by(user_id=current_user.id).all()
+    torneos_data = []
+    for torneo in torneos:
+        torneos_data.append({
+            'id': torneo.id,
+            'nombre': torneo.nombre,
+            'fecha_inicio': torneo.fecha_inicio,
+            'fecha_final': torneo.fecha_final,
+            'deporte': torneo.deporte,
+            'equipos_participantes': torneo.equipos_participantes,
+            # Añade aquí más campos si es necesario
+        })
+    return jsonify(torneos_data)
 
 
