@@ -4,7 +4,7 @@
 <!-- Contenedor para la gestión de torneos -->
 <div class="tournaments-container">
     <h1>Torneos</h1>
-    <p>Crea y gestiona tus torneos deportivos.</p>
+    <p>Crea tus torneos deportivos.</p>
 
     <!-- Botón para abrir el modal de creación de torneos -->
     <button type="button" class="create-tournament-button" data-toggle="modal" data-target="#createTournamentModal">
@@ -58,12 +58,13 @@
         </div>
     </div>
 
-    <!-- Pestañas para navegar entre diferentes vistas de torneos -->
+    <!-- Pestañas para navegar entre diferentes vistas de torneos
     <div class="tabs">
         <button class="tab-button">Mis Torneos</button>
         <button class="tab-button">Torneos de Otros</button>
     </div>
-
+     -->
+     
     <!-- Contenedor para mostrar la lista de torneos -->
     <div id="tournament-list">
       <!-- Los torneos se insertarán aquí usando JavaScript -->
@@ -80,7 +81,8 @@
                 .then(response => response.json())
                 .then(data => {
                     const tournamentList = document.getElementById('tournament-list');
-                    tournamentList.innerHTML = ''; // Limpia la lista actual
+                    // Limpia la lista actual
+                    tournamentList.innerHTML = ''; 
 
                     data.forEach(torneo => {
                         tournamentList.innerHTML += `
