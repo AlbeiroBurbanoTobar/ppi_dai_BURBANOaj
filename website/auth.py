@@ -25,13 +25,13 @@ def login():
         user = User.query.filter_by(email=email).first()
         if user:
             if check_password_hash(user.password, password):
-                flash('Logged in successfully!', category='success')
+                flash('¡El inicio de sesión fue un éxito!', category='success')
                 login_user(user, remember=True)
                 return redirect(url_for('views.home'))
             else:
-                flash('Incorrect password, try again.', category='error')
+                flash('Contraseña incorrecta, inténtalo de nuevo.', category='error')
         else:
-            flash('Email does not exist.', category='error')
+            flash('El correo electrónico no existe.', category='error')
     return render_template("login.html", user=current_user)
 
 @auth.route('/logout')
@@ -66,21 +66,21 @@ def sign_up():
         user = User.query.filter_by(email=email).first()
 
         if user:
-            flash('Email already exists.', category='error')
+            flash('Email ya existe.', category='error')
         elif len(email) < 4:
-            flash('Email must be greater than 3 characters.', category='error')
+            flash('El correo electrónico debe tener más de 3 caracteres.', category='error')
         elif len(first_name) < 2:
-            flash('First name must be greater than 1 character.', category='error')
+            flash('El nombre debe tener más de 1 carácter.', category='error')
         elif password1 != password2:
             flash('Passwords don\'t match.', category='error')
         elif len(password1) < 7:
-            flash('Password must be at least 7 characters.', category='error')
+            flash('La contraseña debe tener al menos 7 caracteres.', category='error')
         else:
             new_user = User(email=email, first_name=first_name, password=generate_password_hash(password1))
             db.session.add(new_user)
             db.session.commit()
             login_user(new_user, remember=True)
-            flash('Account created!', category='success')
+            flash('¡Cuenta creada!', category='success')
             return redirect(url_for('views.home'))
     return render_template("sign_up.html", user=current_user)
 
@@ -94,15 +94,15 @@ def change_password():
         
         user = current_user
         if not check_password_hash(user.password, current_password):
-            flash('Current password is incorrect.', category='error')
+            flash('La contraseña actual es incorrecta.', category='error')
         elif new_password != confirm_password:
-            flash('Passwords do not match.', category='error')
+            flash('Las contraseñas no coinciden', category='error')
         elif len(new_password) < 7:
-            flash('Password must be at least 7 characters.', category='error')
+            flash('La contraseña debe tener al menos 7 caracteres.', category='error')
         else:
             user.password = generate_password_hash(new_password)
             db.session.commit()
-            flash('Your password has been updated!', category='success')
+            flash('¡Tu contraseña ha sido actualizada!', category='success')
             return redirect(url_for('views.home'))
             
     return render_template("change_password.html", user=current_user)

@@ -35,13 +35,13 @@
       <div class="collapse navbar-collapse" id="navbar">
         <div class="navbar-nav">
           {% if user.is_authenticated %}
-          <a class="nav-item nav-link" id="home" href="/">Home</a>
-           <a class="nav-item nav-link" id="changePassword" href="/change-password">Change Password</a>
-          <a class="nav-item nav-link" id="logout" href="/logout">Logout</a>
+          <a class="nav-item nav-link" id="home" href="/">Inicio</a>
+           <a class="nav-item nav-link" id="changePassword" href="/change-password">Cambiar Contraseña</a>
+          <a class="nav-item nav-link" id="logout" href="/logout">Cerrar sesión</a>
         </div>
           {% else %}
-          <a class="nav-item nav-link" id="login" href="/login">Login</a>
-          <a class="nav-item nav-link" id="signUp" href="{{ url_for('auth.privacy_policy') }}">Sign Up</a>
+          <a class="nav-item nav-link" id="login" href="/login">Iniciar sesión</a>
+          <a class="nav-item nav-link" id="signUp" href="{{ url_for('auth.privacy_policy') }}">Regístrate</a>
 
           {% endif %}
         </div>
@@ -52,13 +52,13 @@
     <div class="sidebar-container">
         <div class="sidebar">
           <a href="{{ url_for('views.tournaments') }}">
-            <i class="fa fa-trophy" aria-hidden="true"></i> Tournaments
+            <i class="fa fa-trophy" aria-hidden="true"></i> Torneos
         </a>
         <a href="{{ url_for('views.calendar') }}">
-            <i class="fa fa-calendar" aria-hidden="true"></i> Calendar
+            <i class="fa fa-calendar" aria-hidden="true"></i> Calendario
         </a>
         <a href="{{ url_for('views.teams') }}">
-            <i class="fa fa-users" aria-hidden="true"></i> Teams
+            <i class="fa fa-users" aria-hidden="true"></i> Equipos
         </a>
         </div>
     </div>

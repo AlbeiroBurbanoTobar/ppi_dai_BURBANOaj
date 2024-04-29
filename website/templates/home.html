@@ -13,21 +13,15 @@ Home
 {% endif %}
 
 <!-- Futura Sección de Programación de Partidos -->
-<div id="programacion-partidos">
-    <h2>Match Programming</h2>
-    <p>Programación de partidos, asignación de árbitros y configuración de detalles.</p>
+<div id="Resumen">
+    <h2>Resumen </h2>
+    <p>Se planea mostrar resumen y estadísticas del torneo</p>
     <!-- En el futuro, agregar calendario interactivo y formularios de asignación -->
 </div>
 
-<!-- Futura Sección de Gestión de Equipos y Jugadores -->
-<div id="gestion-equipos">
-    <h2>Team and Player Management</h2>
-    <p>Aquí se crearán y administrarán los equipos y jugadores.</p>
-    <!-- En el futuro, agregar formularios y listas dinámicas -->
-</div>
 
 <!-- Sección de Notas -->
-<h3 align="center">Reminders and Tasks</h3>
+<h3 align="center">Recordatorios y tareas</h3>
 <ul class="list-group list-group-flush" id="notes">
   {% for note in user.notes %}
   <li class="list-group-item">
@@ -37,14 +31,16 @@ Home
     </button>
   </li>
   {% endfor %}
+
+  <form method="POST">
+    <textarea name="note" id="note" class="form-control"></textarea>
+    <br />
+    <div align="center">
+      <button type="submit" class="btn btn-primary">Agregar nota</button>
+    </div>
+  </form>
 </ul>
-<form method="POST">
-  <textarea name="note" id="note" class="form-control"></textarea>
-  <br />
-  <div align="center">
-    <button type="submit" class="btn btn-primary">Add Note</button>
-  </div>
-</form>
+
 <br>
 <br>
 <br>

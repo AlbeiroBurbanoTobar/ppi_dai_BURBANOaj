@@ -1,3 +1,4 @@
+
 from flask import Blueprint, render_template, request, flash, jsonify, redirect, url_for
 from flask_login import login_required, current_user
 from .models import Note, Torneo, User
@@ -118,5 +119,4 @@ def get_tournaments():
             # Añade aquí más campos si es necesario
         })
     return jsonify(torneos_data)
-
 
