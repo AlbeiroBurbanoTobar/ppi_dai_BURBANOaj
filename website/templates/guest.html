@@ -5,37 +5,42 @@ Guest
 {% endblock %}
 
 {% block content %}
+<!-- Título de la página con la etiqueta H1 para la sección de torneos. -->
 <h1 align="center">Torneos</h1>
 
-<!-- Carrusel de Torneos con bordes redondeados -->
+<!-- Carrusel de torneos con bordes redondeados. -->
 <div id="tournamentCarousel" class="carousel slide" data-ride="carousel" style="max-width: 1000px; margin: auto; overflow: hidden; border-radius: 15px;">
   <div class="carousel-inner">
     {% for torneo in torneos %}
-    {% if torneo.deporte | lower == 'baloncesto' %}
-      {% set image_url = 'https://raw.githubusercontent.com/AlbeiroBurbano/ImagenesIconos/main/baloncesto.jpg' %}
-    {% else %}
-      {% set image_url = 'https://raw.githubusercontent.com/AlbeiroBurbano/ImagenesIconos/main/futbol.jpg' %}
-    {% endif %}
-    <div class="carousel-item {{ 'active' if loop.first }}" style="border-radius: 15px; overflow: hidden;">
-      <div style="background-image: url('{{ image_url }}'); background-size: cover; background-position: center; height: 280px; border-radius: 15px;">
-        <div style="height: 100%; background-color: rgba(0, 0, 0, 0.5); display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center;">
-          <h5 style="color: white; text-shadow: 2px 2px 4px #000000;">{{ torneo.nombre }}</h5>
-          <p style="color: white; text-shadow: 2px 2px 4px #000000;">Fecha: {{ torneo.fecha_inicio }} - {{ torneo.fecha_final }}</p>
-          <p style="color: white; text-shadow: 2px 2px 4px #000000;">Deporte: {{ torneo.deporte }}</p>
-          <p style="color: white; text-shadow: 2px 2px 4px #000000;">Equipos: {{ torneo.equipos_participantes }}</p>
-          <a href="#" class="btn btn-primary">Más información</a>
+      {% if torneo.deporte | lower == 'baloncesto' %}
+        {% set image_url = 'https://raw.githubusercontent.com/AlbeiroBurbano/ImagenesIconos/main/baloncesto.jpg' %}
+      {% else %}
+        {% set image_url = 'https://raw.githubusercontent.com/AlbeiroBurbano/ImagenesIconos/main/futbol.jpg' %}
+      {% endif %}
+      
+      <!-- Item del carrusel con la información del torneo y su imagen. -->
+      <div class="carousel-item {{ 'active' if loop.first }}" style="border-radius: 15px; overflow: hidden;">
+        <div style="background-image: url('{{ image_url }}'); background-size: cover; background-position: center; height: 280px; border-radius: 15px;">
+          <div style="height: 100%; background-color: rgba(0, 0, 0, 0.5); display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center;">
+            <h5 style="color: white; text-shadow: 2px 2px 4px #000000;">{{ torneo.nombre }}</h5>
+            <p style="color: white; text-shadow: 2px 2px 4px #000000;">Fecha: {{ torneo.fecha_inicio }} - {{ torneo.fecha_final }}</p>
+            <p style="color: white; text-shadow: 2px 2px 4px #000000;">Deporte: {{ torneo.deporte }}</p>
+            <p style="color: white; text-shadow: 2px 2px 4px #000000;">Equipos: {{ torneo.equipos_participantes }}</p>
+            <a href="#" class="btn btn-primary">Más información</a>
+          </div>
         </div>
       </div>
-    </div>
     {% endfor %}
   </div>
+
+  <!-- Controles de navegación del carrusel. -->
   <a class="carousel-control-prev" href="#tournamentCarousel" role="button" data-slide="prev">
     <span class="carousel-control-prev-icon" aria-hidden="true"></span>
     <span class="sr-only">Previous</span>
   </a>
   <a class="carousel-control-next" href="#tournamentCarousel" role="button" data-slide="next">
-    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-    <span the="sr-only">Siguiente</span>
+    <span la="carousel-control-next-icon" aria-hidden="true"></span>
+    <span la="sr-only">Siguiente</span>
   </a>
 </div>
 
@@ -43,23 +48,25 @@ Guest
 <br>
 <br>
 <br>
+
+<!-- Sección de la firma del desarrollador. -->
 <div id="mi-firma">
   <span>Created by Albeiro Burbano :)  </span>
   <a href="mailto:aburbanot@unal.edu.co">
-      <img src="../static/email-icon.png" alt="Enviar correo" style="width: 24px; height: 24px; vertical-align: middle;">
-  </a>
+        <img src="../static/email-icon.png" alt="Enviar correo" style="width: 24px; height: 24px; vertical-align: middle;">
+    </a>
   <a href="https://www.freelancer.com/u/Albeiro73?sb=t">
-    <img src="../static/free-icon .png" alt="Ver perfil en freelancer" style="width: 24px; height: 24px; vertical-align: middle;">
-</a>
-<a href="https://github.com/AlbeiroBurbanoTobar/ppi_pl_BurbanoA">
-  <img src="../static/git-icon.png" alt="Ver repositorio" style="width: 24px; height: 24px; vertical-align: middle;">
-</a>
-</a>
-<a href="https://stackoverflow.com/users/24090991/albeiro-burbano">
-  <img src="../static/stack-icon.png" alt="Mira el perfil de stackoverflow" style="width: 24px; height: 24px; vertical-align: middle;">
-</a>
-<a href="http://www.linkedin.com/in/albeiro-jose-burbano-tobar-759ba4297">
-  <img src="../static/link-icon.png" alt="Mira el perfil de linkedin" style="width: 24px; height: 24px; vertical-align: middle;">
-</a>
+      <img src="../static/free-icon .png" alt="Ver perfil en freelancer" style="width: 24px; height: 24px; vertical-align: middle;">
+  </a>
+  <a href="https://github.com/AlbeiroBurbanoTobar/ppi_pl_BurbanoA">
+    <img src="../static/git-icon.png" alt="Ver repositorio" style="width: 24px; height: 24px; vertical-align: middle;">
+  </a>
+  </a>
+  <a href="https://stackoverflow.com/users/24090991/albeiro-burbano">
+    <img src="../static/stack-icon.png" alt="Mira el perfil de stackoverflow" style="width: 24px; height: 24px; vertical-align: middle;">
+  </a>
+  <a href="http://www.linkedin.com/in/albeiro-jose-burbano-tobar-759ba4297">
+    <img src="../static/link-icon.png" alt="Mira el perfil de linkedin" style="width: 24px; height: 24px; vertical-align: middle;">
+  </a>
 </div>
 {% endblock %}

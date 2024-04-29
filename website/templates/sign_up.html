@@ -1,7 +1,14 @@
-{% extends "base.html" %} {% block title %}Sign Up{% endblock %} {% block
-content %}
+{% extends "base.html" %}
+
+{% block title %}Sign Up{% endblock %}
+
+{% block content %}
+<!-- Formulario de registro para la aplicación. -->
 <form method="POST">
+  <!-- Título de la página de registro. -->
   <h3 align="center">Regístrate</h3>
+
+  <!-- Campo para ingresar la dirección de correo electrónico. -->
   <div class="form-group">
     <label for="email">Dirección de correo electrónico</label>
     <input
@@ -12,6 +19,8 @@ content %}
       placeholder="Ingresa el correo electrónico"
     />
   </div>
+
+  <!-- Campo para ingresar el nombre del usuario. -->
   <div class="form-group">
     <label for="firstName">Nombre</label>
     <input
@@ -19,9 +28,11 @@ content %}
       class="form-control"
       id="firstName"
       name="firstName"
-      placeholder="Indroduzca el nombre"
+      placeholder="Introduzca el nombre"
     />
   </div>
+
+  <!-- Campo para ingresar la contraseña. -->
   <div class="form-group">
     <label for="password1">Contraseña</label>
     <input
@@ -32,6 +43,8 @@ content %}
       placeholder="Introduzca la contraseña"
     />
   </div>
+
+  <!-- Campo para confirmar la contraseña. -->
   <div class="form-group">
     <label for="password2">Contraseña (Confirmar)</label>
     <input
@@ -42,30 +55,36 @@ content %}
       placeholder="Confirmar contraseña"
     />
   </div>
+
+  <!-- Botón para enviar el formulario. -->
   <br />
   <button type="submit" class="btn btn-primary">Enviar</button>
 </form>
 
+<!-- Espacio adicional para estructurar la página. -->
 <br>
 <br>
 <br>
+
+<!-- Firma del desarrollador con enlaces a sus perfiles y contactos. -->
 <div id="mi-firma">
   <span>Created by Albeiro Burbano :)  </span>
   <a href="mailto:aburbanot@unal.edu.co">
-      <img src="../static/email-icon.png" alt="Enviar correo" style="width: 24px; height: 24px; vertical-align: middle;">
-  </a>
+        <img src="../static/email-icon.png" alt="Enviar correo" style="width: 24px; height: 24px; vertical-align: middle;">
+    </a>
   <a href="https://www.freelancer.com/u/Albeiro73?sb=t">
-    <img src="../static/free-icon .png" alt="Ver perfil en freelancer" style="width: 24px; height: 24px; vertical-align: middle;">
-</a>
-<a href="https://github.com/AlbeiroBurbanoTobar/ppi_pl_BurbanoA">
-  <img src="../static/git-icon.png" alt="Ver repositorio" style="width: 24px; height: 24px; vertical-align: middle;">
-</a>
-</a>
-<a href="https://stackoverflow.com/users/24090991/albeiro-burbano">
-  <img src="../static/stack-icon.png" alt="Mira el perfil de stackoverflow" style="width: 24px; height: 24px; vertical-align: middle;">
-</a>
-<a href="http://www.linkedin.com/in/albeiro-jose-burbano-tobar-759ba4297">
-  <img src="../static/link-icon.png" alt="Mira el perfil de linkedin" style="width: 24px; height: 24px; vertical-align: middle;">
-</a>
+      <img src="../static/free-icon .png" alt="Ver perfil en freelancer" style="width: 24px; height: 24px; vertical-align: middle;">
+  </a>
+  <a href="https://github.com/AlbeiroBurbanoTobar/ppi_pl_BurbanoA">
+    <img src="../static/git-icon.png" alt="Ver repositorio" style="width: 24px; height: 24px; vertical-align: middle;">
+  </a>
+  </a>
+  <a href="https://stackoverflow.com/users/24090991/albeiro-burbano">
+    <img src="../static/stack-icon.png" alt="Mira el perfil de stackoverflow" style="width: 24px; height: 24px; vertical-align: middle;">
+  </a>
+  <a href="http://www.linkedin.com/in/albeiro-jose-burbano-tobar-759ba4297">
+    <img src="../static/link-icon.png" alt="Mira el perfil de linkedin" style="width: 24px; height: 24px; vertical-align: middle;">
+  </a>
 </div>
+
 {% endblock %}

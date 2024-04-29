@@ -6,24 +6,24 @@ Home
 
 {% block content %}
 {% if current_user.is_authenticated %}
-    <!-- Mensaje de bienvenida con el nombre del usuario -->
+    <!-- Mensaje de bienvenida con el nombre del usuario autenticado. -->
     <div class="welcome-message">
         <h1>Bienvenido, {{ current_user.first_name }}.</h1>
     </div>
 {% endif %}
 
-<!-- Futura Sección de Programación de Partidos -->
+<!-- Sección para mostrar el resumen y las estadísticas del torneo. -->
 <div id="Resumen">
-    <h2>Resumen </h2>
+    <h2>Resumen</h2>
     <p>Se planea mostrar resumen y estadísticas del torneo</p>
-    <!-- En el futuro, agregar calendario interactivo y formularios de asignación -->
+    <!-- En el futuro, se añadirán un calendario interactivo y formularios de asignación. -->
 </div>
 
-
-<!-- Sección de Notas -->
+<!-- Sección de notas para recordatorios y tareas. -->
 <h3 align="center">Recordatorios y tareas</h3>
 <ul class="list-group list-group-flush" id="notes">
   {% for note in user.notes %}
+  <!-- Lista de elementos para cada nota del usuario. -->
   <li class="list-group-item">
     {{ note.data }}
     <button type="button" class="close" onClick="deleteNote({{ note.id }})">
@@ -32,6 +32,7 @@ Home
   </li>
   {% endfor %}
 
+  <!-- Formulario para agregar una nueva nota. -->
   <form method="POST">
     <textarea name="note" id="note" class="form-control"></textarea>
     <br />
@@ -45,26 +46,26 @@ Home
 <br>
 <br>
 <br>
+
+<!-- Firma del desarrollador con enlaces a sus perfiles y contactos. -->
 <div id="mi-firma">
   <span>Created by Albeiro Burbano :)  </span>
   <a href="mailto:aburbanot@unal.edu.co">
-      <img src="../static/email-icon.png" alt="Enviar correo" style="width: 24px; height: 24px; vertical-align: middle;">
-  </a>
+        <img src="../static/email-icon.png" alt="Enviar correo" style="width: 24px; height: 24px; vertical-align: middle;">
+    </a>
   <a href="https://www.freelancer.com/u/Albeiro73?sb=t">
-    <img src="../static/free-icon .png" alt="Ver perfil en freelancer" style="width: 24px; height: 24px; vertical-align: middle;">
-</a>
-<a href="https://github.com/AlbeiroBurbanoTobar/ppi_pl_BurbanoA">
-  <img src="../static/git-icon.png" alt="Ver repositorio" style="width: 24px; height: 24px; vertical-align: middle;">
-</a>
-</a>
-<a href="https://stackoverflow.com/users/24090991/albeiro-burbano">
-  <img src="../static/stack-icon.png" alt="Mira el perfil de stackoverflow" style="width: 24px; height: 24px; vertical-align: middle;">
-</a>
-<a href="http://www.linkedin.com/in/albeiro-jose-burbano-tobar-759ba4297">
-  <img src="../static/link-icon.png" alt="Mira el perfil de linkedin" style="width: 24px; height: 24px; vertical-align: middle;">
-</a>
+      <img src="../static/free-icon .png" alt="Ver perfil en freelancer" style="width: 24px; height: 24px; vertical-align: middle;">
+  </a>
+  <a href="https://github.com/AlbeiroBurbanoTobar/ppi_pl_BurbanoA">
+    <img src="../static/git-icon.png" alt="Ver repositorio" style="width: 24px; height: 24px; vertical-align: middle;">
+  </a>
+  </a>
+  <a href="https://stackoverflow.com/users/24090991/albeiro-burbano">
+    <img src="../static/stack-icon.png" alt="Mira el perfil de stackoverflow" style="width: 24px; height: 24px; vertical-align: middle;">
+  </a>
+  <a href="http://www.linkedin.com/in/albeiro-jose-burbano-tobar-759ba4297">
+    <img src="../static/link-icon.png" alt="Mira el perfil de linkedin" style="width: 24px; height: 24px; vertical-align: middle;">
+  </a>
 </div>
 
-
 {% endblock %}
-

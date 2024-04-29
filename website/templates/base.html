@@ -1,29 +1,44 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <!-- Especifica el conjunto de caracteres de la página en UTF-8. -->
     <meta charset="utf-8" />
+
+    <!-- Permite que la página se ajuste a diferentes dispositivos y tamaños de pantalla. -->
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- Incluye el archivo CSS de Bootstrap para estilos predeterminados. -->
     <link
       rel="stylesheet"
       href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
       integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
       crossorigin="anonymous"
     />
+
+    <!-- Incluye el archivo CSS de Font Awesome para íconos. -->
     <link
       rel="stylesheet"
       href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
       crossorigin="anonymous"
     />
 
+    <!-- Define el título de la página web. -->
     <title>{% block title %}Home{% endblock %}</title>
+
+     <!-- Incluye un archivo CSS personalizado para estilos adicionales. -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
   </head>
+
   <body>
+    <!-- Define una barra de navegación de Bootstrap. -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+      <!-- Enlace a la página principal con la marca y el logo. -->
       <a class="navbar-brand" href="/">
         <img src="../static/logo.png" width="30" height="30" class="d-inline-block align-top" alt="">
         PódiumPro
       </a>
+
+      <!-- Botón para expandir/colapsar la barra de navegación en dispositivos móviles. -->
       <button
         class="navbar-toggler"
         type="button"
@@ -32,14 +47,18 @@
       >
         <span class="navbar-toggler-icon"></span>
       </button>
+
+      <!-- Define el contenido expandido de la barra de navegación. -->
       <div class="collapse navbar-collapse" id="navbar">
         <div class="navbar-nav">
           {% if user.is_authenticated %}
+          <!-- Enlaces disponibles solo para usuarios autenticados. -->
           <a class="nav-item nav-link" id="home" href="/">Inicio</a>
            <a class="nav-item nav-link" id="changePassword" href="/change-password">Cambiar Contraseña</a>
           <a class="nav-item nav-link" id="logout" href="/logout">Cerrar sesión</a>
         </div>
           {% else %}
+          <!-- Enlaces disponibles solo para usuarios no autenticados. -->
           <a class="nav-item nav-link" id="login" href="/login">Iniciar sesión</a>
           <a class="nav-item nav-link" id="signUp" href="{{ url_for('auth.privacy_policy') }}">Regístrate</a>
 
@@ -49,6 +68,7 @@
     </nav>
 
     {% if user.is_authenticated %}
+    <!-- Sidebar para usuarios autenticados. -->
     <div class="sidebar-container">
         <div class="sidebar">
           <a href="{{ url_for('views.tournaments') }}">
@@ -64,9 +84,11 @@
     </div>
     {% endif %}
     
-    {% with messages = get_flashed_messages(with_categories=true) %} {% if
-    messages %} {% for category, message in messages %} {% if category ==
-    'error' %}
+    <!-- Muestra mensajes flash si están disponibles. -->
+    {% with messages = get_flashed_messages(with_categories=true) %} 
+    {% if messages %} 
+    {% for category, message in messages %} 
+    {% if category == 'error' %}
     <div class="alert alert-danger alter-dismissable fade show" role="alert">
       {{ message }}
       <button type="button" class="close" data-dismiss="alert">
@@ -80,9 +102,15 @@
         <span aria-hidden="true">&times;</span>
       </button>
     </div>
-    {% endif %} {% endfor %} {% endif %} {% endwith %}
+          {% endif %}
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
 
+    <!-- Contenido principal de la página. -->
     <div class="container">{% block content %} {% endblock %}</div>
+
+    <!-- Incluye archivos JavaScript necesarios para Bootstrap y jQuery. -->
     <script
       src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
       integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
@@ -99,6 +127,7 @@
       crossorigin="anonymous"
     ></script>
 
+<!-- Bloque de scripts adicionales específicos de la aplicación. -->    
 {% block javascript %}
     <script type="text/javascript">
       function deleteNote(noteId) {
@@ -111,6 +140,8 @@
   }
 </script>
 {% endblock %}
+
+<!-- Archivos JavaScript adicionales para jQuery y Bootstrap. -->
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
