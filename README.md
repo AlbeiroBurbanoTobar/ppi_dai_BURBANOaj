@@ -43,14 +43,18 @@ Soy **Albeiro Jose Burbano Tobar**, un **Desarrollador Freelance** con enfoque e
 
 Ofrezco servicios de desarrollo de aplicaciones móviles y web, adaptando cada proyecto a las necesidades específicas de mis clientes para proporcionar soluciones innovadoras y eficientes.
 
-#### Contacto
+## ¿Hablamos?
 
-- **LinkedIn**: [Conéctate conmigo](http://www.linkedin.com/in/albeiro-jose-burbano-tobar-759ba4297)
-- **GitHub**: [Revisa mi código](https://github.com/AlbeiroBurbanoTobar)
-- **Upwork**: [Ve mi perfil en Upwork](https://www.upwork.com/freelancers/~017e0544b7ea64d6c0?mp_source=share)
-- **Freelancer**: [Ve mi perfil en Freelancer](https://www.freelancer.com/u/Albeiro73?sb=t)
-- **Stack Overflow**: [Visita mi perfil](https://stackoverflow.com/users/24090991/albeiro-burbano) 
-- **Correo**: [Escríbeme](mailto:albeirojbt@gmail.com)
+Si buscas un desarrollador tecnológico comprometido y apasionado, listo para elevar tu proyecto, contáctame.
+
+<p align="left">
+  <a href="http://www.linkedin.com/in/albeiro-jose-burbano-tobar-759ba4297"><img src="https://img.icons8.com/fluent/48/000000/linkedin.png" alt="LinkedIn"></a>
+  <a href="https://github.com/AlbeiroBurbanoTobar"><img src="https://img.icons8.com/fluent/48/000000/github.png" alt="GitHub"></a>
+  <a href="https://www.upwork.com/freelancers/~017e0544b7ea64d6c0?mp_source=share"><img src="https://raw.githubusercontent.com/AlbeiroBurbano/ImagenesIconos/main/upwork.png" alt="Upwork"  width="45"></a>
+  <a href="https://www.freelancer.com/u/Albeiro73?sb=t"><img src="https://raw.githubusercontent.com/AlbeiroBurbano/ImagenesIconos/main/freelancer.png" alt="Freelancer" width="45"></a>
+  <a href="https://stackoverflow.com/users/24090991/albeiro-burbano"><img src="https://raw.githubusercontent.com/AlbeiroBurbano/ImagenesIconos/main/overflow.png" alt="Stack Overflow"  width="45"></a>
+  <a href="mailto:albeirojbt@gmail.com"><img src="https://img.icons8.com/fluent/48/000000/mail.png" alt="Email"></a>
+</p>
 
 #### Cómo Contribuir
 
