@@ -162,13 +162,16 @@
    - float: Hace flotar la barra lateral a la izquierda.
    - height: Establece la altura en 100% de la ventana.
 */
-.sidebar-container {
-    width: 200px;
-    background-color: #fafbfb;
-    padding-top: 60px;
-    float: left;
-    height: 100vh;
+.content-with-sidebar {
+    margin-left: 200px; /* Asegúrate de que este valor sea igual al ancho del menú lateral */
+    width: calc(100% - 200px); /* Ocupa el resto del ancho de la ventana */
+    min-height: 100vh;
 }
+
+.table-container {
+    overflow-x: auto; /* Añade scroll horizontal si la tabla es muy ancha */
+}
+
 
 /* Estilos para los enlaces dentro de la barra lateral.
    - padding: Añade un espacio interno de 10px por 15px.
@@ -198,7 +201,7 @@
    - margin-left: Añade un margen izquierdo de 200px para hacer espacio para la barra lateral.
 */
 .content-with-sidebar {
-    margin-left: 200px;
+    margin-left: 250px;
 }
 
 /* Estilo para el contenido principal cuando no hay barra lateral.

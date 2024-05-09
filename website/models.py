@@ -36,6 +36,7 @@ class User(db.Model, UserMixin):
     first_name = db.Column(db.String(150))
     notes = db.relationship('Note')
     torneos = db.relationship('Torneo', back_populates='creador')
+    equipos = db.relationship('Team', back_populates='creador')
 
 
 class Torneo(db.Model):
@@ -61,3 +62,20 @@ class Torneo(db.Model):
 
     # Relación inversa para acceder a los torneos desde el usuario
     creador = db.relationship('User', back_populates='torneos')
+
+    # models.py
+from . import db
+
+class Team(db.Model):
+    """Representa un equipo en la base de datos."""
+    id = db.Column(db.Integer, primary_key=True)
+    nombre = db.Column(db.String(150), nullable=False)
+    capitan = db.Column(db.String(150), nullable=False)
+    contacto = db.Column(db.String(150), nullable=False)
+    categoria = db.Column(db.String(50), nullable=False)
+    ubicacion = db.Column(db.String(150), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+
+    # Relación inversa para acceder al usuario que creó el equipo
+    creador = db.relationship('User', back_populates='equipos')
+

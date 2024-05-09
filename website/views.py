@@ -1,9 +1,12 @@
 # importacion de librerias necesarias
 from flask import Blueprint, render_template, request, flash, jsonify, redirect, url_for
 from flask_login import login_required, current_user
-from .models import Note, Torneo, User
+from .models import Note, Torneo, User, Team
+
 from . import db
 import json
+import pandas as pd
+import os 
 
 views = Blueprint('views', __name__)
 
@@ -88,13 +91,18 @@ def tournaments():
 @views.route('/teams')
 @login_required
 def teams():
-    """Renderiza la plantilla 'teams.html', pasando al
-    usuario actual.
-
-    Returns:
-        str: La plantilla a renderizar.
-    """
-    return render_template('teams.html', user=current_user)
+    """Renderiza la plantilla 'teams.html', pasando al usuario actual y los equipos desde el CSV."""
+    # Ruta del archivo CSV
+    csv_file_path = 'teams.csv'
+    
+    # Verificar si el archivo existe y leer los datos
+    if os.path.exists(csv_file_path):
+        df = pd.read_csv(csv_file_path)
+        teams_data = df.to_dict(orient='records')  # Convierte DataFrame a una lista de diccionarios
+    else:
+        teams_data = []
+    
+    return render_template('teams.html', user=current_user, teams=teams_data)
 
 
 @views.route('/calendar')
@@ -167,3 +175,66 @@ def get_tournaments():
     } for torneo in torneos]
 
     return jsonify(torneos_data)
+
+@views.route('/create-team', methods=['POST'])
+@login_required
+def create_team():
+    # Recuperar datos del formulario
+    team_name = request.form.get('teamName')
+    captain_name = request.form.get('captainName')
+    captain_contact = request.form.get('captainContact')
+    category = request.form.get('category')
+    location = request.form.get('location')
+
+    if not (team_name and captain_name and captain_contact and category and location):
+        flash('Todos los campos son requeridos.', 'error')
+        return redirect(url_for('views.teams'))
+
+    # ID del usuario actual
+    user_id = current_user.id
+
+    # Leer el archivo CSV si existe
+    csv_file_path = 'teams.csv'
+    if os.path.exists(csv_file_path):
+        df = pd.read_csv(csv_file_path)
+
+        # Filtrar los equipos del usuario actual para asignar un ID único
+        user_teams = df[df['UserID'] == user_id]
+        team_id = f"{user_id}-{len(user_teams) + 1}"
+    else:
+        # Crear un nuevo DataFrame si el archivo no existe
+        df = pd.DataFrame(columns=['TeamID', 'UserID', 'TeamName', 'CaptainName', 'CaptainContact', 'Category', 'Location'])
+        team_id = f"{user_id}-1"
+
+    # Añadir el nuevo equipo a la base de datos
+    nuevo_equipo = Team(
+        nombre=team_name,
+        capitan=captain_name,
+        contacto=captain_contact,
+        categoria=category,
+        ubicacion=location,
+        user_id=user_id
+    )
+
+    db.session.add(nuevo_equipo)
+    db.session.commit()
+
+    # Añadir la nueva fila al DataFrame
+    new_row = pd.DataFrame([{
+        'TeamID': team_id,
+        'UserID': user_id,
+        'TeamName': team_name,
+        'CaptainName': captain_name,
+        'CaptainContact': captain_contact,
+        'Category': category,
+        'Location': location
+    }])
+
+    df = pd.concat([df, new_row], ignore_index=True)
+    df.to_csv(csv_file_path, index=False)
+
+    flash('Equipo creado con éxito.', 'success')
+    return redirect(url_for('views.teams'))
+
+
+

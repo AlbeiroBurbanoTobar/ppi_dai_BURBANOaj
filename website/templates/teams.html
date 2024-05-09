@@ -3,10 +3,90 @@
 {% block content %}
 <!-- Contenido principal para la página de Equipos. -->
 <div class="page-content">
-    <!-- Título de la página de Equipos. -->
     <h1>Equipos</h1>
-    
-    <!-- Mensaje de bienvenida y descripción de las funcionalidades. -->
     <p>Le damos la bienvenida a la página de Equipos. Aquí puedes crear nuevos equipos o gestionar los existentes.</p>
+
+    <!-- Botón para abrir el modal de creación de equipos -->
+    <button type="button" class="create-team-button" data-toggle="modal" data-target="#createTeamModal">
+        Registrar un nuevo equipo
+    </button>
+
+    <!-- Contenedor para mostrar los equipos registrados -->
+    <div class="container">
+        <h2>Equipos Registrados</h2>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Nombre del Equipo</th>
+                    <th>Capitán</th>
+                    <th>Contacto del Capitán</th>
+                    <th>Categoría</th>
+                    <th>Ubicación</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for team in teams %}
+                <tr>
+                    <td>{{ team['TeamName'] }}</td>
+                    <td>{{ team['CaptainName'] }}</td>
+                    <td>{{ team['CaptainContact'] }}</td>
+                    <td>{{ team['Category'] }}</td>
+                    <td>{{ team['Location'] }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Modal para la creación de un nuevo equipo -->
+    <div class="modal fade" id="createTeamModal" tabindex="-1" role="dialog" aria-labelledby="modalTeamTitle" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalTeamTitle">Registrar Equipo</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <!-- Formulario para registrar un nuevo equipo -->
+                    <form id="createTeamForm" method="POST" action="{{ url_for('views.create_team') }}">
+                        <div class="form-group">
+                            <label for="teamName">Nombre del Equipo</label>
+                            <input type="text" class="form-control" id="teamName" name="teamName" placeholder="Ingresa el nombre del equipo" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="captainName">Nombre del Capitán</label>
+                            <input type="text" class="form-control" id="captainName" name="captainName" placeholder="Ingresa el nombre del capitán" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="captainContact">Contacto del Capitán</label>
+                            <input type="text" class="form-control" id="captainContact" name="captainContact" placeholder="Ingresa el número de teléfono del capitán" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="category">Categoría</label>
+                            <select class="form-control" id="category" name="category" required>
+                                <option value="Masculino">Masculino</option>
+                                <option value="Femenino">Femenino</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="location">Ubicación</label>
+                            <input type="text" class="form-control" id="location" name="location" placeholder="Ingresa la ubicación del equipo" required>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                            <button type="submit" class="btn btn-primary">Registrar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='index.js') }}"></script>
 {% endblock %}

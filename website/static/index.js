@@ -65,3 +65,32 @@ function fetchTournaments() {
 // Necesitas tener un listener para cuando el formulario se envíe
 document.getElementById('createTournamentForm').addEventListener('submit', createTournament);
 
+document.addEventListener('DOMContentLoaded', function() {
+  fetchTeams();
+});
+
+// Se agrega un listener al botón que abre el modal de "Ver Equipos"
+$('#viewTeamsModal').on('show.bs.modal', function () {
+  fetchTeams();
+});
+
+function fetchTeams() {
+  fetch('/get-teams')
+      .then(response => response.json())
+      .then(teams => {
+          const teamList = document.getElementById('list-of-teams');
+          teamList.innerHTML = '';
+          teams.forEach(team => {
+              const li = document.createElement('li');
+              li.classList.add('list-group-item');
+              li.textContent = `${team.TeamName} - Capitán: ${team.CaptainName} - Contacto: ${team.CaptainContact}`;
+              teamList.appendChild(li);
+          });
+      })
+      .catch(error => {
+          console.error('Error al cargar los equipos:', error);
+          alert('Error al cargar los equipos');
+      });
+}
+
+
