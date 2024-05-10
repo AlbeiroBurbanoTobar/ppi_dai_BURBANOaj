@@ -298,5 +298,15 @@ def add_player():
     return redirect(url_for('views.teams'))
 
 
+@views.route('/get-tournaments', endpoint='get_user_tournaments')
+@login_required
+def get_user_tournaments():
+    torneos = Torneo.query.filter_by(user_id=current_user.id).all()
+    torneos_data = [{
+        'id': torneo.id,
+        'nombre': torneo.nombre,
+    } for torneo in torneos]
+    return jsonify(torneos_data)
+
 
 

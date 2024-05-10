@@ -44,6 +44,17 @@ function fetchTournaments() {
   fetch('/get-tournaments')
       .then(response => response.json())
       .then(torneos => {
+          const select = document.getElementById('tournamentSelect');
+          data.forEach(torneo => {
+            const option = document.createElement('option');
+            option.value = torneo.id;
+            option.textContent = torneo.nombre;
+            select.appendChild(option);
+        });
+    })
+    .catch(error => console.error('Error al cargar torneos:', error));
+}
+
           const tournamentList = document.getElementById('tournament-list');
           tournamentList.innerHTML = '';  // Limpiamos la lista
           torneos.forEach(torneo => {     // Y la volvemos a llenar con los datos actualizados
@@ -56,11 +67,7 @@ function fetchTournaments() {
                   </div>
               `;
           });
-      })
-      .catch(error => {
-          console.error('Error fetching tournaments:', error);
-      });
-}
+
 
 // Necesitas tener un listener para cuando el formulario se envíe
 document.getElementById('createTournamentForm').addEventListener('submit', createTournament);
