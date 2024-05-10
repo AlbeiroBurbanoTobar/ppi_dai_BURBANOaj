@@ -93,5 +93,56 @@ function fetchTeams() {
       });
 }
 
+// Asumiendo que jQuery está habilitado
+$(document).ready(function() {
+  $('#playersModal').on('show.bs.modal', function (event) {
+      var button = $(event.relatedTarget);  // Botón que activó el modal
+      var teamId = button.data('id');  // Extraer información del atributo data-*
+
+      // Limpia la tabla anterior
+      $('#playersData').empty();
+
+      // Carga de datos de jugadores mediante AJAX
+      $.getJSON('/get-players/' + teamId, function(data) {
+          $.each(data, function(index, player) {
+              var row = `<tr>
+                          <td>${player.FirstName}</td>
+                          <td>${player.LastName}</td>
+                          <td>${player.Age}</td>
+                         </tr>`;
+              $('#playersData').append(row);
+          });
+      });
+  });
+});
+
+
+$(document).ready(function() {
+  $('#playersModal').on('show.bs.modal', function (event) {
+      var button = $(event.relatedTarget);  // Botón que activó el modal
+      var teamId = button.data('id');  // Extraer información del atributo data-*
+
+      // Limpia la tabla anterior
+      $('#playersData').empty();
+
+      // Carga de datos de jugadores mediante AJAX
+      $.getJSON('/get-players/' + teamId, function(data) {
+          if(data.length === 0) {
+              $('#playersData').append('<tr><td colspan="3">No hay jugadores registrados en este equipo.</td></tr>');
+          } else {
+              $.each(data, function(index, player) {
+                  var row = `<tr>
+                              <td>${player.FirstName}</td>
+                              <td>${player.LastName}</td>
+                              <td>${player.Age}</td>
+                             </tr>`;
+                  $('#playersData').append(row);
+              });
+          }
+      }).fail(function() {
+          console.log("Error al cargar los datos.");
+      });
+  });
+});
 
 

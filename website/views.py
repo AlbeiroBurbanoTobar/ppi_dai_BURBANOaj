@@ -90,16 +90,25 @@ def tournaments():
 @views.route('/teams')
 @login_required
 def teams():
-    csv_file_path = 'teams.csv'
+    csv_file_path_teams = 'teams.csv'
+    csv_file_path_players = 'Players.csv'
     
-    if os.path.exists(csv_file_path):
-        df = pd.read_csv(csv_file_path)
+    if os.path.exists(csv_file_path_teams):
+        df_teams = pd.read_csv(csv_file_path_teams)
+        df_players = pd.read_csv(csv_file_path_players) if os.path.exists(csv_file_path_players) else pd.DataFrame()
+        
+        # Contar los jugadores para cada equipo
+        player_counts = df_players.groupby('TeamID').size().rename('PlayerCount').reset_index()
+        df_teams = df_teams.merge(player_counts, how='left', left_on='TeamID', right_on='TeamID')
+        df_teams['PlayerCount'] = df_teams['PlayerCount'].fillna(0).astype(int)
+        
         # Filtrar los equipos que pertenecen al usuario actual
-        filtered_teams = df[df['UserID'] == current_user.id].to_dict(orient='records')
+        filtered_teams = df_teams[df_teams['UserID'] == current_user.id].to_dict(orient='records')
     else:
         filtered_teams = []
     
     return render_template('teams.html', user=current_user, teams=filtered_teams)
+
 
 @views.route('/delete-team', methods=['POST'])
 @login_required
@@ -248,18 +257,46 @@ def create_team():
     flash('Equipo creado con éxito.', 'success')
     return redirect(url_for('views.teams'))
 
-@views.route('/add-player', methods=['GET', 'POST'])
-@login_required
-def add_player():
-    csv_file_path = 'teams.csv'
+def generate_next_id(csv_file_path):
     if os.path.exists(csv_file_path):
         df = pd.read_csv(csv_file_path)
-        # Filtrar los equipos que pertenecen al usuario actual
-        filtered_teams = df[df['UserID'] == current_user.id].to_dict(orient='records')
+        if df.empty:
+            return 1
+        else:
+            return df['PlayerID'].max() + 1
     else:
-        filtered_teams = []
+        return 1
 
-    return render_template('add_player.html', teams=filtered_teams)
+@views.route('/add-player', methods=['POST'])
+@login_required
+def add_player():
+    player_first_name = request.form.get('playerFirstName')
+    player_last_name = request.form.get('playerLastName')
+    player_age = request.form.get('playerAge')
+    team_id = request.form.get('teamId')
+
+    csv_file_path = 'Players.csv'
+    player_id = generate_next_id(csv_file_path)
+
+    player_data = {
+        'PlayerID': player_id,
+        'FirstName': player_first_name,
+        'LastName': player_last_name,
+        'Age': player_age,
+        'TeamID': team_id
+    }
+
+    if os.path.exists(csv_file_path):
+        df = pd.read_csv(csv_file_path)
+        new_row = pd.DataFrame([player_data])
+        df = pd.concat([df, new_row], ignore_index=True)
+    else:
+        df = pd.DataFrame([player_data])
+
+    df.to_csv(csv_file_path, index=False)
+    flash('Jugador creado exitosamente', 'success')
+    return redirect(url_for('views.teams'))
+
 
 
 
