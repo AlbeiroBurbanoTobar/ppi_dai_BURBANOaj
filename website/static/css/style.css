@@ -387,3 +387,8 @@
     border-radius: 15px; /* Bordes redondeados */
     overflow: hidden; /* Esconde cualquier contenido que se extienda fuera del borde redondeado */
 }
+
+select, select option {
+    color: black; /* Establece el color del texto a negro */
+    background-color: white; /* Establece el color de fondo a blanco */
+}

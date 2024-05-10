@@ -2,7 +2,6 @@
 from flask import Blueprint, render_template, request, flash, jsonify, redirect, url_for
 from flask_login import login_required, current_user
 from .models import Note, Torneo, User, Team
-
 from . import db
 import json
 import pandas as pd
@@ -91,18 +90,31 @@ def tournaments():
 @views.route('/teams')
 @login_required
 def teams():
-    """Renderiza la plantilla 'teams.html', pasando al usuario actual y los equipos desde el CSV."""
-    # Ruta del archivo CSV
     csv_file_path = 'teams.csv'
     
-    # Verificar si el archivo existe y leer los datos
     if os.path.exists(csv_file_path):
         df = pd.read_csv(csv_file_path)
-        teams_data = df.to_dict(orient='records')  # Convierte DataFrame a una lista de diccionarios
+        # Filtrar los equipos que pertenecen al usuario actual
+        filtered_teams = df[df['UserID'] == current_user.id].to_dict(orient='records')
     else:
-        teams_data = []
+        filtered_teams = []
     
-    return render_template('teams.html', user=current_user, teams=teams_data)
+    return render_template('teams.html', user=current_user, teams=filtered_teams)
+
+@views.route('/delete-team', methods=['POST'])
+@login_required
+def delete_team():
+    team_id = request.json['teamId']
+    csv_file_path = 'teams.csv'
+    
+    if os.path.exists(csv_file_path):
+        df = pd.read_csv(csv_file_path)
+        # Filtrar para no incluir el equipo a borrar
+        df = df[df['TeamID'] != team_id]
+        df.to_csv(csv_file_path, index=False)  # Sobrescribe el archivo CSV sin el equipo borrado
+        return jsonify({'success': True})
+    else:
+        return jsonify({'success': False, 'message': 'Archivo no encontrado'}), 404
 
 
 @views.route('/calendar')
@@ -235,6 +247,19 @@ def create_team():
 
     flash('Equipo creado con éxito.', 'success')
     return redirect(url_for('views.teams'))
+
+@views.route('/add-player', methods=['GET', 'POST'])
+@login_required
+def add_player():
+    csv_file_path = 'teams.csv'
+    if os.path.exists(csv_file_path):
+        df = pd.read_csv(csv_file_path)
+        # Filtrar los equipos que pertenecen al usuario actual
+        filtered_teams = df[df['UserID'] == current_user.id].to_dict(orient='records')
+    else:
+        filtered_teams = []
+
+    return render_template('add_player.html', teams=filtered_teams)
 
 
 

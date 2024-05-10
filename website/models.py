@@ -79,3 +79,13 @@ class Team(db.Model):
     # Relación inversa para acceder al usuario que creó el equipo
     creador = db.relationship('User', back_populates='equipos')
 
+class Player(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    first_name = db.Column(db.String(100), nullable=False)
+    last_name = db.Column(db.String(100), nullable=False)
+    age = db.Column(db.Integer, nullable=False)
+    team_id = db.Column(db.Integer, db.ForeignKey('team.id'), nullable=False)
+
+    team = db.relationship('Team', backref=db.backref('players', lazy=True))
+
+
