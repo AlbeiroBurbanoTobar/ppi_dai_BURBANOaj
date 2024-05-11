@@ -309,4 +309,19 @@ def get_user_tournaments():
     return jsonify(torneos_data)
 
 
+@views.route('/get-user-teams', methods=['GET'])
+@login_required
+def get_user_teams():
+    """ Devuelve los equipos asociados al usuario actual en forma de JSON. """
+    csv_file_path = 'teams.csv'
+    if os.path.exists(csv_file_path):
+        df = pd.read_csv(csv_file_path)
+        # Filtrar los equipos que pertenecen al usuario actual
+        filtered_teams = df[df['UserID'] == current_user.id]
+        teams_data = filtered_teams.to_dict(orient='records')
+        teams_formatted = [{'id': team['TeamID'], 'name': team['TeamName']} for team in teams_data]
+        return jsonify(teams_formatted)
+    else:
+        return jsonify([])  # Devuelve una lista vacía si no hay archivo o no hay equipos
+
 

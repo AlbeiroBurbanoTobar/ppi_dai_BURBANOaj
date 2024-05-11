@@ -20,13 +20,19 @@
                 </div>
                 <div class="form-group col-md-6">
                     <label for="teamA">Equipo A</label>
-                    <input type="text" id="teamA" name="teamA" class="form-control">
+                    <select id="teamA" name="teamA" class="form-control">
+                        <option value="">Selecciona un equipo</option>
+                        <!-- Las opciones se añadirán dinámicamente -->
+                    </select>
                 </div>
             </div>
             <div class="form-row">
                 <div class="form-group col-md-6">
                     <label for="teamB">Equipo B</label>
-                    <input type="text" id="teamB" name="teamB" class="form-control">
+                    <select id="teamB" name="teamB" class="form-control">
+                        <option value="">Selecciona un equipo</option>
+                        <!-- Las opciones se añadirán dinámicamente -->
+                    </select>
                 </div>
 
                 <div class="form-group col-md-6">
@@ -196,6 +202,64 @@ function changeMonth(step) {
     generateCalendar(currentMonth, currentYear);
 }
 
+
+</script>
+
+<script>
+
+document.addEventListener('DOMContentLoaded', function() {
+    loadTeams();
+});
+
+function loadTeams() {
+    fetch('/get-user-teams')  // Asume que tienes un endpoint que devuelve los equipos del usuario
+        .then(response => response.json())
+        .then(teams => {
+            const teamASelect = document.getElementById('teamA');
+            const teamBSelect = document.getElementById('teamB');
+            teams.forEach(team => {
+                const optionA = document.createElement('option');
+                optionA.value = team.id;
+                optionA.textContent = team.name;
+                teamASelect.appendChild(optionA);
+
+                const optionB = document.createElement('option');
+                optionB.value = team.id;
+                optionB.textContent = team.name;
+                teamBSelect.appendChild(optionB);
+            });
+        })
+        .catch(error => console.error('Error al cargar los equipos:', error));
+}
+
+</script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+    const teamASelect = document.getElementById('teamA');
+    const teamBSelect = document.getElementById('teamB');
+
+    teamASelect.addEventListener('change', function() {
+        adjustTeamOptions(teamBSelect, teamASelect);
+    });
+
+    teamBSelect.addEventListener('change', function() {
+        adjustTeamOptions(teamASelect, teamBSelect);
+    });
+});
+
+function adjustTeamOptions(targetSelect, referenceSelect) {
+    const selectedValue = referenceSelect.value;
+    const options = targetSelect.querySelectorAll('option');
+
+    options.forEach(option => {
+        if (option.value === selectedValue) {
+            option.disabled = true; // Deshabilita la opción que ya está seleccionada en el otro select
+        } else {
+            option.disabled = false; // Habilita todas las otras opciones
+        }
+    });
+}
 
 </script>
 {% endblock %}
