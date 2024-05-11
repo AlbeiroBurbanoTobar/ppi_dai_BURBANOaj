@@ -5,14 +5,15 @@
     <h1 id="tournamentTitle" style="text-align: center;">PodiúmPro</h1>
     <div class="schedule-form">
         <h2>Programar Partido</h2>
+        <form method="POST" action="{{ url_for('views.schedule_match') }}">>
         <div class="controlsSuperior">
             <a>Selecciona el torneo: </a>
-            <select id="tournamentSelect">
+            <select id="tournamentSelect" name="tournamentSelect">
                 <option value="" disabled selected>Selecciona un torneo</option>
             </select>
 
         </div>
-        <form>
+        
             <div class="form-row">
                 <div class="form-group col-md-6">
                     <label for="date">Fecha</label>
@@ -89,13 +90,14 @@ function fetchTournaments() {
             const select = document.getElementById('tournamentSelect');
             data.forEach(torneo => {
                 const option = document.createElement('option');
-                option.value = torneo.id;
+                option.value = torneo.nombre;  // Cambia aquí para usar el nombre como valor
                 option.textContent = torneo.nombre;
                 select.appendChild(option);
             });
         })
         .catch(error => console.error('Error al cargar torneos:', error));
 }
+
 </script>
 <script>
     document.addEventListener('DOMContentLoaded', function() {

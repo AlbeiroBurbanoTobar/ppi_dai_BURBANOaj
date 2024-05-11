@@ -5,7 +5,8 @@ from .models import Note, Torneo, User, Team
 from . import db
 import json
 import pandas as pd
-import os 
+import os
+import uuid 
 
 views = Blueprint('views', __name__)
 
@@ -324,4 +325,47 @@ def get_user_teams():
     else:
         return jsonify([])  # Devuelve una lista vacía si no hay archivo o no hay equipos
 
+@views.route('/schedule-match', methods=['POST'])
+@login_required
+def schedule_match():
+    if request.method == 'POST':
+        tournament_name = request.form.get('tournamentSelect')
+        team_a = request.form.get('teamA')
+        team_b = request.form.get('teamB')
+        match_date = request.form.get('date')
+        referee = request.form.get('referee')
+        location = request.form.get('location')
 
+        # Crear un identificador único para cada partido
+        match_id = str(uuid.uuid4())
+
+        # Información del usuario que programa el partido
+        user_id = current_user.id
+
+        # Definir la ruta del archivo CSV
+        csv_file_path = 'Partidos.csv'
+
+        # Crear un DataFrame con los datos del formulario
+        data = pd.DataFrame({
+            'match_id': [match_id],
+            'user_id': [user_id],
+            'tournament_name': [tournament_name],
+            'team_a': [team_a],
+            'team_b': [team_b],
+            'match_date': [match_date],
+            'referee': [referee],
+            'location': [location]
+        })
+
+        # Guardar o agregar al archivo CSV existente
+        if os.path.exists(csv_file_path):
+            df = pd.read_csv(csv_file_path)
+            df = pd.concat([df, data], ignore_index=True)
+        else:
+            df = data
+
+        df.to_csv(csv_file_path, index=False)
+
+        flash('Partido programado con éxito!', 'success')
+        return redirect(url_for('views.calendar'))
+    return redirect(url_for('views.home'))
