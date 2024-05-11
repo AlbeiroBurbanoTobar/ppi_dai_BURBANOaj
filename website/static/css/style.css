@@ -470,9 +470,12 @@ select:hover, button:hover {
 }
 
 .calendar td {
-    background-color: #fafafa;
-    transition: background-color 0.3s ease;
+    width: 14%; /* Asegura que cada día tenga el mismo ancho relativo */
+    height: 80px; /* Altura suficiente para evitar desbordamientos */
+    vertical-align: top; /* Alinea el contenido en la parte superior de la celda */
+    border: 1px solid #ccc; /* Borde sutil para las celdas */
 }
+
 
 .calendar td:hover {
     background-color: #f0f0f0;
@@ -482,8 +485,12 @@ select:hover, button:hover {
 #monthYearDisplay {
     text-align: center;
     font-size: 18px;
-    color: #555;
+    color: #007bff;
     margin-bottom: 15px;
 }
 
+.today {
+    background-color: #acd4ffc5; /* Color amarillo para destacar la fecha actual */
+    color: white;
+}
 

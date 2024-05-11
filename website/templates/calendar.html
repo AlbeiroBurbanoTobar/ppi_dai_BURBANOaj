@@ -71,8 +71,6 @@
         </tbody>
     </table>
 
-
-    
     
     </div>
 </div>
@@ -158,6 +156,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 function generateCalendar(month, year) {
+    const now = new Date();
+    const todayDate = now.getDate();
+    const todayMonth = now.getMonth();
+    const todayYear = now.getFullYear();
+
     const firstDay = new Date(year, month).getDay();
     const daysInMonth = new Date(year, month + 1, 0).getDate();
 
@@ -179,6 +182,9 @@ function generateCalendar(month, year) {
             } else if (date > daysInMonth) {
                 cell.textContent = ''; // Continuar añadiendo celdas vacías si el mes terminó
             } else {
+                if (date === todayDate && month === todayMonth && year === todayYear) {
+                    cell.classList.add('today');
+                }
                 cell.textContent = date;
                 date++;
             }
@@ -187,6 +193,7 @@ function generateCalendar(month, year) {
         tbody.appendChild(row);
     }
 }
+
 
 
 const monthNames = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
@@ -266,3 +273,4 @@ function adjustTeamOptions(targetSelect, referenceSelect) {
 </script>
 {% endblock %}
  
+
