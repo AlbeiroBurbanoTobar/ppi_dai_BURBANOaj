@@ -5,23 +5,32 @@
     <h1 id="tournamentTitle" style="text-align: center;">PodiúmPro</h1>
     <div class="schedule-form">
         <h2>Programar Partido</h2>
-        <form method="POST" action="{{ url_for('views.schedule_match') }}">>
+        <form method="POST" action="{{ url_for('views.schedule_match') }}">
         <div class="controlsSuperior">
             <a>Selecciona el torneo: </a>
-            <select id="tournamentSelect" name="tournamentSelect">
+            <select id="tournamentSelect" name="tournamentSelect" required>
                 <option value="" disabled selected>Selecciona un torneo</option>
             </select>
-
         </div>
+
+        <div class="form-group">
+            <label for="categoria">Categoría</label>
+            <select class="form-control" id="categoria" name="categoria" onchange="updateTeamLists()" required>
+                <option value="Masculino">Masculino</option>
+                <option value="Femenino">Femenino</option>
+            </select>
+        </div>
+        
+        
         
             <div class="form-row">
                 <div class="form-group col-md-6">
                     <label for="date">Fecha</label>
-                    <input type="date" id="date" name="date" class="form-control">
+                    <input type="date" id="date" name="date" class="form-control" required>
                 </div>
                 <div class="form-group col-md-6">
                     <label for="teamA">Equipo A</label>
-                    <select id="teamA" name="teamA" class="form-control">
+                    <select id="teamA" name="teamA" class="form-control" required>
                         <option value="">Selecciona un equipo</option>
                         <!-- Las opciones se añadirán dinámicamente -->
                     </select>
@@ -30,7 +39,7 @@
             <div class="form-row">
                 <div class="form-group col-md-6">
                     <label for="teamB">Equipo B</label>
-                    <select id="teamB" name="teamB" class="form-control">
+                    <select id="teamB" name="teamB" class="form-control" required>
                         <option value="">Selecciona un equipo</option>
                         <!-- Las opciones se añadirán dinámicamente -->
                     </select>
@@ -38,13 +47,13 @@
 
                 <div class="form-group col-md-6">
                     <label for="referee">Árbitro</label>
-                    <input type="text" id="referee" name="referee" class="form-control">
+                    <input type="text" id="referee" name="referee" class="form-control" required>
     
             </div>
             </div>
             <div class="form-group">
                 <label for="location">Lugar</label>
-                <input type="text" id="location" name="location" class="form-control">
+                <input type="text" id="location" name="location" class="form-control" required>
             </div>
             <button type="submit" class="btn btn-primary">Programar partido</button>
         </form>
@@ -268,6 +277,36 @@ function adjustTeamOptions(targetSelect, referenceSelect) {
             option.disabled = false; // Habilita todas las otras opciones
         }
     });
+}
+
+</script>
+
+<script>
+    function updateTeamLists() {
+        const categoria = document.getElementById('categoria').value;
+
+    const url = `/get-teams/${categoria}`;
+    fetch(url)
+        .then(response => response.json())
+        .then(data => {
+            const teamASelect = document.getElementById('teamA');
+            const teamBSelect = document.getElementById('teamB');
+            teamASelect.innerHTML = '';
+            teamBSelect.innerHTML = '';
+            
+            data.forEach(team => {
+                const optionA = document.createElement('option');
+                optionA.value = team.id;
+                optionA.textContent = team.name;
+                teamASelect.appendChild(optionA);
+                
+                const optionB = document.createElement('option');
+                optionB.value = team.id;
+                optionB.textContent = team.name;
+                teamBSelect.appendChild(optionB);
+            });
+        })
+        .catch(error => console.error('Error al cargar los equipos:', error));
 }
 
 </script>

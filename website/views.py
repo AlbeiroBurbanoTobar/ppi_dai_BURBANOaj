@@ -337,6 +337,7 @@ def schedule_match():
         match_date = request.form.get('date')
         referee = request.form.get('referee')
         location = request.form.get('location')
+        categoria = request.form.get('categoria')
 
         # Crear un identificador único para cada partido
         match_id = str(uuid.uuid4())
@@ -356,7 +357,8 @@ def schedule_match():
             'team_b': [team_b],
             'match_date': [match_date],
             'referee': [referee],
-            'location': [location]
+            'location': [location],
+            'categoria': [categoria]
         })
 
         # Guardar o agregar al archivo CSV existente
@@ -371,6 +373,12 @@ def schedule_match():
         flash('Partido programado con éxito!', 'success')
         return redirect(url_for('views.calendar'))
     return redirect(url_for('views.home'))
+
+@views.route('/get-teams/<categoria>')
+def get_teams(categoria):
+    teams = Team.query.filter_by(categoria=categoria).all()
+    team_data = [{'id': team.id, 'name': team.nombre} for team in teams]
+    return jsonify(team_data)
 
 
 
