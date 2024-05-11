@@ -162,6 +162,12 @@
    - float: Hace flotar la barra lateral a la izquierda.
    - height: Establece la altura en 100% de la ventana.
 */
+.sidebar-container {
+    width: 100%; /* Ajusta el ancho del contenedor al 100% de su contenedor padre */
+    background-color: #f4f4f4; /* O el color que prefieras para el fondo */
+    padding: 10px 0; /* Espacio superior e inferior dentro del contenedor */
+}
+
 .content-with-sidebar {
     margin-left: 200px; /* Asegúrate de que este valor sea igual al ancho del menú lateral */
     width: calc(100% - 200px); /* Ocupa el resto del ancho de la ventana */
@@ -182,12 +188,17 @@
    - white-space: Evita que el texto se divida en líneas nuevas.
 */
 .sidebar a {
-    padding: 10px 15px;
-    text-decoration: none;
-    font-size: 16px;
-    color: #333;
-    display: block;
-    white-space: nowrap;
+    display: flex;
+    align-items: center; /* Alinea verticalmente los íconos con el texto */
+    color: black; /* Color del texto, ajusta según tu diseño */
+    text-decoration: none; /* Elimina el subrayado del enlace */
+    padding: 5px 10px; /* Espacio alrededor de cada enlace */
+}
+
+.sidebar {
+    display: flex;
+    justify-content: space-around; /* Distribuye el espacio entre los elementos */
+    align-items: center; /* Centra los elementos verticalmente */
 }
 
 /* Estilos para el efecto hover en los enlaces.
@@ -235,6 +246,9 @@
 .tournaments-container h1 {
     text-align: center;
     margin-bottom: 20px;
+}
+.sidebar a i {
+    margin-right: 5px; /* Espacio entre el icono y el texto */
 }
 
 /* Define el estilo para la clase tabs.
