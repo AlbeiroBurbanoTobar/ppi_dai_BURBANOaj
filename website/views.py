@@ -338,6 +338,7 @@ def schedule_match():
         referee = request.form.get('referee')
         location = request.form.get('location')
         categoria = request.form.get('categoria')
+        match_time = request.form.get('match_time') 
 
         # Crear un identificador único para cada partido
         match_id = str(uuid.uuid4())
@@ -357,6 +358,7 @@ def schedule_match():
             'team_b': [team_b],
             'match_date': [match_date],
             'referee': [referee],
+            'match_time': [match_time], 
             'location': [location],
             'categoria': [categoria]
         })

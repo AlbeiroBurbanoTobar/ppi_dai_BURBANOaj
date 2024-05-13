@@ -1,4 +1,2 @@
-match_id,user_id,tournament_name,team_a,team_b,match_date,referee,location,categoria
-497439fa-4384-43f0-a617-15a91370e605,1,,1-1,1-5,2024-05-23,Juan Reyes,Pasto,Masculino
-a937f555-34f4-487a-ad84-e78aa1f2d9af,1,,1,1,,,,Masculino
-94d0aba9-a6b2-4717-b969-f50e4cd9e78d,1,NBA,1-1,1-2,2024-05-11,Juan Reyes,Tierra del amanecer,Masculino
+match_id,user_id,tournament_name,team_a,team_b,match_date,referee,match_time,location,categoria
+cab87540-2e26-4bd8-b4a9-9cc7577be3f2,1,NBA,2,8,2024-05-13,Juan Reyes,18:00,Pasto,Masculino

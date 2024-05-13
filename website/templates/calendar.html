@@ -16,6 +16,7 @@
         <div class="form-group">
             <label for="categoria">Categoría</label>
             <select class="form-control" id="categoria" name="categoria" onchange="updateTeamLists()" required>
+                <option value="" disabled selected>Selecciona la categoría</option>
                 <option value="Masculino">Masculino</option>
                 <option value="Femenino">Femenino</option>
             </select>
@@ -28,6 +29,16 @@
                     <label for="date">Fecha</label>
                     <input type="date" id="date" name="date" class="form-control" required>
                 </div>
+
+                <div class="form-group col-md-6">
+                    <label for="match_time">Hora del partido:</label>
+                    <input type="time" id="match_time" name="match_time" class="form-control" required>  
+                </div>
+                
+
+            </div>
+            <div class="form-row">
+
                 <div class="form-group col-md-6">
                     <label for="teamA">Equipo A</label>
                     <select id="teamA" name="teamA" class="form-control" required>
@@ -35,8 +46,7 @@
                         <!-- Las opciones se añadirán dinámicamente -->
                     </select>
                 </div>
-            </div>
-            <div class="form-row">
+
                 <div class="form-group col-md-6">
                     <label for="teamB">Equipo B</label>
                     <select id="teamB" name="teamB" class="form-control" required>
@@ -45,17 +55,18 @@
                     </select>
                 </div>
 
-                <div class="form-group col-md-6">
-                    <label for="referee">Árbitro</label>
-                    <input type="text" id="referee" name="referee" class="form-control" required>
-    
             </div>
+            <div class="form-group">
+                <label for="referee">Árbitro</label>
+                <input type="text" id="referee" name="referee" class="form-control" required>
+
             </div>
             <div class="form-group">
                 <label for="location">Lugar</label>
                 <input type="text" id="location" name="location" class="form-control" required>
             </div>
             <button type="submit" class="btn btn-primary">Programar partido</button>
+            
         </form>
     </div>
     <br>
