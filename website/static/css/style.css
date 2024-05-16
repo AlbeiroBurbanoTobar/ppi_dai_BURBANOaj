@@ -483,8 +483,20 @@ select:hover, button:hover {
     background-color: #acd4ff;
 }
 
+.events {
+    margin-top: 5px;
+}
+
+.more-link {
+    display: block;
+    color: blue;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
 .calendar td {
     width: 14%; /* Asegura que cada día tenga el mismo ancho relativo */
+    position: relative;
     height: 80px; /* Altura suficiente para evitar desbordamientos */
     vertical-align: top; /* Alinea el contenido en la parte superior de la celda */
     border: 1px solid #ccc; /* Borde sutil para las celdas */

@@ -132,13 +132,19 @@ def delete_team():
 @views.route('/calendar')
 @login_required
 def calendar():
-    """Renderiza la plantilla 'calendar.html', pasando al
-    usuario actual.
+    """Renderiza la plantilla 'calendar.html', pasando al usuario actual y la lista de partidos desde el CSV.
 
     Returns:
         str: La plantilla a renderizar.
     """
-    return render_template('calendar.html', user=current_user)
+    csv_file_path = 'partidos.csv'  # Asegúrate de que esta ruta sea correcta
+    matches = []
+
+    if os.path.exists(csv_file_path):
+        df = pd.read_csv(csv_file_path)
+        matches = df[['match_date', 'tournament_name']].to_dict(orient='records')
+    
+    return render_template('calendar.html', user=current_user, matches=matches)
 
 
 @views.route('/create-tournament', methods=['POST'])
@@ -326,6 +332,7 @@ def get_user_teams():
         return jsonify(teams_formatted)
     else:
         return jsonify([])  # Devuelve una lista vacía si no hay archivo o no hay equipos
+    
 
 @views.route('/schedule-match', methods=['POST'])
 @login_required
@@ -338,7 +345,7 @@ def schedule_match():
         referee = request.form.get('referee')
         location = request.form.get('location')
         categoria = request.form.get('categoria')
-        match_time = request.form.get('match_time') 
+        match_time = request.form.get('match_time')
 
         # Crear un identificador único para cada partido
         match_id = str(uuid.uuid4())
@@ -358,7 +365,7 @@ def schedule_match():
             'team_b': [team_b],
             'match_date': [match_date],
             'referee': [referee],
-            'match_time': [match_time], 
+            'match_time': [match_time],
             'location': [location],
             'categoria': [categoria]
         })
@@ -376,11 +383,25 @@ def schedule_match():
         return redirect(url_for('views.calendar'))
     return redirect(url_for('views.home'))
 
+
+
 @views.route('/get-teams/<categoria>')
 def get_teams(categoria):
     teams = Team.query.filter_by(categoria=categoria).all()
     team_data = [{'id': team.id, 'name': team.nombre} for team in teams]
     return jsonify(team_data)
+
+@views.route('/get-matches', methods=['GET'])
+@login_required
+def get_matches():
+    csv_file_path = 'partidos.csv'
+    matches = []
+
+    if os.path.exists(csv_file_path):
+        df = pd.read_csv(csv_file_path)
+        matches = df[['match_date', 'tournament_name']].to_dict(orient='records')
+
+    return jsonify(matches)
 
 
 
