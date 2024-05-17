@@ -307,14 +307,11 @@ def add_player():
     return redirect(url_for('views.teams'))
 
 
-@views.route('/get-tournaments', endpoint='get_user_tournaments')
+@views.route('/get-user-tournaments')
 @login_required
 def get_user_tournaments():
     torneos = Torneo.query.filter_by(user_id=current_user.id).all()
-    torneos_data = [{
-        'id': torneo.id,
-        'nombre': torneo.nombre,
-    } for torneo in torneos]
+    torneos_data = [{'id': torneo.id, 'name': torneo.nombre} for torneo in torneos]
     return jsonify(torneos_data)
 
 
@@ -333,7 +330,6 @@ def get_user_teams():
     else:
         return jsonify([])  # Devuelve una lista vacía si no hay archivo o no hay equipos
     
-
 @views.route('/schedule-match', methods=['POST'])
 @login_required
 def schedule_match():
@@ -383,6 +379,25 @@ def schedule_match():
         return redirect(url_for('views.calendar'))
     return redirect(url_for('views.home'))
 
+@views.route('/get-team-names')
+def get_team_names():
+    try:
+        teams_df = pd.read_csv('teams.csv')
+        teams = teams_df[['TeamID', 'TeamName']].to_dict(orient='records')
+        return jsonify(teams)
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+
+
+@views.route('/get-matches')
+def get_matches():
+    try:
+        matches_df = pd.read_csv('Partidos.csv')
+        matches = matches_df.to_dict(orient='records')
+        return jsonify(matches)
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
 
 
 @views.route('/get-teams/<categoria>')
@@ -391,17 +406,7 @@ def get_teams(categoria):
     team_data = [{'id': team.id, 'name': team.nombre} for team in teams]
     return jsonify(team_data)
 
-@views.route('/get-matches', methods=['GET'])
-@login_required
-def get_matches():
-    csv_file_path = 'partidos.csv'
-    matches = []
 
-    if os.path.exists(csv_file_path):
-        df = pd.read_csv(csv_file_path)
-        matches = df[['match_date', 'tournament_name']].to_dict(orient='records')
-
-    return jsonify(matches)
 
 
 

@@ -1,2 +1,8 @@
 match_id,user_id,tournament_name,team_a,team_b,match_date,referee,match_time,location,categoria
 6faf9bca-8100-4ca2-b1c1-eaddb90ee97d,1,UNAL febrero,3,9,2024-05-01,Juan Reyes,18:17,Medellín,Masculino
+e8b931ec-0a13-4c27-826a-2b439888e14f,1,NBA,9,1,2024-05-31,Juan Reyes,18:43,Pasto,Masculino
+cdd1eb2f-ee66-4638-b18d-75693f92f23e,1,Los Yakuza,5,7,2024-05-24,Juan Reyes,19:07,Tierra del amanecer,Femenino
+fee8a80a-7667-43e1-ae0b-e23bef71bc63,1,Los Yakuza,5,7,2024-05-31,Juan Reyes,23:03,Pasto,Femenino
+91892162-6f43-4d88-a4ea-fd8c153439ff,1,NBA,3,1,2024-05-31,Juan Reyes,12:02,Bello,Masculino
+b4b833f0-a5e1-4cb5-80b4-45d32aed49bf,1,Los Yakuza,5,7,2024-05-17,Juan Reyes,19:03,Barranquilla,Femenino
+26eea7b5-c560-4318-9309-1985eb4657cc,1,UNAL febrero,2,9,2024-05-31,Juan Reyes,12:03,Medellín,Masculino

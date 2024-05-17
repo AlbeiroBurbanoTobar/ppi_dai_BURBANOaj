@@ -87,11 +87,30 @@
 </div>
 
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-    fetchTournaments();
-    fetchMatches();
-    generateCalendar(currentMonth, currentYear);
-});
+function loadTournaments() {
+    fetch('/get-user-tournaments')
+        .then(response => response.json())
+        .then(tournaments => {
+            const select = document.getElementById('tournamentSelect');
+            select.innerHTML = '';
+            const defaultOption = document.createElement('option');
+            defaultOption.textContent = 'Selecciona un torneo';
+            defaultOption.value = '';
+            defaultOption.disabled = true;
+            defaultOption.selected = true;
+            select.appendChild(defaultOption);
+
+            tournaments.forEach(tournament => {
+                const option = document.createElement('option');
+                option.value = tournament.id;
+                option.textContent = tournament.name;
+                select.appendChild(option);
+            });
+
+            select.dispatchEvent(new Event('change'));
+        });
+}
+
 
 function fetchTournaments() {
     fetch('/get-tournaments')
@@ -118,37 +137,69 @@ function fetchMatches() {
         .catch(error => console.error('Error al cargar partidos:', error));
 }
 
+
 function generateCalendar(month, year) {
     const firstDay = new Date(year, month).getDay();
     const daysInMonth = new Date(year, month + 1, 0).getDate();
+
     const tbody = document.getElementById('calendarBody');
     const monthYearDisplay = document.getElementById('monthYearDisplay');
+
     monthYearDisplay.textContent = `${monthNames[month]} ${year}`;
     tbody.innerHTML = '';
-
     let date = 1;
+
     for (let i = 0; i < 6; i++) {
         const row = document.createElement('tr');
         for (let j = 0; j < 7; j++) {
             const cell = document.createElement('td');
+            cell.classList.add('calendar-cell');
             if (i === 0 && j < firstDay) {
                 cell.textContent = '';
             } else if (date > daysInMonth) {
                 cell.textContent = '';
             } else {
                 cell.textContent = date;
-                const match = window.matches.find(match => new Date(match.match_date).getDate() === date && new Date(match.match_date).getMonth() === month && new Date(match.match_date).getFullYear() === year);
-                if (match) {
-                    const matchInfo = document.createElement('div');
-                    matchInfo.textContent = match.tournament_name;
-                    cell.appendChild(matchInfo);
-                }
+                cell.dataset.date = `${year}-${String(month + 1).padStart(2, '0')}-${String(date).padStart(2, '0')}`;
                 date++;
             }
             row.appendChild(cell);
         }
         tbody.appendChild(row);
     }
+    displayMatches();
+}
+
+function displayMatches() {
+    window.matches.forEach(match => {
+        const matchDate = new Date(match.match_date);
+        if (matchDate.getMonth() === currentMonth && matchDate.getFullYear() === currentYear) {
+            const cell = document.querySelector(`td[data-date='${match.match_date}']`);
+            if (cell) {
+                const matchInfo = document.createElement('div');
+                matchInfo.classList.add('event');
+                matchInfo.textContent = match.tournament_name;
+                cell.appendChild(matchInfo);
+
+                const events = cell.querySelectorAll('.event');
+                if (events.length > 2) {
+                    events.forEach((event, index) => {
+                        if (index >= 2) {
+                            event.style.display = 'none';
+                        }
+                    });
+                    const showMore = document.createElement('div');
+                    showMore.classList.add('show-more');
+                    showMore.textContent = 'Ver más';
+                    showMore.onclick = () => {
+                        events.forEach(event => event.style.display = 'block');
+                        showMore.style.display = 'none';
+                    };
+                    cell.appendChild(showMore);
+                }
+            }
+        }
+    });
 }
 
 const now = new Date();
@@ -168,9 +219,15 @@ function changeMonth(step) {
     }
     generateCalendar(currentMonth, currentYear);
 }
+document.addEventListener('DOMContentLoaded', function() {
+    fetchTournaments();
+    fetchMatches();
+});
 
 document.addEventListener('DOMContentLoaded', function() {
+    fetchTournaments();
     loadTeams();
+    generateCalendar(currentMonth, currentYear);
 });
 
 function loadTeams() {
@@ -181,20 +238,22 @@ function loadTeams() {
             const teamBSelect = document.getElementById('teamB');
             teamASelect.innerHTML = '';
             teamBSelect.innerHTML = '';
+            
             teams.forEach(team => {
                 const optionA = document.createElement('option');
-                optionA.value = team.id;  // Usando el ID como valor
+                optionA.value = team.id;
                 optionA.textContent = team.name;
                 teamASelect.appendChild(optionA);
 
                 const optionB = document.createElement('option');
-                optionB.value = team.id;  // Usando el ID como valor
+                optionB.value = team.id;
                 optionB.textContent = team.name;
                 teamBSelect.appendChild(optionB);
             });
         })
         .catch(error => console.error('Error al cargar los equipos:', error));
 }
+
 document.addEventListener('DOMContentLoaded', function() {
     const teamASelect = document.getElementById('teamA');
     const teamBSelect = document.getElementById('teamB');
@@ -231,13 +290,13 @@ function updateTeamLists() {
             const teamBSelect = document.getElementById('teamB');
             teamASelect.innerHTML = '';
             teamBSelect.innerHTML = '';
-
+            
             data.forEach(team => {
                 const optionA = document.createElement('option');
                 optionA.value = team.id;
                 optionA.textContent = team.name;
                 teamASelect.appendChild(optionA);
-
+                
                 const optionB = document.createElement('option');
                 optionB.value = team.id;
                 optionB.textContent = team.name;

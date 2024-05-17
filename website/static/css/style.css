@@ -494,6 +494,26 @@ select:hover, button:hover {
     cursor: pointer;
 }
 
+.calendar-cell {
+    position: relative;
+    vertical-align: top;
+    min-height: 100px;
+}
+.calendar-cell .event {
+    background-color: #f0f0f0;
+    margin: 2px 0;
+    padding: 2px;
+    border-radius: 2px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+.calendar-cell .show-more {
+    cursor: pointer;
+    color: blue;
+    text-decoration: underline;
+}
+
 .calendar td {
     width: 14%; /* Asegura que cada día tenga el mismo ancho relativo */
     position: relative;
