@@ -341,7 +341,7 @@ def schedule_match():
         referee = request.form.get('referee')
         location = request.form.get('location')
         categoria = request.form.get('categoria')
-        match_time = request.form.get('match_time')
+        match_time = request.form.get('match_time') 
 
         # Crear un identificador único para cada partido
         match_id = str(uuid.uuid4())
@@ -361,7 +361,7 @@ def schedule_match():
             'team_b': [team_b],
             'match_date': [match_date],
             'referee': [referee],
-            'match_time': [match_time],
+            'match_time': [match_time], 
             'location': [location],
             'categoria': [categoria]
         })
@@ -379,7 +379,7 @@ def schedule_match():
         return redirect(url_for('views.calendar'))
     return redirect(url_for('views.home'))
 
-@views.route('/get-team-names')
+@views.route('/get-team-names', methods=['GET'])
 def get_team_names():
     try:
         teams_df = pd.read_csv('teams.csv')
@@ -390,14 +390,24 @@ def get_team_names():
 
 
 
-@views.route('/get-matches')
+
+@views.route('/get-matches', methods=['GET'])
 def get_matches():
     try:
         matches_df = pd.read_csv('Partidos.csv')
+        teams_df = pd.read_csv('teams.csv')
+        
+        # Crear un diccionario para mapear TeamID a TeamName
+        team_names = teams_df.set_index('TeamID')['TeamName'].to_dict()
+        
+        matches_df['team_a_name'] = matches_df['team_a'].map(team_names).fillna(matches_df['team_a'])
+        matches_df['team_b_name'] = matches_df['team_b'].map(team_names).fillna(matches_df['team_b'])
+        
         matches = matches_df.to_dict(orient='records')
         return jsonify(matches)
     except Exception as e:
         return jsonify({'error': str(e)}), 500
+
 
 
 @views.route('/get-teams/<categoria>')

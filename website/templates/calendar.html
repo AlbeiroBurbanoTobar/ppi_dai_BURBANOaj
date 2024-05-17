@@ -84,11 +84,41 @@
         <tbody id="calendarBody">
         </tbody>
     </table>
+
+    <!-- Modal -->
+<div class="modal" id="eventModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Detalles del Partido</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <!-- Aquí se insertarán los detalles del partido -->
+                <div id="matchDetails"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
 </div>
+
+</div>
+<style>
+    .modal-dialog.modal-lg {
+        max-width: 80%;
+    }
+    .event {
+        cursor: pointer;
+    }
+</style>
 
 <script>
 function loadTournaments() {
-    fetch('/get-user-tournaments')
+    fetch('/get-tournaments')
         .then(response => response.json())
         .then(tournaments => {
             const select = document.getElementById('tournamentSelect');
@@ -102,30 +132,16 @@ function loadTournaments() {
 
             tournaments.forEach(tournament => {
                 const option = document.createElement('option');
-                option.value = tournament.id;
-                option.textContent = tournament.name;
+                option.value = tournament.nombre;  // Usar el nombre como valor
+                option.textContent = tournament.nombre;
                 select.appendChild(option);
             });
 
             select.dispatchEvent(new Event('change'));
-        });
-}
-
-
-function fetchTournaments() {
-    fetch('/get-tournaments')
-        .then(response => response.json())
-        .then(data => {
-            const select = document.getElementById('tournamentSelect');
-            data.forEach(torneo => {
-                const option = document.createElement('option');
-                option.value = torneo.nombre;  // Cambia aquí para usar el nombre como valor
-                option.textContent = torneo.nombre;
-                select.appendChild(option);
-            });
         })
         .catch(error => console.error('Error al cargar torneos:', error));
 }
+
 
 function fetchMatches() {
     fetch('/get-matches')
@@ -136,7 +152,6 @@ function fetchMatches() {
         })
         .catch(error => console.error('Error al cargar partidos:', error));
 }
-
 
 function generateCalendar(month, year) {
     const firstDay = new Date(year, month).getDay();
@@ -161,6 +176,7 @@ function generateCalendar(month, year) {
             } else {
                 cell.textContent = date;
                 cell.dataset.date = `${year}-${String(month + 1).padStart(2, '0')}-${String(date).padStart(2, '0')}`;
+                cell.addEventListener('click', () => showEventDetails(cell.dataset.date));
                 date++;
             }
             row.appendChild(cell);
@@ -179,6 +195,10 @@ function displayMatches() {
                 const matchInfo = document.createElement('div');
                 matchInfo.classList.add('event');
                 matchInfo.textContent = match.tournament_name;
+                matchInfo.addEventListener('click', (event) => {
+                    event.stopPropagation();
+                    showEventDetails(match.match_date);
+                });
                 cell.appendChild(matchInfo);
 
                 const events = cell.querySelectorAll('.event');
@@ -191,7 +211,8 @@ function displayMatches() {
                     const showMore = document.createElement('div');
                     showMore.classList.add('show-more');
                     showMore.textContent = 'Ver más';
-                    showMore.onclick = () => {
+                    showMore.onclick = (event) => {
+                        event.stopPropagation();
                         events.forEach(event => event.style.display = 'block');
                         showMore.style.display = 'none';
                     };
@@ -200,6 +221,29 @@ function displayMatches() {
             }
         }
     });
+}
+
+function showEventDetails(date) {
+    const matchDetailsContainer = document.getElementById('matchDetails');
+    matchDetailsContainer.innerHTML = '';
+
+    const matches = window.matches.filter(match => match.match_date === date);
+    matches.forEach(match => {
+        const matchDetail = document.createElement('div');
+        matchDetail.innerHTML = `
+            <p><strong>Torneo:</strong> ${match.tournament_name}</p>
+            <p><strong>Equipo A:</strong> ${match.team_a_name}</p>
+            <p><strong>Equipo B:</strong> ${match.team_b_name}</p>
+            <p><strong>Fecha:</strong> ${match.match_date}</p>
+            <p><strong>Hora:</strong> ${match.match_time}</p>
+            <p><strong>Árbitro:</strong> ${match.referee}</p>
+            <p><strong>Ubicación:</strong> ${match.location}</p>
+            <p><strong>Categoría:</strong> ${match.categoria}</p>
+        `;
+        matchDetailsContainer.appendChild(matchDetail);
+    });
+
+    $('#eventModal').modal('show');
 }
 
 const now = new Date();
@@ -219,13 +263,10 @@ function changeMonth(step) {
     }
     generateCalendar(currentMonth, currentYear);
 }
-document.addEventListener('DOMContentLoaded', function() {
-    fetchTournaments();
-    fetchMatches();
-});
 
 document.addEventListener('DOMContentLoaded', function() {
-    fetchTournaments();
+    loadTournaments();
+    fetchMatches();
     loadTeams();
     generateCalendar(currentMonth, currentYear);
 });
