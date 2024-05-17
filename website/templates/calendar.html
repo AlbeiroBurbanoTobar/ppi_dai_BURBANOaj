@@ -135,6 +135,7 @@ function loadTournaments() {
                 const option = document.createElement('option');
                 option.value = torneo.id; // Usar el ID como valor
                 option.textContent = torneo.nombre;
+                option.dataset.name = torneo.nombre; // Guardar el nombre del torneo en un dataset
                 select.appendChild(option);
             });
 
@@ -142,6 +143,14 @@ function loadTournaments() {
         })
         .catch(error => console.error('Error al cargar torneos:', error));
 }
+
+// Añadir un evento de cambio para actualizar el campo oculto con el nombre del torneo
+document.getElementById('tournamentSelect').addEventListener('change', function() {
+    const selectedOption = this.options[this.selectedIndex];
+    const tournamentName = selectedOption.dataset.name;
+    document.getElementById('tournamentName').value = tournamentName;
+});
+
 
 
 function fetchMatches() {

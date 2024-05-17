@@ -1,4 +1,5 @@
 match_id,user_id,tournament_name,team_a,team_b,match_date,referee,match_time,location,categoria
-181f923e-743b-456c-90f6-43372447ab3e,1,8,1-1,1-2,2024-05-30,Juan Reyes,22:08,Bello,Femenino
-eaef4cb2-f8cb-4406-8053-71ac048a5ad0,1,3,1-3,1-4,2024-05-15,Juan Reyes,22:08,Bello,Masculino
-9797df2f-ed37-48a1-ac91-9f3b818945f1,10,9,10-5,10-6,2024-05-25,Juan Reyes,13:13,Bello,Masculino
+e3e4ee27-dd09-423c-90dd-0fd79c99ed66,1,UNAL febrero,1-1,1-2,2024-05-16,Juan Reyes,10:57,Barranquilla,Femenino
+ad2ea254-ba87-4b2c-b989-81d52e2377e1,1,Los Yakuza,1-3,1-4,2024-05-16,Juan Reyes,10:00,Bello,Masculino
+b05b9059-33f3-4b94-b03b-deac587c9cc7,1,Los Yakuza,1-4,1-3,2024-05-16,Juan Reyes,14:58,Barranquilla,Masculino
+3a0a7c36-daf9-41fa-8f13-7d951c2be285,10,Torneo Juvenil,10-6,10-5,2024-05-22,Juan Reyes,10:02,Barranquilla,Masculino

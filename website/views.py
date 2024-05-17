@@ -340,14 +340,18 @@ def get_user_teams():
 @login_required
 def schedule_match():
     if request.method == 'POST':
-        tournament_name = request.form.get('tournamentSelect')
+        tournament_id = request.form.get('tournamentSelect')
         team_a = request.form.get('teamA')
         team_b = request.form.get('teamB')
         match_date = request.form.get('date')
         referee = request.form.get('referee')
         location = request.form.get('location')
         categoria = request.form.get('categoria')
-        match_time = request.form.get('match_time') 
+        match_time = request.form.get('match_time')
+
+        # Obtener el nombre del torneo basado en el ID
+        torneo = Torneo.query.filter_by(id=tournament_id, user_id=current_user.id).first()
+        tournament_name = torneo.nombre if torneo else "Unknown Tournament"
 
         # Crear un identificador único para cada partido
         match_id = str(uuid.uuid4())
@@ -367,7 +371,7 @@ def schedule_match():
             'team_b': [team_b],
             'match_date': [match_date],
             'referee': [referee],
-            'match_time': [match_time], 
+            'match_time': [match_time],
             'location': [location],
             'categoria': [categoria]
         })
@@ -384,6 +388,7 @@ def schedule_match():
         flash('Partido programado con éxito!', 'success')
         return redirect(url_for('views.calendar'))
     return redirect(url_for('views.home'))
+ 
 
 @views.route('/get-team-names', methods=['GET'])
 def get_team_names():
