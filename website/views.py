@@ -220,21 +220,25 @@ def create_team():
         flash('Todos los campos son requeridos.', 'error')
         return redirect(url_for('views.teams'))
 
-    # ID del usuario actual
-    user_id = current_user.id
-
     # Leer el archivo CSV si existe
     csv_file_path = 'teams.csv'
     if os.path.exists(csv_file_path):
         df = pd.read_csv(csv_file_path)
-
-        # Filtrar los equipos del usuario actual para asignar un ID único
-        user_teams = df[df['UserID'] == user_id]
-        team_id = f"{user_id}-{len(user_teams) + 1}"
+        if df.empty:
+            team_id = 1
+        else:
+            max_team_id = df['TeamID'].apply(lambda x: int(x.split('-')[1])).max()
+            team_id = max_team_id + 1
     else:
         # Crear un nuevo DataFrame si el archivo no existe
         df = pd.DataFrame(columns=['TeamID', 'UserID', 'TeamName', 'CaptainName', 'CaptainContact', 'Category', 'Location'])
-        team_id = f"{user_id}-1"
+        team_id = 1
+
+    # ID del usuario actual
+    user_id = current_user.id
+
+    # Formatear el nuevo TeamID como un número entero
+    team_id = f"{user_id}-{team_id}"
 
     # Añadir el nuevo equipo a la base de datos
     nuevo_equipo = Team(
@@ -265,6 +269,7 @@ def create_team():
 
     flash('Equipo creado con éxito.', 'success')
     return redirect(url_for('views.teams'))
+
 
 def generate_next_id(csv_file_path):
     if os.path.exists(csv_file_path):
@@ -307,11 +312,11 @@ def add_player():
     return redirect(url_for('views.teams'))
 
 
-@views.route('/get-user-tournaments')
+@views.route('/get-user-tournaments', methods=['GET'])
 @login_required
 def get_user_tournaments():
     torneos = Torneo.query.filter_by(user_id=current_user.id).all()
-    torneos_data = [{'id': torneo.id, 'name': torneo.nombre} for torneo in torneos]
+    torneos_data = [{'id': torneo.id, 'nombre': torneo.nombre} for torneo in torneos]
     return jsonify(torneos_data)
 
 
@@ -329,6 +334,7 @@ def get_user_teams():
         return jsonify(teams_formatted)
     else:
         return jsonify([])  # Devuelve una lista vacía si no hay archivo o no hay equipos
+
     
 @views.route('/schedule-match', methods=['POST'])
 @login_required
@@ -411,10 +417,18 @@ def get_matches():
 
 
 @views.route('/get-teams/<categoria>')
+@login_required
 def get_teams(categoria):
-    teams = Team.query.filter_by(categoria=categoria).all()
-    team_data = [{'id': team.id, 'name': team.nombre} for team in teams]
-    return jsonify(team_data)
+    csv_file_path = 'teams.csv'
+    if os.path.exists(csv_file_path):
+        df = pd.read_csv(csv_file_path)
+        # Filtrar los equipos que pertenecen al usuario actual y la categoría especificada
+        filtered_teams = df[(df['UserID'] == current_user.id) & (df['Category'] == categoria)]
+        teams_data = filtered_teams.to_dict(orient='records')
+        teams_formatted = [{'id': team['TeamID'], 'name': team['TeamName']} for team in teams_data]
+        return jsonify(teams_formatted)
+    else:
+        return jsonify([])  # Devuelve una lista vacía si no hay archivo o no hay equipos
 
 
 

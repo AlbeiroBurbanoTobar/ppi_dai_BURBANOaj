@@ -117,10 +117,11 @@
 </style>
 
 <script>
+
 function loadTournaments() {
-    fetch('/get-tournaments')
+    fetch('/get-user-tournaments')
         .then(response => response.json())
-        .then(tournaments => {
+        .then(torneos => {
             const select = document.getElementById('tournamentSelect');
             select.innerHTML = '';
             const defaultOption = document.createElement('option');
@@ -130,10 +131,10 @@ function loadTournaments() {
             defaultOption.selected = true;
             select.appendChild(defaultOption);
 
-            tournaments.forEach(tournament => {
+            torneos.forEach(torneo => {
                 const option = document.createElement('option');
-                option.value = tournament.nombre;  // Usar el nombre como valor
-                option.textContent = tournament.nombre;
+                option.value = torneo.id; // Usar el ID como valor
+                option.textContent = torneo.nombre;
                 select.appendChild(option);
             });
 
@@ -300,7 +301,7 @@ function loadTeams() {
             const teamBSelect = document.getElementById('teamB');
             teamASelect.innerHTML = '';
             teamBSelect.innerHTML = '';
-            
+
             teams.forEach(team => {
                 const optionA = document.createElement('option');
                 optionA.value = team.id;
@@ -315,6 +316,7 @@ function loadTeams() {
         })
         .catch(error => console.error('Error al cargar los equipos:', error));
 }
+ 
 
 document.addEventListener('DOMContentLoaded', function() {
     const teamASelect = document.getElementById('teamA');
@@ -352,13 +354,13 @@ function updateTeamLists() {
             const teamBSelect = document.getElementById('teamB');
             teamASelect.innerHTML = '';
             teamBSelect.innerHTML = '';
-            
+
             data.forEach(team => {
                 const optionA = document.createElement('option');
                 optionA.value = team.id;
                 optionA.textContent = team.name;
                 teamASelect.appendChild(optionA);
-                
+
                 const optionB = document.createElement('option');
                 optionB.value = team.id;
                 optionB.textContent = team.name;
@@ -367,5 +369,6 @@ function updateTeamLists() {
         })
         .catch(error => console.error('Error al cargar los equipos:', error));
 }
+
 </script>
 {% endblock %}

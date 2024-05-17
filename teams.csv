@@ -1,10 +1,3 @@
 TeamID,UserID,TeamName,CaptainName,CaptainContact,Category,Location
-1-1,1,Los MySQL,PHP,PHP,Masculino,Medellín
-10-1,10,Los Aurelianos Buen Día,Pepe,987654321,Masculino,Cali
-10-2,10,Las 007,Liro Rodriguez,741852963,Femenino,Tumaco
-1-2,1,AlicoSoft,Miguel,1232134561,Femenino,Pasto
-1-3,1,Reales Bin,Jorge Milatos,159753034,Masculino,Pasto
-1-4,1,Las María,Maria,7412589630,Femenino,Bello
-1-5,1,Mauricios,Mauricio Lizcano,4567891230,Masculino,Bello
-1-6,1,Las 009,Andres,777777777,Masculino,Bogotá
-9-1,9,Las HardC,Marta,7412369874,Femenino,Bogotá
+1-1,1,Las María,Maria,1232134561,Femenino,Pasto
+1-2,1,LAS UNI,Angela Montenegro,7412589630,Femenino,Pasto
