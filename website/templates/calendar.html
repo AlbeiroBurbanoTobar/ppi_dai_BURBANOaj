@@ -85,7 +85,6 @@
         </tbody>
     </table>
 
-    <!-- Modal -->
 <div class="modal" id="eventModal" tabindex="-1" role="dialog">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
@@ -98,13 +97,39 @@
             <div class="modal-body">
                 <!-- Aquí se insertarán los detalles del partido -->
                 <div id="matchDetails"></div>
+                <div id="additionalFields">
+                    <form id="updateMatchForm">
+                        <div class="form-group">
+                            <label for="matchSelect">Selecciona el partido:</label>
+                            <select id="matchSelect" class="form-control"></select>
+                        </div>
+                        <div class="form-group">
+                            <label for="team_a_score">Puntuación Equipo A:</label>
+                            <input type="number" id="team_a_score" name="team_a_score" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label for="team_b_score">Puntuación Equipo B:</label>
+                            <input type="number" id="team_b_score" name="team_b_score" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label for="faltas_team_a">Faltas Equipo A:</label>
+                            <input type="number" id="faltas_team_a" name="faltas_team_a" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label for="faltas_team_b">Faltas Equipo B:</label>
+                            <input type="number" id="faltas_team_b" name="faltas_team_b" class="form-control">
+                        </div>
+                    </form>
+                </div>
             </div>
             <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="saveMatchDetails">Guardar</button>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
             </div>
         </div>
     </div>
 </div>
+
 
 </div>
 <style>
@@ -257,7 +282,7 @@ function showEventDetails(date) {
     table.appendChild(thead);
     const tbody = document.createElement('tbody');
     
-    matches.forEach(match => {
+    matches.forEach((match, index) => {
         const row = document.createElement('tr');
         row.innerHTML = `
             <td>${match.tournament_name}</td>
@@ -270,6 +295,13 @@ function showEventDetails(date) {
             <td>${match.categoria}</td>
         `;
         tbody.appendChild(row);
+
+        // Agregar opciones al selector
+        const matchSelect = document.getElementById('matchSelect');
+        const option = document.createElement('option');
+        option.value = match.match_id;
+        option.textContent = `${match.team_a_name} vs ${match.team_b_name} - ${match.match_time}`;
+        matchSelect.appendChild(option);
     });
 
     table.appendChild(tbody);
@@ -277,6 +309,37 @@ function showEventDetails(date) {
     $('#eventModal').modal('show');
 }
 
+// Guardar los detalles del partido
+document.getElementById('saveMatchDetails').addEventListener('click', () => {
+    const selectedMatchId = document.getElementById('matchSelect').value;
+    const teamAScore = document.getElementById('team_a_score').value;
+    const teamBScore = document.getElementById('team_b_score').value;
+    const faltasTeamA = document.getElementById('faltas_team_a').value;
+    const faltasTeamB = document.getElementById('faltas_team_b').value;
+    
+    const selectedMatch = window.matches.find(match => match.match_id === selectedMatchId);
+    selectedMatch.team_a_score = teamAScore;
+    selectedMatch.team_b_score = teamBScore;
+    selectedMatch.faltas_team_a = faltasTeamA;
+    selectedMatch.faltas_team_b = faltasTeamB;
+
+    // Guardar en el CSV
+    fetch('/update-match', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(selectedMatch)
+    }).then(response => response.json())
+      .then(data => {
+          if (data.success) {
+              alert('Detalles del partido guardados con éxito.');
+              $('#eventModal').modal('hide');
+          } else {
+              alert('Error al guardar los detalles del partido.');
+          }
+      });
+});
 
 const now = new Date();
 let currentMonth = now.getMonth();

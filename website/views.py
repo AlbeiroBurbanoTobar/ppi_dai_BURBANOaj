@@ -373,7 +373,11 @@ def schedule_match():
             'referee': [referee],
             'match_time': [match_time],
             'location': [location],
-            'categoria': [categoria]
+            'categoria': [categoria],
+            'team_a_score': [0],
+            'team_b_score': [0],
+            'faltas_team_a': [0],
+            'faltas_team_b': [0],
         })
 
         # Guardar o agregar al archivo CSV existente
@@ -440,6 +444,29 @@ def get_teams(categoria):
     else:
         return jsonify([])  # Devuelve una lista vacía si no hay archivo o no hay equipos
 
+@views.route('/update-match', methods=['POST'])
+@login_required
+def update_match():
+    data = request.get_json()
+    
+    csv_file_path = 'Partidos.csv'
+    if os.path.exists(csv_file_path):
+        df = pd.read_csv(csv_file_path)
+        
+        match_id = data['match_id']
+        match_index = df[df['match_id'] == match_id].index
+        
+        if not match_index.empty:
+            match_index = match_index[0]
+            df.at[match_index, 'team_a_score'] = data['team_a_score']
+            df.at[match_index, 'team_b_score'] = data['team_b_score']
+            df.at[match_index, 'faltas_team_a'] = data['faltas_team_a']
+            df.at[match_index, 'faltas_team_b'] = data['faltas_team_b']
+            
+            df.to_csv(csv_file_path, index=False)
+            return jsonify({'success': True})
+        
+    return jsonify({'success': False, 'message': 'Partido no encontrado'}), 404
 
 
 
