@@ -228,23 +228,44 @@ function showEventDetails(date) {
     matchDetailsContainer.innerHTML = '';
 
     const matches = window.matches.filter(match => match.match_date === date);
+    const table = document.createElement('table');
+    table.classList.add('table', 'table-bordered', 'table-striped');
+    const thead = document.createElement('thead');
+    thead.innerHTML = `
+        <tr>
+            <th>Torneo</th>
+            <th>Equipo A</th>
+            <th>Equipo B</th>
+            <th>Fecha</th>
+            <th>Hora</th>
+            <th>Árbitro</th>
+            <th>Ubicación</th>
+            <th>Categoría</th>
+        </tr>
+    `;
+    table.appendChild(thead);
+    const tbody = document.createElement('tbody');
+    
     matches.forEach(match => {
-        const matchDetail = document.createElement('div');
-        matchDetail.innerHTML = `
-            <p><strong>Torneo:</strong> ${match.tournament_name}</p>
-            <p><strong>Equipo A:</strong> ${match.team_a_name}</p>
-            <p><strong>Equipo B:</strong> ${match.team_b_name}</p>
-            <p><strong>Fecha:</strong> ${match.match_date}</p>
-            <p><strong>Hora:</strong> ${match.match_time}</p>
-            <p><strong>Árbitro:</strong> ${match.referee}</p>
-            <p><strong>Ubicación:</strong> ${match.location}</p>
-            <p><strong>Categoría:</strong> ${match.categoria}</p>
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td>${match.tournament_name}</td>
+            <td>${match.team_a_name}</td>
+            <td>${match.team_b_name}</td>
+            <td>${match.match_date}</td>
+            <td>${match.match_time}</td>
+            <td>${match.referee}</td>
+            <td>${match.location}</td>
+            <td>${match.categoria}</td>
         `;
-        matchDetailsContainer.appendChild(matchDetail);
+        tbody.appendChild(row);
     });
 
+    table.appendChild(tbody);
+    matchDetailsContainer.appendChild(table);
     $('#eventModal').modal('show');
 }
+
 
 const now = new Date();
 let currentMonth = now.getMonth();
