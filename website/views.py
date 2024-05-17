@@ -398,10 +398,14 @@ def get_team_names():
 
 
 @views.route('/get-matches', methods=['GET'])
+@login_required
 def get_matches():
     try:
         matches_df = pd.read_csv('Partidos.csv')
         teams_df = pd.read_csv('teams.csv')
+        
+        # Filtrar los partidos para incluir solo los creados por el usuario actual
+        matches_df = matches_df[matches_df['user_id'] == current_user.id]
         
         # Crear un diccionario para mapear TeamID a TeamName
         team_names = teams_df.set_index('TeamID')['TeamName'].to_dict()
@@ -413,6 +417,7 @@ def get_matches():
         return jsonify(matches)
     except Exception as e:
         return jsonify({'error': str(e)}), 500
+
 
 
 

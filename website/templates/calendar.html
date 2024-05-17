@@ -154,6 +154,7 @@ function fetchMatches() {
         .catch(error => console.error('Error al cargar partidos:', error));
 }
 
+
 function generateCalendar(month, year) {
     const firstDay = new Date(year, month).getDay();
     const daysInMonth = new Date(year, month + 1, 0).getDate();
