@@ -524,7 +524,7 @@ select:hover, button:hover {
 
 
 .calendar td:hover {
-    background-color: #f0f0f0;
+    background-color: #FFA500;
 }
 
 /* Estilizar el display de mes y año */
@@ -536,7 +536,7 @@ select:hover, button:hover {
 }
 
 .today {
-    background-color: #acd4ffc5; /* Color amarillo para destacar la fecha actual */
+    background-color: #007bff; /* Color amarillo para destacar la fecha actual */
     color: white;
 }
 

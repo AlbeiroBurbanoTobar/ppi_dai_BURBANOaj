@@ -103,22 +103,29 @@
                             <label for="matchSelect">Selecciona el partido:</label>
                             <select id="matchSelect" class="form-control"></select>
                         </div>
-                        <div class="form-group">
-                            <label for="team_a_score">Puntuación Equipo A:</label>
-                            <input type="number" id="team_a_score" name="team_a_score" class="form-control">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="team_a_score">Puntuación Equipo A:</label>
+                                <input type="number" id="team_a_score" name="team_a_score" class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <label for="team_b_score">Puntuación Equipo B:</label>
+                                <input type="number" id="team_b_score" name="team_b_score" class="form-control">
+                            </div>
                         </div>
-                        <div class="form-group">
-                            <label for="team_b_score">Puntuación Equipo B:</label>
-                            <input type="number" id="team_b_score" name="team_b_score" class="form-control">
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="faltas_team_a">Faltas Equipo A:</label>
+                                <input type="number" id="faltas_team_a" name="faltas_team_a" class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <label for="faltas_team_b">Faltas Equipo B:</label>
+                                <input type="number" id="faltas_team_b" name="faltas_team_b" class="form-control">
+                            </div>
                         </div>
-                        <div class="form-group">
-                            <label for="faltas_team_a">Faltas Equipo A:</label>
-                            <input type="number" id="faltas_team_a" name="faltas_team_a" class="form-control">
-                        </div>
-                        <div class="form-group">
-                            <label for="faltas_team_b">Faltas Equipo B:</label>
-                            <input type="number" id="faltas_team_b" name="faltas_team_b" class="form-control">
-                        </div>
+
+
                     </form>
                 </div>
             </div>
@@ -192,6 +199,10 @@ function fetchMatches() {
 function generateCalendar(month, year) {
     const firstDay = new Date(year, month).getDay();
     const daysInMonth = new Date(year, month + 1, 0).getDate();
+    const today = new Date();
+    const todayDate = today.getDate();
+    const todayMonth = today.getMonth();
+    const todayYear = today.getFullYear();
 
     const tbody = document.getElementById('calendarBody');
     const monthYearDisplay = document.getElementById('monthYearDisplay');
@@ -212,6 +223,12 @@ function generateCalendar(month, year) {
             } else {
                 cell.textContent = date;
                 cell.dataset.date = `${year}-${String(month + 1).padStart(2, '0')}-${String(date).padStart(2, '0')}`;
+
+                // Marcar el día actual
+                if (date === todayDate && month === todayMonth && year === todayYear) {
+                    cell.classList.add('today');
+                }
+
                 cell.addEventListener('click', () => showEventDetails(cell.dataset.date));
                 date++;
             }
@@ -221,6 +238,7 @@ function generateCalendar(month, year) {
     }
     displayMatches();
 }
+
 
 function displayMatches() {
     window.matches.forEach(match => {
