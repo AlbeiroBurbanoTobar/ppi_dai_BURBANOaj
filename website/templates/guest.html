@@ -46,6 +46,8 @@ Guest
 <br>
 <!-- Sección para seleccionar torneos y ver más información -->
 <div class="container" align="center">
+  <p>Selecciona un torneo de la lista desplegable y haz clic en "Más Información"
+    para ver los detalles del torneo seleccionado.</p>
   <label for="tournamentSelect">Selecciona un torneo:</label>
   <select id="tournamentSelect" class="form-control" style="max-width: 300px; display: inline-block;">
       {% for torneo in torneos %}
@@ -101,6 +103,9 @@ Guest
 <!-- Sección para el calendario de todos los partidos -->
 <div class="container">
   <h2 class="my-4">Calendario de Todos los Partidos</h2>
+  <p>En esta sección puedes ver el calendario de todos 
+    los partidos programados. Haz clic en "Ver Mapa" junto
+     a cada partido para ver la ubicación del mismo.</p>
   <table class="table table-bordered">
     <thead>
       <tr>
@@ -124,7 +129,7 @@ Guest
         <td>{{ match.location }}</td>
         <td>{{ match.match_time }}</td>
         <td>{{ match.categoria }}</td>
-        <td><button class="btn btn-info" data-toggle="modal" data-target="#mapModal" onclick="loadMap('{{ match.location }}')">Ver Mapa</button></td>
+        <td><button class="btn btn-ver-mapa"  data-toggle="modal" data-target="#mapModal" onclick="loadMap('{{ match.location }}')">Ver Mapa</button></td>
       </tr>
       {% endfor %}
     </tbody>
@@ -184,6 +189,18 @@ Guest
   }
   .custom-modal-content {
       height: 90vh;
+  }
+</style>
+
+<style>
+  .btn-ver-mapa {
+      background-color: #007bff; /* Color del botón */
+      color: white; /* Color del texto */
+      border-color: #007bff; /* Color del borde */
+  }
+  .btn-ver-mapa:hover {
+      background-color: #0056b3; /* Color del botón al pasar el mouse */
+      border-color: #0056b3; /* Color del borde al pasar el mouse */
   }
 </style>
 
