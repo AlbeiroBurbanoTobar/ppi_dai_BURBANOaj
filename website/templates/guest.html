@@ -26,7 +26,6 @@ Guest
             <p style="color: white; text-shadow: 2px 2px 4px #000000;">Fecha: {{ torneo.fecha_inicio }} - {{ torneo.fecha_final }}</p>
             <p style="color: white; text-shadow: 2px 2px 4px #000000;">Deporte: {{ torneo.deporte }}</p>
             <p style="color: white; text-shadow: 2px 2px 4px #000000;">Equipos: {{ torneo.equipos_participantes }}</p>
-            <a href="#" class="btn btn-primary">Más información</a>
           </div>
         </div>
       </div>
@@ -43,6 +42,42 @@ Guest
     <span class="sr-only">Siguiente</span>
   </a>
 </div>
+
+<br>
+<!-- Sección para seleccionar torneos y ver más información -->
+<div class="container" align="center">
+  <label for="tournamentSelect">Selecciona un torneo:</label>
+  <select id="tournamentSelect" class="form-control" style="max-width: 300px; display: inline-block;">
+      {% for torneo in torneos %}
+          <option value="{{ torneo.nombre }}">{{ torneo.nombre }}</option>
+      {% endfor %}
+  </select>
+  <button id="moreInfoBtn" class="btn btn-primary" style="margin-left: 10px;">Más Información</button>
+</div>
+
+<!-- Modal para mostrar la información del torneo -->
+<div class="modal fade" id="tournamentInfoModal" tabindex="-1" role="dialog" aria-labelledby="tournamentInfoModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xl custom-modal-dialog" role="document"> <!-- Añadido custom-modal-dialog -->
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="tournamentInfoModalLabel">Información del Torneo</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <!-- Descripción de la tabla -->
+        <p>Esta tabla muestra los detalles de los partidos programados para el torneo seleccionado, incluyendo las puntuaciones y las faltas de cada equipo.</p>
+        <!-- Aquí se llenará la información del torneo -->
+        <div id="tournamentInfoContent"></div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 
 <!-- Sección para el calendario de todos los partidos -->
 <div class="container">
@@ -119,4 +154,49 @@ Guest
     <img src="../static/link-icon.png" alt="Mira el perfil de linkedin" style="width: 24px; height: 24px; vertical-align: middle;">
   </a>
 </div>
+
+<!-- Añadir estilos CSS personalizados -->
+<style>
+  .custom-modal-dialog {
+      max-width: 100%;
+      width: 100%;
+  }
+  .custom-modal-content {
+      height: 90vh;
+  }
+  </style>
+
+
+<script>
+document.getElementById('moreInfoBtn').addEventListener('click', function() {
+    var select = document.getElementById('tournamentSelect');
+    var selectedTournament = select.options[select.selectedIndex].value;
+    
+    fetch(`/get-tournament-info/${selectedTournament}`)
+        .then(response => response.json())
+        .then(data => {
+            var content = "<table class='table table-bordered'><thead><tr><th>Fecha</th><th>Equipo A</th><th>Equipo B</th><th>Ubicación</th><th>Hora</th><th>Categoría</th><th>Score Equipo A</th><th>Score Equipo B</th><th>Faltas Equipo A</th><th>Faltas Equipo B</th><th>Media Puntuaciones</th><th>Media Faltas</th></tr></thead><tbody>";
+            data.matches.forEach(match => {
+                content += `<tr>
+                    <td>${match.match_date}</td>
+                    <td>${match.team_a}</td>
+                    <td>${match.team_b}</td>
+                    <td>${match.location}</td>
+                    <td>${match.match_time}</td>
+                    <td>${match.categoria}</td>
+                    <td>${match.team_a_score}</td>
+                    <td>${match.team_b_score}</td>
+                    <td>${match.faltas_team_a}</td>
+                    <td>${match.faltas_team_b}</td>
+                    <td>${match.media_puntuacion.toFixed(2)}</td>
+                    <td>${match.media_faltas.toFixed(2)}</td>
+                </tr>`;
+            });
+            content += "</tbody></table>";
+            document.getElementById('tournamentInfoContent').innerHTML = content;
+            $('#tournamentInfoModal').modal('show');
+        })
+        .catch(error => console.error('Error:', error));
+});
+</script>
 {% endblock %}

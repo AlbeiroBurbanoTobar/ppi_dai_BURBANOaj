@@ -11,6 +11,7 @@ import matplotlib.pyplot as plt
 import io
 import base64
 from datetime import datetime
+import numpy as np
 
 
 views = Blueprint('views', __name__)
@@ -45,71 +46,58 @@ def home():
     return render_template("home.html", user=current_user)
 
 
+
 @views.route('/guest')
 def guest():
-    """Renderiza la plantilla 'guest.html', pasando al usuario actual y la lista de todos los partidos desde el CSV.
-
-    Returns:
-        str: La plantilla a renderizar.
-    """
-    torneos = Torneo.query.all()  # Asegúrate de que esta línea se ajuste a tu modelo y datos.
+    torneos = Torneo.query.all()
     
-    # Leer equipos
     teams_csv_path = 'teams.csv'
     teams = {}
 
     if os.path.exists(teams_csv_path):
         df_teams = pd.read_csv(teams_csv_path)
         teams = df_teams.set_index('TeamID')['TeamName'].to_dict()
-    
-    # Leer partidos
+
     partidos_csv_path = 'Partidos.csv'
     matches = []
 
     if os.path.exists(partidos_csv_path):
         df_matches = pd.read_csv(partidos_csv_path)
         
-        # Reemplazar IDs de equipos por nombres
         df_matches['team_a'] = df_matches['team_a'].map(teams)
         df_matches['team_b'] = df_matches['team_b'].map(teams)
         
-        # Filtrar partidos con fechas futuras
         today = datetime.today().date()
         df_matches['match_date'] = pd.to_datetime(df_matches['match_date']).dt.date
         df_matches = df_matches[df_matches['match_date'] >= today]
         
         matches = df_matches.to_dict(orient='records')
 
-    # Crear gráfico de partidos por fecha
     match_dates = df_matches['match_date'].value_counts().sort_index()
     fig, ax = plt.subplots()
-    match_dates.plot(kind='line', ax=ax, marker='o', color='#007bff')  # Cambiado color de línea a #007bff
+    match_dates.plot(kind='line', ax=ax, marker='o', color='#007bff')
     ax.set_xlabel('Fecha')
     ax.set_ylabel('Número de Partidos')
     ax.set_title('Distribución de Partidos por Fecha')
     
-    # Mejorar visualización del eje x
     plt.xticks(rotation=45, ha='right')
     plt.tight_layout()
 
-    # Guardar gráfico en un buffer
     buf = io.BytesIO()
     plt.savefig(buf, format='png')
     buf.seek(0)
     image_base64 = base64.b64encode(buf.getvalue()).decode('utf8')
     buf.close()
 
-    # Crear gráfico de categorías de equipos
     category_counts = df_teams['Category'].value_counts()
     fig2, ax2 = plt.subplots()
     colors = ['#007bff' if category == 'Masculino' else '#ff69b4' for category in category_counts.index]
-    category_counts.plot(kind='bar', ax=ax2, color=colors)  # Colores personalizados para cada categoría
+    category_counts.plot(kind='bar', ax=ax2, color=colors)
     ax2.set_xlabel('Categoría')
     ax2.set_ylabel('Número de Equipos')
     ax2.set_title('Distribución de Equipos por Categoría')
-    plt.xticks(rotation=0, ha='center')  # Ajuste de rotación y alineación
+    plt.xticks(rotation=0, ha='center')
 
-    # Guardar gráfico en un buffer
     buf2 = io.BytesIO()
     plt.savefig(buf2, format='png')
     buf2.seek(0)
@@ -532,6 +520,39 @@ def update_match():
         
     return jsonify({'success': False, 'message': 'Partido no encontrado'}), 404
 
+
+
+
+@views.route('/get-tournament-info/<tournament_name>')
+def get_tournament_info(tournament_name):
+    partidos_csv_path = 'Partidos.csv'
+    teams_csv_path = 'teams.csv'
+    
+    # Cargar nombres de equipos
+    if os.path.exists(teams_csv_path):
+        df_teams = pd.read_csv(teams_csv_path)
+        teams_dict = df_teams.set_index('TeamID')['TeamName'].to_dict()
+    else:
+        teams_dict = {}
+
+    # Cargar y filtrar partidos
+    if os.path.exists(partidos_csv_path):
+        df_matches = pd.read_csv(partidos_csv_path)
+        df_matches = df_matches[df_matches['tournament_name'] == tournament_name]
+
+        # Reemplazar IDs de equipos por nombres
+        df_matches['team_a'] = df_matches['team_a'].map(teams_dict)
+        df_matches['team_b'] = df_matches['team_b'].map(teams_dict)
+
+        # Calcular medias
+        df_matches['media_puntuacion'] = df_matches[['team_a_score', 'team_b_score']].mean(axis=1)
+        df_matches['media_faltas'] = df_matches[['faltas_team_a', 'faltas_team_b']].mean(axis=1)
+
+        matches = df_matches.to_dict(orient='records')
+    else:
+        matches = []
+
+    return jsonify(matches=matches)
 
 
 
