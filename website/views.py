@@ -45,7 +45,6 @@ def home():
     return render_template("home.html", user=current_user)
 
 
-
 @views.route('/guest')
 def guest():
     """Renderiza la plantilla 'guest.html', pasando al usuario actual y la lista de todos los partidos desde el CSV.
@@ -81,10 +80,10 @@ def guest():
         
         matches = df_matches.to_dict(orient='records')
 
-    # Crear gráfico
+    # Crear gráfico de partidos por fecha
     match_dates = df_matches['match_date'].value_counts().sort_index()
     fig, ax = plt.subplots()
-    match_dates.plot(kind='line', ax=ax, marker='o')  # Añadido marker='o' para visualizar mejor los puntos
+    match_dates.plot(kind='line', ax=ax, marker='o', color='#007bff')  # Cambiado color de línea a #007bff
     ax.set_xlabel('Fecha')
     ax.set_ylabel('Número de Partidos')
     ax.set_title('Distribución de Partidos por Fecha')
@@ -100,8 +99,24 @@ def guest():
     image_base64 = base64.b64encode(buf.getvalue()).decode('utf8')
     buf.close()
 
-    return render_template('guest.html', user=current_user, torneos=torneos, matches=matches, image_base64=image_base64)
+    # Crear gráfico de categorías de equipos
+    category_counts = df_teams['Category'].value_counts()
+    fig2, ax2 = plt.subplots()
+    colors = ['#007bff' if category == 'Masculino' else '#ff69b4' for category in category_counts.index]
+    category_counts.plot(kind='bar', ax=ax2, color=colors)  # Colores personalizados para cada categoría
+    ax2.set_xlabel('Categoría')
+    ax2.set_ylabel('Número de Equipos')
+    ax2.set_title('Distribución de Equipos por Categoría')
+    plt.xticks(rotation=0, ha='center')  # Ajuste de rotación y alineación
 
+    # Guardar gráfico en un buffer
+    buf2 = io.BytesIO()
+    plt.savefig(buf2, format='png')
+    buf2.seek(0)
+    category_image_base64 = base64.b64encode(buf2.getvalue()).decode('utf8')
+    buf2.close()
+
+    return render_template('guest.html', user=current_user, torneos=torneos, matches=matches, image_base64=image_base64, category_image_base64=category_image_base64)
 
 
 @views.route('/delete-note', methods=['POST'])

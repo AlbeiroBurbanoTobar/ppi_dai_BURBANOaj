@@ -5,3 +5,4 @@ match_id,user_id,tournament_name,team_a,team_b,match_date,referee,match_time,loc
 1f85a81f-dba9-479f-9da6-5e391002f356,1,Los Yakuza,1-4,1-3,2024-05-19,Juan Reyes,08:07,Medellín,Masculino,0,0,0,0
 e9ff2b46-be39-4aec-901c-5fa04a8613e9,1,Reoginal,1-3,1-4,2024-06-03,Juan Reyes,08:08,Pasto,Masculino,0,0,0,0
 876bae1b-5d49-4a85-9610-0f7822e59665,10,Torneo Juvenil,10-5,10-6,2024-05-20,Juan Reyes,14:18,Barranquilla,Masculino,0,0,0,0
+c6a685bc-0a10-46c4-ad93-3c08329f6884,1,Reoginal,1-4,1-3,2024-05-20,Juan Reyes,00:23,Pasto,Masculino,0,0,0,0
