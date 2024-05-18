@@ -12,6 +12,9 @@ import io
 import base64
 from datetime import datetime
 import numpy as np
+import requests
+import geopandas as gpd
+from shapely.geometry import Point, box
 
 
 views = Blueprint('views', __name__)
@@ -556,6 +559,69 @@ def get_tournament_info(tournament_name):
 
 
 
+def get_coordinates(address):
+    url = 'https://nominatim.openstreetmap.org/search'
+    params = {'q': address, 'format': 'json'}
+    headers = {'User-Agent': 'Mozilla/5.0 (compatible; my bot/0.1; +http://mywebsite.com/bot)'}
+
+    try:
+        response = requests.get(url, params=params, headers=headers)
+        response.raise_for_status()  # Levanta una excepción para errores HTTP
+        data = response.json()
+        if data:
+            lat = float(data[0]['lat'])
+            lon = float(data[0]['lon'])
+            return lat, lon
+        else:
+            print("No se encontraron resultados para la dirección proporcionada.")
+            return None
+    except requests.exceptions.RequestException as e:
+        print(f"Error en la solicitud HTTP: {e}")
+        return None
+    except ValueError as e:
+        print(f"Error al decodificar la respuesta JSON: {e}")
+        return None
+
+def generate_map(address):
+    coords = get_coordinates(address)
+    if coords:
+        lat, lon = coords
+        point = Point(lon, lat)
+        gdf = gpd.GeoDataFrame([{'geometry': point, 'address': address}])
+
+        # Cargar directamente un archivo GeoJSON desde GitHub
+        url = 'https://raw.githubusercontent.com/johan/world.geo.json/master/countries.geo.json'
+        world = gpd.read_file(url)
+
+        # Crear una caja delimitadora alrededor de las coordenadas
+        buffer = 0.1  # Grados de latitud y longitud para la caja delimitadora
+        bbox = box(lon-buffer, lat-buffer, lon+buffer, lat+buffer)
+
+        # Filtrar el GeoDataFrame para incluir solo los países dentro de la caja delimitadora
+        world = world[world.intersects(bbox)]
+
+        ax = world.plot(figsize=(10, 6))
+        gdf.plot(ax=ax, color='red', markersize=100)
+        ax.set_title('Mapa con dirección geocodificada')
+
+        buf = io.BytesIO()
+        plt.savefig(buf, format='png')
+        buf.seek(0)
+        image_base64 = base64.b64encode(buf.getvalue()).decode('utf8')
+        buf.close()
+
+        return image_base64
+    else:
+        print("No se pudieron obtener las coordenadas.")
+        return None
+
+@views.route('/get-map/<address>', methods=['GET'])
+def get_map(address):
+    map_image = generate_map(address)
+    if map_image:
+        return jsonify({'image_base64': map_image})
+    else:
+        return jsonify({'error': 'No se pudieron obtener las coordenadas.'}), 500
 
 
 

@@ -57,7 +57,7 @@ Guest
 
 <!-- Modal para mostrar la información del torneo -->
 <div class="modal fade" id="tournamentInfoModal" tabindex="-1" role="dialog" aria-labelledby="tournamentInfoModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-xl custom-modal-dialog" role="document"> <!-- Añadido custom-modal-dialog -->
+  <div class="modal-dialog modal-xl custom-modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="tournamentInfoModalLabel">Información del Torneo</h5>
@@ -78,6 +78,25 @@ Guest
   </div>
 </div>
 
+<!-- Modal para mostrar el mapa -->
+<div class="modal fade" id="mapModal" tabindex="-1" role="dialog" aria-labelledby="mapModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="mapModalLabel">Mapa de la ubicación del partido</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <img id="mapImage" src="" alt="Mapa de la ubicación del partido" class="img-fluid">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>
 
 <!-- Sección para el calendario de todos los partidos -->
 <div class="container">
@@ -92,6 +111,7 @@ Guest
         <th>Ubicación</th>
         <th>Hora</th>
         <th>Categoría</th>
+        <th>Mapa</th> <!-- Nueva columna para el botón del mapa -->
       </tr>
     </thead>
     <tbody>
@@ -104,6 +124,7 @@ Guest
         <td>{{ match.location }}</td>
         <td>{{ match.match_time }}</td>
         <td>{{ match.categoria }}</td>
+        <td><button class="btn btn-info" data-toggle="modal" data-target="#mapModal" onclick="loadMap('{{ match.location }}')">Ver Mapa</button></td>
       </tr>
       {% endfor %}
     </tbody>
@@ -164,8 +185,7 @@ Guest
   .custom-modal-content {
       height: 90vh;
   }
-  </style>
-
+</style>
 
 <script>
 document.getElementById('moreInfoBtn').addEventListener('click', function() {
@@ -198,5 +218,18 @@ document.getElementById('moreInfoBtn').addEventListener('click', function() {
         })
         .catch(error => console.error('Error:', error));
 });
+
+function loadMap(address) {
+  fetch(`/get-map/${address}`)
+    .then(response => response.json())
+    .then(data => {
+      if (data.image_base64) {
+        document.getElementById('mapImage').src = `data:image/png;base64,${data.image_base64}`;
+      } else {
+        alert('No se pudieron obtener las coordenadas para la ubicación proporcionada.');
+      }
+    })
+    .catch(error => console.error('Error:', error));
+}
 </script>
 {% endblock %}
