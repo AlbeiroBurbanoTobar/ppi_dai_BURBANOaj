@@ -39,9 +39,46 @@ Guest
     <span class="sr-only">Previous</span>
   </a>
   <a class="carousel-control-next" href="#tournamentCarousel" role="button" data-slide="next">
-    <span la="carousel-control-next-icon" aria-hidden="true"></span>
-    <span la="sr-only">Siguiente</span>
+    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+    <span class="sr-only">Siguiente</span>
   </a>
+</div>
+
+<!-- Sección para el calendario de todos los partidos -->
+<div class="container">
+  <h2 class="my-4">Calendario de Todos los Partidos</h2>
+  <table class="table table-bordered">
+    <thead>
+      <tr>
+        <th>Fecha</th>
+        <th>Torneo</th>
+        <th>Equipo A</th>
+        <th>Equipo B</th>
+        <th>Ubicación</th>
+        <th>Hora</th>
+        <th>Categoría</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for match in matches %}
+      <tr>
+        <td>{{ match.match_date }}</td>
+        <td>{{ match.tournament_name }}</td>
+        <td>{{ match.team_a }}</td>
+        <td>{{ match.team_b }}</td>
+        <td>{{ match.location }}</td>
+        <td>{{ match.match_time }}</td>
+        <td>{{ match.categoria }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+<!-- Gráfica de distribución de partidos por fecha (gráfica de línea)-->
+<div style="text-align: center;">
+  <h2 class="my-4">Distribución de Partidos por Fecha</h2>
+  <img src="data:image/png;base64,{{ image_base64 }}" alt="Distribución de Partidos por Fecha">
 </div>
 
 <br>
@@ -53,14 +90,13 @@ Guest
 <div id="mi-firma">
   <span>Created by Albeiro Burbano :)  </span>
   <a href="mailto:aburbanot@unal.edu.co">
-        <img src="../static/email-icon.png" alt="Enviar correo" style="width: 24px; height: 24px; vertical-align: middle;">
-    </a>
+    <img src="../static/email-icon.png" alt="Enviar correo" style="width: 24px; height: 24px; vertical-align: middle;">
+  </a>
   <a href="https://www.freelancer.com/u/Albeiro73?sb=t">
-      <img src="../static/free-icon .png" alt="Ver perfil en freelancer" style="width: 24px; height: 24px; vertical-align: middle;">
+    <img src="../static/free-icon .png" alt="Ver perfil en freelancer" style="width: 24px; height: 24px; vertical-align: middle;">
   </a>
   <a href="https://github.com/AlbeiroBurbanoTobar/ppi_pl_BurbanoA">
     <img src="../static/git-icon.png" alt="Ver repositorio" style="width: 24px; height: 24px; vertical-align: middle;">
-  </a>
   </a>
   <a href="https://stackoverflow.com/users/24090991/albeiro-burbano">
     <img src="../static/stack-icon.png" alt="Mira el perfil de stackoverflow" style="width: 24px; height: 24px; vertical-align: middle;">

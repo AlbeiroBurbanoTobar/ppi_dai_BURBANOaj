@@ -7,7 +7,10 @@ import json
 import pandas as pd
 import os
 import uuid 
-from datetime import date
+import matplotlib.pyplot as plt
+import io
+import base64
+from datetime import datetime
 
 
 views = Blueprint('views', __name__)
@@ -42,17 +45,63 @@ def home():
     return render_template("home.html", user=current_user)
 
 
+
 @views.route('/guest')
 def guest():
-    """Renderiza la plantilla "guest.html", pasando al usuario
-    actual si está autenticado o None si no lo está.
+    """Renderiza la plantilla 'guest.html', pasando al usuario actual y la lista de todos los partidos desde el CSV.
 
     Returns:
         str: La plantilla a renderizar.
     """
-    torneos = Torneo.query.all()
+    torneos = Torneo.query.all()  # Asegúrate de que esta línea se ajuste a tu modelo y datos.
+    
+    # Leer equipos
+    teams_csv_path = 'teams.csv'
+    teams = {}
 
-    return render_template("guest.html", user=current_user if current_user.is_authenticated else None, torneos=torneos)
+    if os.path.exists(teams_csv_path):
+        df_teams = pd.read_csv(teams_csv_path)
+        teams = df_teams.set_index('TeamID')['TeamName'].to_dict()
+    
+    # Leer partidos
+    partidos_csv_path = 'Partidos.csv'
+    matches = []
+
+    if os.path.exists(partidos_csv_path):
+        df_matches = pd.read_csv(partidos_csv_path)
+        
+        # Reemplazar IDs de equipos por nombres
+        df_matches['team_a'] = df_matches['team_a'].map(teams)
+        df_matches['team_b'] = df_matches['team_b'].map(teams)
+        
+        # Filtrar partidos con fechas futuras
+        today = datetime.today().date()
+        df_matches['match_date'] = pd.to_datetime(df_matches['match_date']).dt.date
+        df_matches = df_matches[df_matches['match_date'] >= today]
+        
+        matches = df_matches.to_dict(orient='records')
+
+    # Crear gráfico
+    match_dates = df_matches['match_date'].value_counts().sort_index()
+    fig, ax = plt.subplots()
+    match_dates.plot(kind='line', ax=ax, marker='o')  # Añadido marker='o' para visualizar mejor los puntos
+    ax.set_xlabel('Fecha')
+    ax.set_ylabel('Número de Partidos')
+    ax.set_title('Distribución de Partidos por Fecha')
+    
+    # Mejorar visualización del eje x
+    plt.xticks(rotation=45, ha='right')
+    plt.tight_layout()
+
+    # Guardar gráfico en un buffer
+    buf = io.BytesIO()
+    plt.savefig(buf, format='png')
+    buf.seek(0)
+    image_base64 = base64.b64encode(buf.getvalue()).decode('utf8')
+    buf.close()
+
+    return render_template('guest.html', user=current_user, torneos=torneos, matches=matches, image_base64=image_base64)
+
 
 
 @views.route('/delete-note', methods=['POST'])
@@ -467,6 +516,9 @@ def update_match():
             return jsonify({'success': True})
         
     return jsonify({'success': False, 'message': 'Partido no encontrado'}), 404
+
+
+
 
 
 
