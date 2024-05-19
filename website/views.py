@@ -25,22 +25,17 @@ import seaborn as sns
 views = Blueprint('views', __name__)
 
 
+from flask import Blueprint, render_template, request, flash
+from flask_login import login_required, current_user
+import pandas as pd
+import numpy as np
+import os
+
+views = Blueprint('views', __name__)
+
 @views.route('/', methods=['GET', 'POST'])
 @login_required
 def home():
-    """Maneja la funcionalidad de la página de inicio.
-
-    Si el método de la solicitud es POST, recupera la nota del formulario
-    y verifica si es demasiado corta.
-    Si no lo es, crea una nueva nota y la añade a la base de datos.
-    Luego, muestra un mensaje de éxito
-    y renderiza la plantilla "home.html".
-
-    Si el método es GET, simplemente renderiza la plantilla "home.html".
-
-    Returns:
-        str: La plantilla a renderizar.
-    """
     if request.method == 'POST':
         note = request.form.get('note')
         if len(note) < 1:
@@ -51,7 +46,72 @@ def home():
             db.session.commit()
             flash('¡Nota añadida!', category='success')
 
-    return render_template("home.html", user=current_user)
+    # Cargar archivos CSV
+    partidos_csv_path = 'Partidos.csv'
+    players_csv_path = 'Players.csv'
+    teams_csv_path = 'teams.csv'
+    
+    # Obtener el user_id del usuario actual
+    user_id = current_user.id
+
+    avg_time, earliest_time, latest_time, avg_age = None, None, None, None
+    num_partidos, num_jugadores = 0, 0
+
+    if os.path.exists(partidos_csv_path) and os.path.exists(players_csv_path) and os.path.exists(teams_csv_path):
+        df_partidos = pd.read_csv(partidos_csv_path)
+        df_players = pd.read_csv(players_csv_path)
+        df_teams = pd.read_csv(teams_csv_path)
+
+        # Asegurarse de que el tipo de datos de user_id en los DataFrames sea consistente
+        df_teams['UserID'] = df_teams['UserID'].astype(int)
+
+        # Filtrar equipos que pertenecen al usuario actual
+        user_teams = df_teams[df_teams['UserID'] == user_id]
+
+        # Obtener los TeamIDs de los equipos del usuario
+        user_team_ids = user_teams['TeamID']
+
+        # Filtrar jugadores que pertenecen a los equipos del usuario actual
+        user_players = df_players[df_players['TeamID'].isin(user_team_ids)]
+
+        # Contar el número de jugadores del usuario
+        num_jugadores = len(user_players)
+
+        # Calcular el promedio de edad utilizando NumPy
+        if not user_players.empty:
+            avg_age = np.mean(user_players['Age'])
+        
+        # Filtrar partidos que pertenecen al usuario actual
+        df_partidos['user_id'] = df_partidos['user_id'].astype(int)
+        user_partidos = df_partidos[df_partidos['user_id'] == user_id]
+
+        # Contar el número de partidos del usuario
+        num_partidos = len(user_partidos)
+
+        # Verificar si hay partidos del usuario
+        if not user_partidos.empty:
+            # Convertir la columna de tiempo a datetime
+            user_partidos['match_time'] = pd.to_datetime(user_partidos['match_time'], format='%H:%M')
+
+            # Calcular el promedio de horarios utilizando NumPy
+            times_in_seconds = user_partidos['match_time'].dt.hour * 3600 + user_partidos['match_time'].dt.minute * 60
+            avg_time_seconds = np.mean(times_in_seconds)
+            avg_hour = int(avg_time_seconds // 3600)
+            avg_minute = int((avg_time_seconds % 3600) // 60)
+
+            # Formatear el promedio de tiempo en HH:MM
+            avg_time = f"{avg_hour:02d}:{avg_minute:02d}"
+
+            # Calcular la hora más temprana y la más tardía
+            earliest_time = user_partidos['match_time'].min().strftime('%H:%M')
+            latest_time = user_partidos['match_time'].max().strftime('%H:%M')
+
+    return render_template("home.html", user=current_user, avg_time=avg_time, earliest_time=earliest_time, latest_time=latest_time, avg_age=avg_age, user_id=user_id, num_partidos=num_partidos, num_jugadores=num_jugadores)
+
+
+
+
+
 
 
 @views.route('/guest')

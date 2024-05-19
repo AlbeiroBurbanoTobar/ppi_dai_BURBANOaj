@@ -12,18 +12,71 @@ Home
     </div>
 {% endif %}
 
-<!-- Sección para mostrar el resumen y las estadísticas del torneo. -->
-<div id="Resumen">
-    <h2>Resumen</h2>
-    <p>Se planea mostrar resumen y estadísticas del torneo</p>
-    <!-- En el futuro, se añadirán un calendario interactivo y formularios de asignación. -->
+<!-- Tabla para mostrar las métricas -->
+<div id="metrics-table">
+    <h2>Resumen de Datos</h2>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Métrica</th>
+                <th>Valor</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Número de Partidos Programados</td>
+                <td>Tienes {{ num_partidos }} partidos programados.</td>
+            </tr>
+            <tr>
+                <td>Promedio de Horarios de los Partidos</td>
+                <td>
+                    {% if avg_time is not none %}
+                        El promedio de horario de tus partidos es: {{ avg_time }}
+                    {% else %}
+                        No tienes partidos programados.
+                    {% endif %}
+                </td>
+            </tr>
+            <tr>
+                <td>Hora más temprana de los partidos</td>
+                <td>
+                    {% if earliest_time is not none %}
+                        La hora más temprana de tus partidos es: {{ earliest_time }}
+                    {% else %}
+                        No tienes partidos programados.
+                    {% endif %}
+                </td>
+            </tr>
+            <tr>
+                <td>Hora más tardía de los partidos</td>
+                <td>
+                    {% if latest_time is not none %}
+                        La hora más tardía de tus partidos es: {{ latest_time }}
+                    {% else %}
+                        No tienes partidos programados.
+                    {% endif %}
+                </td>
+            </tr>
+            <tr>
+                <td>Número de Jugadores Registrados</td>
+                <td>Tienes {{ num_jugadores }} jugadores registrados.</td>
+            </tr>
+            <tr>
+                <td>Promedio de Edad de los Jugadores</td>
+                <td>
+                    {% if avg_age is not none %}
+                        El promedio de edad de tus jugadores es: {{ avg_age|round(2) }} años.
+                    {% else %}
+                        No tienes jugadores registrados.
+                    {% endif %}
+                </td>
+            </tr>
+        </tbody>
+    </table>
 </div>
 
 <!-- Sección de notas para recordatorios y tareas. -->
 <h3 align="center">Recordatorios y tareas</h3>
-<p>Registra tus ideas, tareas, y recordatorios relacionados con la organización
-  del torneo. Mantén un seguimiento detallado de los equipos, juegos, y otros
-  aspectos importantes para un evento exitoso.</p>
 <ul class="list-group list-group-flush" id="notes">
   {% for note in user.notes %}
   <!-- Lista de elementos para cada nota del usuario. -->
@@ -54,10 +107,10 @@ Home
 <div id="mi-firma">
   <span>Created by Albeiro Burbano :)  </span>
   <a href="mailto:aburbanot@unal.edu.co">
-        <img src="../static/email-icon.png" alt="Enviar correo" style="width: 24px; height: 24px; vertical-align: middle;">
-    </a>
+      <img src="../static/email-icon.png" alt="Enviar correo" style="width: 24px; height: 24px; vertical-align: middle;">
+  </a>
   <a href="https://www.freelancer.com/u/Albeiro73?sb=t">
-      <img src="../static/free-icon .png" alt="Ver perfil en freelancer" style="width: 24px; height: 24px; vertical-align: middle;">
+    <img src="../static/free-icon .png" alt="Ver perfil en freelancer" style="width: 24px; height: 24px; vertical-align: middle;">
   </a>
   <a href="https://github.com/AlbeiroBurbanoTobar/ppi_pl_BurbanoA">
     <img src="../static/git-icon.png" alt="Ver repositorio" style="width: 24px; height: 24px; vertical-align: middle;">
