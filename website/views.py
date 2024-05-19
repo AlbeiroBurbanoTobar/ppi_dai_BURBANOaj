@@ -53,6 +53,7 @@ def home():
 
     return render_template("home.html", user=current_user)
 
+
 @views.route('/guest')
 def guest():
     torneos = Torneo.query.all()
@@ -76,7 +77,7 @@ def guest():
         df_matches = df_matches[df_matches['match_date'] >= today]
         matches = df_matches.to_dict(orient='records')
 
-    # Análisis de Correlación
+    # Análisis de Correlación con scipy
     correlation_image_base64 = None
     if not df_matches.empty:
         # Calcular las características agregadas por equipo
@@ -88,23 +89,15 @@ def guest():
         # Renombrar columnas para claridad
         team_stats.columns = ['TeamID', 'AvgScore', 'AvgFouls']
 
-        # Debug: Imprimir el contenido de team_stats
-        print("Contenido de team_stats:")
-        print(team_stats)
-
         # Verificar que no haya valores NaN y que haya más de un equipo
         if not team_stats[['AvgScore', 'AvgFouls']].isnull().values.any() and len(team_stats) > 1:
-            # Calcular la matriz de correlación
-            correlation_matrix = team_stats[['AvgScore', 'AvgFouls']].corr()
-
-            # Debug: Imprimir la matriz de correlación
-            print("Matriz de correlación:")
-            print(correlation_matrix)
-
+            # Calcular la correlación de Pearson con scipy
+            corr_coef, p_value = pearsonr(team_stats['AvgScore'], team_stats['AvgFouls'])
+            
             # Crear el mapa de calor de correlación
             plt.figure(figsize=(8, 6))
-            sns.heatmap(correlation_matrix, annot=True, cmap='coolwarm', vmin=-1, vmax=1, center=0, linewidths=.5)
-            plt.title('Mapa de Calor de Correlación entre Puntuaciones y Faltas')
+            sns.heatmap(team_stats[['AvgScore', 'AvgFouls']].corr(), annot=True, cmap='coolwarm', vmin=-1, vmax=1, center=0, linewidths=.5)
+            plt.title(f'Mapa de Calor de Correlación (Coeficiente de Pearson: {corr_coef:.2f}, p-value: {p_value:.2f})')
 
             buf = io.BytesIO()
             plt.savefig(buf, format='png')
@@ -147,7 +140,6 @@ def guest():
     buf2.close()
 
     return render_template('guest.html', user=current_user, torneos=torneos, matches=matches, image_base64=image_base64, category_image_base64=category_image_base64, correlation_image_base64=correlation_image_base64)
-
 
 
 @views.route('/delete-note', methods=['POST'])
