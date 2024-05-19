@@ -123,11 +123,11 @@ Guest
   </table>
 </div>
 
-{% if regression_image_base64 %}
+{% if correlation_image_base64 %}
 <div style="text-align: center;">
-    <h2 class="my-4">Análisis de Regresión entre Puntuaciones y Faltas</h2>
-    <p>El gráfico muestra la relación entre las puntuaciones promedio y las faltas promedio de los equipos, junto con una línea de regresión lineal.</p>
-    <img src="data:image/png;base64,{{ regression_image_base64 }}" alt="Gráfico de Regresión">
+    <h2 class="my-4">Análisis de Correlación entre Puntuaciones y Faltas</h2>
+    <p>El mapa de calor muestra la relación de correlación entre las puntuaciones promedio y las faltas promedio de los equipos.</p>
+    <img src="data:image/png;base64,{{ correlation_image_base64 }}" alt="Mapa de Calor de Correlación">
 </div>
 {% endif %}
 

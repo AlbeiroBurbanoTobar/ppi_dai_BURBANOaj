@@ -5,4 +5,5 @@ pandas
 matplotlib
 requests
 geopandas
-scipy 
+scipy
+seaborn
