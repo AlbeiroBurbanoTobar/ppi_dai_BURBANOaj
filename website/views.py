@@ -53,6 +53,7 @@ def home():
 
     return render_template("home.html", user=current_user)
 
+
 @views.route('/guest')
 def guest():
     torneos = Torneo.query.all()
@@ -89,7 +90,7 @@ def guest():
         team_stats.columns = ['TeamID', 'AvgScore', 'AvgFouls']
 
         # Verificar que no haya valores NaN
-        if not team_stats[['AvgScore', 'AvgFouls']].isnull().values.any():
+        if not team_stats[['AvgScore', 'AvgFouls']].isnull().values.any() and len(team_stats) > 1:
             # Calcular la correlación de Pearson
             correlation_matrix = team_stats[['AvgScore', 'AvgFouls']].corr()
 
@@ -139,7 +140,6 @@ def guest():
     buf2.close()
 
     return render_template('guest.html', user=current_user, torneos=torneos, matches=matches, image_base64=image_base64, category_image_base64=category_image_base64, correlation_image_base64=correlation_image_base64)
-
 
 
 
