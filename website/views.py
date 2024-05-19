@@ -53,8 +53,6 @@ def home():
 
     return render_template("home.html", user=current_user)
 
-
-
 @views.route('/guest')
 def guest():
     torneos = Torneo.query.all()
@@ -90,19 +88,23 @@ def guest():
         # Renombrar columnas para claridad
         team_stats.columns = ['TeamID', 'AvgScore', 'AvgFouls']
 
-        # Calcular la correlación de Pearson
-        correlation, _ = pearsonr(team_stats['AvgScore'], team_stats['AvgFouls'])
+        # Verificar que no haya valores NaN
+        if not team_stats[['AvgScore', 'AvgFouls']].isnull().values.any():
+            # Calcular la correlación de Pearson
+            correlation_matrix = team_stats[['AvgScore', 'AvgFouls']].corr()
 
-        # Crear el mapa de calor de correlación
-        plt.figure(figsize=(10, 7))
-        sns.heatmap(team_stats[['AvgScore', 'AvgFouls']].corr(), annot=True, cmap='coolwarm')
-        plt.title('Mapa de Calor de Correlación entre Puntuaciones y Faltas')
+            # Crear el mapa de calor de correlación
+            plt.figure(figsize=(8, 6))
+            sns.heatmap(correlation_matrix, annot=True, cmap='coolwarm', vmin=-1, vmax=1, center=0, linewidths=.5)
+            plt.title('Mapa de Calor de Correlación entre Puntuaciones y Faltas')
 
-        buf = io.BytesIO()
-        plt.savefig(buf, format='png')
-        buf.seek(0)
-        correlation_image_base64 = base64.b64encode(buf.getvalue()).decode('utf8')
-        buf.close()
+            buf = io.BytesIO()
+            plt.savefig(buf, format='png')
+            buf.seek(0)
+            correlation_image_base64 = base64.b64encode(buf.getvalue()).decode('utf8')
+            buf.close()
+        else:
+            correlation_image_base64 = None
 
     # Gráfica de distribución de partidos por fecha
     match_dates = df_matches['match_date'].value_counts().sort_index()
@@ -137,6 +139,12 @@ def guest():
     buf2.close()
 
     return render_template('guest.html', user=current_user, torneos=torneos, matches=matches, image_base64=image_base64, category_image_base64=category_image_base64, correlation_image_base64=correlation_image_base64)
+
+
+
+
+
+
 @views.route('/delete-note', methods=['POST'])
 def delete_note():
     """Elimina una nota de la base de datos.
