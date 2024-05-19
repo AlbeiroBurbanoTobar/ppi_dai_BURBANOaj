@@ -50,35 +50,32 @@ def home():
     return render_template("home.html", user=current_user)
 
 
-
 @views.route('/guest')
 def guest():
     torneos = Torneo.query.all()
     
+    # Cargar los datos de los equipos
     teams_csv_path = 'teams.csv'
     teams = {}
-
     if os.path.exists(teams_csv_path):
         df_teams = pd.read_csv(teams_csv_path)
         teams = df_teams.set_index('TeamID')['TeamName'].to_dict()
 
+    # Cargar los datos de los partidos
     partidos_csv_path = 'Partidos.csv'
     matches = []
-
     if os.path.exists(partidos_csv_path):
         df_matches = pd.read_csv(partidos_csv_path)
-        
         df_matches['team_a'] = df_matches['team_a'].map(teams)
         df_matches['team_b'] = df_matches['team_b'].map(teams)
-        
         today = datetime.today().date()
         df_matches['match_date'] = pd.to_datetime(df_matches['match_date']).dt.date
         df_matches = df_matches[df_matches['match_date'] >= today]
-        
         matches = df_matches.to_dict(orient='records')
 
     # Análisis de Regresión
     regression_image_base64 = None
+    regression_message = None
 
     if not df_matches.empty:
         # Calcular las características agregadas por equipo
@@ -90,25 +87,29 @@ def guest():
         # Renombrar columnas para claridad
         team_stats.columns = ['TeamID', 'AvgScore', 'AvgFouls']
 
-        # Realizar el análisis de regresión
-        X = team_stats['AvgScore']
-        Y = team_stats['AvgFouls']
-        slope, intercept, r_value, p_value, std_err = stats.linregress(X, Y)
+        # Verificar si todos los valores de X son idénticos
+        if len(team_stats['AvgScore'].unique()) > 1:
+            # Realizar el análisis de regresión
+            X = team_stats['AvgScore']
+            Y = team_stats['AvgFouls']
+            slope, intercept, r_value, p_value, std_err = stats.linregress(X, Y)
 
-        # Crear el gráfico de regresión
-        plt.figure()
-        plt.scatter(X, Y, color='blue', label='Datos')
-        plt.plot(X, slope * X + intercept, color='red', label=f'Regresión Lineal (R²={r_value**2:.2f})')
-        plt.xlabel('Puntuaciones Promedio')
-        plt.ylabel('Faltas Promedio')
-        plt.title('Relación entre Puntuaciones y Faltas')
-        plt.legend()
+            # Crear el gráfico de regresión
+            plt.figure()
+            plt.scatter(X, Y, color='blue', label='Datos')
+            plt.plot(X, slope * X + intercept, color='red', label=f'Regresión Lineal (R²={r_value**2:.2f})')
+            plt.xlabel('Puntuaciones Promedio')
+            plt.ylabel('Faltas Promedio')
+            plt.title('Relación entre Puntuaciones y Faltas')
+            plt.legend()
 
-        buf = io.BytesIO()
-        plt.savefig(buf, format='png')
-        buf.seek(0)
-        regression_image_base64 = base64.b64encode(buf.getvalue()).decode('utf8')
-        buf.close()
+            buf = io.BytesIO()
+            plt.savefig(buf, format='png')
+            buf.seek(0)
+            regression_image_base64 = base64.b64encode(buf.getvalue()).decode('utf8')
+            buf.close()
+        else:
+            regression_message = "No se puede calcular una regresión lineal porque todos los valores de puntuaciones promedio son idénticos."
 
     # Gráfica de distribución de partidos por fecha
     match_dates = df_matches['match_date'].value_counts().sort_index()
@@ -142,7 +143,9 @@ def guest():
     category_image_base64 = base64.b64encode(buf2.getvalue()).decode('utf8')
     buf2.close()
 
-    return render_template('guest.html', user=current_user, torneos=torneos, matches=matches, image_base64=image_base64, category_image_base64=category_image_base64, regression_image_base64=regression_image_base64)
+    return render_template('guest.html', user=current_user, torneos=torneos, matches=matches, image_base64=image_base64, category_image_base64=category_image_base64, regression_image_base64=regression_image_base64, regression_message=regression_message)
+
+
 
 @views.route('/delete-note', methods=['POST'])
 def delete_note():
