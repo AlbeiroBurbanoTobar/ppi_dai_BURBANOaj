@@ -25,13 +25,6 @@ import seaborn as sns
 views = Blueprint('views', __name__)
 
 
-from flask import Blueprint, render_template, request, flash
-from flask_login import login_required, current_user
-import pandas as pd
-import numpy as np
-import os
-
-views = Blueprint('views', __name__)
 
 @views.route('/', methods=['GET', 'POST'])
 @login_required
@@ -56,6 +49,7 @@ def home():
 
     avg_time, earliest_time, latest_time, avg_age = None, None, None, None
     num_partidos, num_jugadores = 0, 0
+    arbitros_img_base64 = None
 
     if os.path.exists(partidos_csv_path) and os.path.exists(players_csv_path) and os.path.exists(teams_csv_path):
         df_partidos = pd.read_csv(partidos_csv_path)
@@ -106,12 +100,27 @@ def home():
             earliest_time = user_partidos['match_time'].min().strftime('%H:%M')
             latest_time = user_partidos['match_time'].max().strftime('%H:%M')
 
-    return render_template("home.html", user=current_user, avg_time=avg_time, earliest_time=earliest_time, latest_time=latest_time, avg_age=avg_age, user_id=user_id, num_partidos=num_partidos, num_jugadores=num_jugadores)
+            # Calcular la frecuencia de árbitros
+            arbitros_freq = user_partidos['referee'].value_counts()
 
+            # Crear la gráfica de barras horizontal con el color especificado
+            plt.figure(figsize=(10, 6))
+            arbitros_freq.plot(kind='barh', color='#007bff')
+            plt.xlabel('Número de partidos')
+            plt.ylabel('Árbitro')
+            plt.title('Frecuencia de árbitros en los partidos')
 
+            # Guardar la imagen en un buffer
+            buf = io.BytesIO()
+            plt.savefig(buf, format='png')
+            buf.seek(0)
 
+            # Codificar la imagen en base64
+            arbitros_img_base64 = base64.b64encode(buf.read()).decode('utf-8')
+            buf.close()
+            plt.close()
 
-
+    return render_template("home.html", user=current_user, avg_time=avg_time, earliest_time=earliest_time, latest_time=latest_time, avg_age=avg_age, user_id=user_id, num_partidos=num_partidos, num_jugadores=num_jugadores, arbitros_img_base64=arbitros_img_base64)
 
 
 @views.route('/guest')

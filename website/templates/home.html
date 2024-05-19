@@ -99,6 +99,15 @@ Home
 </ul>
 
 <br>
+<!-- Sección para mostrar la gráfica de frecuencia de árbitros -->
+{% if arbitros_img_base64 %}
+<div id="arbitros-frecuencia" style="text-align: center;">
+    <h2>Frecuencia de Árbitros en los Partidos</h2>
+    <img src="data:image/png;base64,{{ arbitros_img_base64 }}" alt="Frecuencia de Árbitros">
+</div>
+{% endif %}
+
+<br>
 <br>
 <br>
 <br>
