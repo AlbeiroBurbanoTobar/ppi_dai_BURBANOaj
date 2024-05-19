@@ -18,13 +18,15 @@ from shapely.geometry import Point, box
 from scipy import stats
 from scipy.stats import pearsonr
 import seaborn as sns
-
+from scipy.cluster.hierarchy import dendrogram, linkage
+import matplotlib
+matplotlib.use('Agg')  # Usar el backend Agg
+from sklearn.preprocessing import StandardScaler
 
 
 
 views = Blueprint('views', __name__)
-
-
+ 
 
 @views.route('/', methods=['GET', 'POST'])
 @login_required
@@ -49,7 +51,7 @@ def home():
 
     avg_time, earliest_time, latest_time, avg_age = None, None, None, None
     num_partidos, num_jugadores = 0, 0
-    arbitros_img_base64 = None
+    arbitros_img_base64, clusters_img_base64 = None, None
 
     if os.path.exists(partidos_csv_path) and os.path.exists(players_csv_path) and os.path.exists(teams_csv_path):
         df_partidos = pd.read_csv(partidos_csv_path)
@@ -74,10 +76,11 @@ def home():
         # Calcular el promedio de edad utilizando NumPy
         if not user_players.empty:
             avg_age = np.mean(user_players['Age'])
-        
-        # Filtrar partidos que pertenecen al usuario actual
-        df_partidos['user_id'] = df_partidos['user_id'].astype(int)
-        user_partidos = df_partidos[df_partidos['user_id'] == user_id]
+        else:
+            avg_age = 0  # Si no hay jugadores, establecer avg_age a 0
+
+        # Filtrar partidos que pertenecen a los equipos del usuario actual
+        user_partidos = df_partidos[df_partidos['team_a'].isin(user_team_ids) | df_partidos['team_b'].isin(user_team_ids)]
 
         # Contar el número de partidos del usuario
         num_partidos = len(user_partidos)
@@ -120,7 +123,48 @@ def home():
             buf.close()
             plt.close()
 
-    return render_template("home.html", user=current_user, avg_time=avg_time, earliest_time=earliest_time, latest_time=latest_time, avg_age=avg_age, user_id=user_id, num_partidos=num_partidos, num_jugadores=num_jugadores, arbitros_img_base64=arbitros_img_base64)
+        # Fusionar datos de partidos con nombres de equipos
+        user_partidos = user_partidos.merge(df_teams[['TeamID', 'TeamName']], left_on='team_a', right_on='TeamID', how='left')
+        user_partidos.rename(columns={'TeamName': 'team_a_name'}, inplace=True)
+        user_partidos = user_partidos.merge(df_teams[['TeamID', 'TeamName']], left_on='team_b', right_on='TeamID', how='left')
+        user_partidos.rename(columns={'TeamName': 'team_b_name'}, inplace=True)
+
+        # Crear etiquetas más descriptivas usando los nombres de los equipos
+        user_partidos['team_names'] = user_partidos['team_a_name'] + ' vs ' + user_partidos['team_b_name']
+
+        # Aplicar clustering jerárquico a los equipos basado en las puntuaciones y faltas
+        features = ['team_a_score', 'team_b_score', 'faltas_team_a', 'faltas_team_b']
+        df_features = user_partidos[features].dropna()
+        scaler = StandardScaler()
+        scaled_features = scaler.fit_transform(df_features)
+
+        # Usar clustering jerárquico con SciPy
+        linked = linkage(scaled_features, method='ward')
+
+        # Crear el dendrograma con etiquetas más descriptivas
+        plt.figure(figsize=(14, 8))  # Reducir el tamaño del gráfico
+        dendrogram(linked,
+                   orientation='top',
+                   labels=list(user_partidos['team_names']),
+                   distance_sort='descending',
+                   show_leaf_counts=True)
+        plt.title('Dendrograma de Equipos Basado en Puntuaciones y Faltas')
+        plt.xlabel('Equipos')
+        plt.ylabel('Distancia')
+        plt.xticks(rotation=45, ha='right', fontsize=10)  # Rotar las etiquetas y ajustar su tamaño
+        plt.tight_layout()  # Ajustar el diseño para evitar etiquetas cortadas
+
+        # Guardar la imagen en un buffer
+        buf = io.BytesIO()
+        plt.savefig(buf, format='png')
+        buf.seek(0)
+
+        # Codificar la imagen en base64
+        clusters_img_base64 = base64.b64encode(buf.read()).decode('utf-8')
+        buf.close()
+        plt.close()
+
+    return render_template("home.html", user=current_user, avg_time=avg_time, earliest_time=earliest_time, latest_time=latest_time, avg_age=avg_age, user_id=user_id, num_partidos=num_partidos, num_jugadores=num_jugadores, arbitros_img_base64=arbitros_img_base64, clusters_img_base64=clusters_img_base64)
 
 
 @views.route('/guest')

@@ -7,16 +7,16 @@ Home
 {% block content %}
 {% if current_user.is_authenticated %}
     <!-- Mensaje de bienvenida con el nombre del usuario autenticado. -->
-    <div class="welcome-message">
+    <div class="welcome-message text-center">
         <h1>Bienvenido, {{ current_user.first_name }}.</h1>
     </div>
 {% endif %}
 
 <!-- Tabla para mostrar las métricas -->
-<div id="metrics-table">
-    <h2>Resumen de Datos</h2>
-    <table class="table table-striped">
-        <thead>
+<div id="metrics-table" class="container my-4">
+    <h2 class="text-center">Resumen de Datos</h2>
+    <table class="table table-bordered table-hover">
+        <thead class="thead-dark">
             <tr>
                 <th>Métrica</th>
                 <th>Valor</th>
@@ -76,61 +76,113 @@ Home
 </div>
 
 <!-- Sección de notas para recordatorios y tareas. -->
-<h3 align="center">Recordatorios y tareas</h3>
-<ul class="list-group list-group-flush" id="notes">
-  {% for note in user.notes %}
-  <!-- Lista de elementos para cada nota del usuario. -->
-  <li class="list-group-item">
-    {{ note.data }}
-    <button type="button" class="close" onClick="deleteNote({{ note.id }})">
-      <span aria-hidden="true">&times;</span>
-    </button>
-  </li>
-  {% endfor %}
+<div class="container my-4">
+    <h3 class="text-center">Recordatorios y tareas</h3>
+    <ul class="list-group list-group-flush" id="notes">
+        {% for note in user.notes %}
+        <!-- Lista de elementos para cada nota del usuario. -->
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+            {{ note.data }}
+            <button type="button" class="close" onClick="deleteNote({{ note.id }})">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </li>
+        {% endfor %}
 
-  <!-- Formulario para agregar una nueva nota. -->
-  <form method="POST">
-    <textarea name="note" id="note" class="form-control"></textarea>
-    <br />
-    <div align="center">
-      <button type="submit" class="btn btn-primary">Agregar nota</button>
-    </div>
-  </form>
-</ul>
+        <!-- Formulario para agregar una nueva nota. -->
+        <form method="POST" class="my-2">
+            <textarea name="note" id="note" class="form-control mb-2" placeholder="Escribe una nueva nota..."></textarea>
+            <div class="text-center">
+                <button type="submit" class="btn btn-primary">Agregar nota</button>
+            </div>
+        </form>
+    </ul>
+</div>
 
-<br>
 <!-- Sección para mostrar la gráfica de frecuencia de árbitros -->
 {% if arbitros_img_base64 %}
-<div id="arbitros-frecuencia" style="text-align: center;">
+<div id="arbitros-frecuencia" class="text-center my-4">
     <h2>Frecuencia de Árbitros en los Partidos</h2>
-    <img src="data:image/png;base64,{{ arbitros_img_base64 }}" alt="Frecuencia de Árbitros">
+    <img src="data:image/png;base64,{{ arbitros_img_base64 }}" alt="Frecuencia de Árbitros" class="img-fluid">
 </div>
 {% endif %}
 
-<br>
-<br>
-<br>
-<br>
-
-<!-- Firma del desarrollador con enlaces a sus perfiles y contactos. -->
-<div id="mi-firma">
-  <span>Created by Albeiro Burbano :)  </span>
-  <a href="mailto:aburbanot@unal.edu.co">
-      <img src="../static/email-icon.png" alt="Enviar correo" style="width: 24px; height: 24px; vertical-align: middle;">
-  </a>
-  <a href="https://www.freelancer.com/u/Albeiro73?sb=t">
-    <img src="../static/free-icon .png" alt="Ver perfil en freelancer" style="width: 24px; height: 24px; vertical-align: middle;">
-  </a>
-  <a href="https://github.com/AlbeiroBurbanoTobar/ppi_pl_BurbanoA">
-    <img src="../static/git-icon.png" alt="Ver repositorio" style="width: 24px; height: 24px; vertical-align: middle;">
-  </a>
-  </a>
-  <a href="https://stackoverflow.com/users/24090991/albeiro-burbano">
-    <img src="../static/stack-icon.png" alt="Mira el perfil de stackoverflow" style="width: 24px; height: 24px; vertical-align: middle;">
-  </a>
-  <a href="http://www.linkedin.com/in/albeiro-jose-burbano-tobar-759ba4297">
-    <img src="../static/link-icon.png" alt="Mira el perfil de linkedin" style="width: 24px; height: 24px; vertical-align: middle;">
-  </a>
+<!-- Sección para mostrar la gráfica de clusters -->
+{% if clusters_img_base64 %}
+<div id="clusters-frecuencia" class="text-center my-4">
+    <h2>Clusters de Equipos Basados en Puntuaciones y Faltas
+        <!-- Botón de ayuda -->
+        <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#dendrogramHelpModal" style="background-color: #007bff;">¿Cómo interpretar?</button>
+    </h2>
+    <img src="data:image/png;base64,{{ clusters_img_base64 }}" alt="Clusters de Equipos" class="img-fluid">
 </div>
+{% endif %}
+
+<!-- Modal de Ayuda -->
+<div class="modal fade" id="dendrogramHelpModal" tabindex="-1" role="dialog" aria-labelledby="dendrogramHelpModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="dendrogramHelpModalLabel">¿Cómo interpretar el dendrograma?</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>El dendrograma es una herramienta de visualización utilizada para mostrar el resultado del análisis de clustering jerárquico. Aquí se explica cómo interpretarlo:</p>
+                <ul>
+                    <li><strong>Ejes del Dendrograma:</strong>
+                        <ul>
+                            <li><strong>Eje X (Horizontal):</strong> Representa las etiquetas de los partidos. Cada etiqueta corresponde a un partido o a un grupo de partidos.</li>
+                            <li><strong>Eje Y (Vertical):</strong> Representa la distancia o disimilitud entre los partidos o grupos de partidos. Cuanto mayor es la altura en 
+                                el eje Y donde se unen dos grupos, mayor es la disimilitud entre ellos.</li>
+                        </ul>
+                    </li>
+                    <li><strong>Ramas del Dendrograma:</strong>
+                        <ul>
+                            <li><strong>Ramas y Hojas:</strong> Cada rama del dendrograma representa un grupo de partidos.
+                                 Las hojas al final de las ramas representan los partidos individuales.</li>
+                            <li><strong>Unión de Ramas:</strong> El punto en el que dos ramas se unen indica el nivel de 
+                                similitud entre los grupos que se unen. Cuanto más baja es la unión, más similares son los grupos.
+                                 Por ejemplo, si dos partidos se unen a una altura baja, significa que tienen puntuaciones y faltas similares.</li>
+                        </ul>
+                    </li>
+                    <li><strong>Distancia:</strong>
+                        <ul>
+                            <li><strong>Altura de las Uniones:</strong> La altura a la que se unen dos grupos indica la distancia o
+                                 disimilitud entre ellos. Una unión más baja significa que los partidos en esos grupos son más similares
+                                  entre sí, mientras que una unión más alta indica que son más diferentes.</li>
+                        </ul>
+                    </li>
+                </ul>
+                <p>Utiliza esta información para identificar grupos naturales, analizar similitudes y planificar estrategias basadas en el rendimiento de los partidos.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Sección de la firma del desarrollador. -->
+<div id="mi-firma">
+    <span>Created by Albeiro Burbano :)  </span>
+    <a href="mailto:aburbanot@unal.edu.co">
+      <img src="../static/email-icon.png" alt="Enviar correo" style="width: 24px; height: 24px; vertical-align: middle;">
+    </a>
+    <a href="https://www.freelancer.com/u/Albeiro73?sb=t">
+      <img src="../static/free-icon .png" alt="Ver perfil en freelancer" style="width: 24px; height: 24px; vertical-align: middle;">
+    </a>
+    <a href="https://github.com/AlbeiroBurbanoTobar/ppi_pl_BurbanoA">
+      <img src="../static/git-icon.png" alt="Ver repositorio" style="width: 24px; height: 24px; vertical-align: middle;">
+    </a>
+    <a href="https://stackoverflow.com/users/24090991/albeiro-burbano">
+      <img src="../static/stack-icon.png" alt="Mira el perfil de stackoverflow" style="width: 24px; height: 24px; vertical-align: middle;">
+    </a>
+    <a href="http://www.linkedin.com/in/albeiro-jose-burbano-tobar-759ba4297">
+      <img src="../static/link-icon.png" alt="Mira el perfil de linkedin" style="width: 24px; height: 24px; vertical-align: middle;">
+    </a>
+  </div>
+<br>
 
 {% endblock %}
