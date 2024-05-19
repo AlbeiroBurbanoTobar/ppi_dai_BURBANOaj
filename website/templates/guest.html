@@ -126,10 +126,69 @@ Guest
 {% if correlation_image_base64 %}
 <div style="text-align: center;">
     <h2 class="my-4">Mapa de Calor de Correlación entre Puntuaciones y Faltas</h2>
-    <p>El mapa de calor muestra la relación de correlación entre las puntuaciones promedio y las faltas promedio de los equipos.</p>
+    <p>El mapa de calor muestra la relación de correlación entre diferentes variables relacionadas con los equipos en el torneo.</p>
     <img src="data:image/png;base64,{{ correlation_image_base64 }}" alt="Mapa de Calor de Correlación">
+    
+    <!-- Botón de Ayuda -->
+    <button type="button" class="btn btn-ver-mapa"  data-toggle="modal" data-target="#helpModal">
+      ¿Cómo Interpretar?
+    </button>
+
+    <!-- Modal de Ayuda -->
+    <div class="modal fade" id="helpModal" tabindex="-1" role="dialog" aria-labelledby="helpModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="helpModalLabel">Interpretación del Mapa de Calor de Correlación</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" style="text-align: left;">
+                    <p>
+                        El siguiente mapa de calor muestra la correlación entre diferentes variables relacionadas con los equipos en el torneo. A continuación, se detallan los elementos clave y su interpretación:
+                    </p>
+                    <ol>
+                        <li><strong>Coeficiente de Correlación de Pearson:</strong> 
+                            <ul>
+                                <li><strong>Valor:</strong> El coeficiente de correlación de Pearson es un valor entre -1 y 1 que indica la fuerza y la dirección de la relación lineal entre dos variables.</li>
+                                <li><strong>Positivo:</strong> Un valor positivo indica que a medida que una variable aumenta, la otra también tiende a aumentar.</li>
+                                <li><strong>Negativo:</strong> Un valor negativo indica que a medida que una variable aumenta, la otra tiende a disminuir.</li>
+                                <li><strong>Cero:</strong> Un valor cercano a 0 indica que no hay una relación lineal significativa entre las dos variables.</li>
+                                <li><strong>Interpretación:</strong> Los valores cercanos a 1 o -1 indican una fuerte correlación, ya sea positiva o negativa, mientras que los valores cercanos a 0 indican poca o ninguna correlación.</li>
+                            </ul>
+                        </li>
+                        <li><strong>P-valor:</strong> 
+                            <ul>
+                                <li><strong>Valor:</strong> El p-valor indica la probabilidad de que la correlación observada ocurra por azar.</li>
+                                <li><strong>Significativo:</strong> Un p-valor bajo (típicamente menor que 0.05) sugiere que la correlación observada es estadísticamente significativa.</li>
+                                <li><strong>No Significativo:</strong> Un p-valor alto sugiere que la correlación podría ser debida al azar y no refleja una relación verdadera entre las variables.</li>
+                            </ul>
+                        </li>
+                        <li><strong>Colores del Mapa de Calor:</strong> 
+                            <ul>
+                                <li><strong>Rojo Intenso:</strong> Indica una fuerte correlación positiva.</li>
+                                <li><strong>Azul Intenso:</strong> Indica una fuerte correlación negativa.</li>
+                                <li><strong>Colores Intermedios:</strong> Indican correlaciones más débiles.</li>
+                                <li><strong>Blanco:</strong> Indica ausencia de correlación.</li>
+                            </ul>
+                        </li>
+                    </ol>
+
+                    <p>
+                        El mapa de calor permite identificar rápidamente qué variables están correlacionadas y la fuerza de sus relaciones. 
+                        Este análisis es útil para comprender cómo diferentes métricas (como puntuaciones y faltas) están relacionadas.
+                    </p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 {% endif %}
+
 
 <div style="text-align: center;">
   <h2 class="my-4">Distribución de Partidos por Fecha</h2>
