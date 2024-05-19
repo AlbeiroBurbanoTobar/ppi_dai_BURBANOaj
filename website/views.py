@@ -53,7 +53,6 @@ def home():
 
     return render_template("home.html", user=current_user)
 
-
 @views.route('/guest')
 def guest():
     torneos = Torneo.query.all()
@@ -89,10 +88,18 @@ def guest():
         # Renombrar columnas para claridad
         team_stats.columns = ['TeamID', 'AvgScore', 'AvgFouls']
 
-        # Verificar que no haya valores NaN
+        # Debug: Imprimir el contenido de team_stats
+        print("Contenido de team_stats:")
+        print(team_stats)
+
+        # Verificar que no haya valores NaN y que haya más de un equipo
         if not team_stats[['AvgScore', 'AvgFouls']].isnull().values.any() and len(team_stats) > 1:
-            # Calcular la correlación de Pearson
+            # Calcular la matriz de correlación
             correlation_matrix = team_stats[['AvgScore', 'AvgFouls']].corr()
+
+            # Debug: Imprimir la matriz de correlación
+            print("Matriz de correlación:")
+            print(correlation_matrix)
 
             # Crear el mapa de calor de correlación
             plt.figure(figsize=(8, 6))
@@ -140,8 +147,6 @@ def guest():
     buf2.close()
 
     return render_template('guest.html', user=current_user, torneos=torneos, matches=matches, image_base64=image_base64, category_image_base64=category_image_base64, correlation_image_base64=correlation_image_base64)
-
-
 
 
 
