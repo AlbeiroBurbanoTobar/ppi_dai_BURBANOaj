@@ -8,3 +8,4 @@ geopandas
 scipy
 seaborn
 numpy
+scikit-learn
