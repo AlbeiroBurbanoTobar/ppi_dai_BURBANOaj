@@ -5,10 +5,8 @@ Guest
 {% endblock %}
 
 {% block content %}
-<!-- Título de la página con la etiqueta H1 para la sección de torneos. -->
 <h1 align="center">Torneos</h1>
 
-<!-- Carrusel de torneos con bordes redondeados. -->
 <div id="tournamentCarousel" class="carousel slide" data-ride="carousel" style="max-width: 1000px; margin: auto; overflow: hidden; border-radius: 15px;">
   <div class="carousel-inner">
     {% for torneo in torneos %}
@@ -18,7 +16,6 @@ Guest
         {% set image_url = 'https://raw.githubusercontent.com/AlbeiroBurbano/ImagenesIconos/main/futbol.jpg' %}
       {% endif %}
       
-      <!-- Item del carrusel con la información del torneo y su imagen. -->
       <div class="carousel-item {{ 'active' if loop.first }}" style="border-radius: 15px; overflow: hidden;">
         <div style="background-image: url('{{ image_url }}'); background-size: cover; background-position: center; height: 280px; border-radius: 15px;">
           <div style="height: 100%; background-color: rgba(0, 0, 0, 0.5); display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center;">
@@ -32,7 +29,6 @@ Guest
     {% endfor %}
   </div>
 
-  <!-- Controles de navegación del carrusel. -->
   <a class="carousel-control-prev" href="#tournamentCarousel" role="button" data-slide="prev">
     <span class="carousel-control-prev-icon" aria-hidden="true"></span>
     <span class="sr-only">Previous</span>
@@ -44,10 +40,8 @@ Guest
 </div>
 
 <br>
-<!-- Sección para seleccionar torneos y ver más información -->
 <div class="container" align="center">
-  <p>Selecciona un torneo de la lista desplegable y haz clic en "Más Información"
-    para ver los detalles del torneo seleccionado.</p>
+  <p>Selecciona un torneo de la lista desplegable y haz clic en "Más Información" para ver los detalles del torneo seleccionado.</p>
   <label for="tournamentSelect">Selecciona un torneo:</label>
   <select id="tournamentSelect" class="form-control" style="max-width: 300px; display: inline-block;">
       {% for torneo in torneos %}
@@ -57,7 +51,6 @@ Guest
   <button id="moreInfoBtn" class="btn btn-primary" style="margin-left: 10px;">Más Información</button>
 </div>
 
-<!-- Modal para mostrar la información del torneo -->
 <div class="modal fade" id="tournamentInfoModal" tabindex="-1" role="dialog" aria-labelledby="tournamentInfoModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-xl custom-modal-dialog" role="document">
     <div class="modal-content">
@@ -68,9 +61,7 @@ Guest
         </button>
       </div>
       <div class="modal-body">
-        <!-- Descripción de la tabla -->
         <p>Esta tabla muestra los detalles de los partidos programados para el torneo seleccionado, incluyendo las puntuaciones y las faltas de cada equipo.</p>
-        <!-- Aquí se llenará la información del torneo -->
         <div id="tournamentInfoContent"></div>
       </div>
       <div class="modal-footer">
@@ -80,7 +71,6 @@ Guest
   </div>
 </div>
 
-<!-- Modal para mostrar el mapa -->
 <div class="modal fade" id="mapModal" tabindex="-1" role="dialog" aria-labelledby="mapModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
@@ -100,12 +90,9 @@ Guest
   </div>
 </div>
 
-<!-- Sección para el calendario de todos los partidos -->
 <div class="container">
   <h2 class="my-4">Calendario de Todos los Partidos</h2>
-  <p>En esta sección puedes ver el calendario de todos 
-    los partidos programados. Haz clic en "Ver Mapa" junto
-     a cada partido para ver la ubicación del mismo.</p>
+  <p>En esta sección puedes ver el calendario de todos los partidos programados. Haz clic en "Ver Mapa" junto a cada partido para ver la ubicación del mismo.</p>
   <table class="table table-bordered">
     <thead>
       <tr>
@@ -116,7 +103,7 @@ Guest
         <th>Ubicación</th>
         <th>Hora</th>
         <th>Categoría</th>
-        <th>Mapa</th> <!-- Nueva columna para el botón del mapa -->
+        <th>Mapa</th>
       </tr>
     </thead>
     <tbody>
@@ -136,23 +123,23 @@ Guest
   </table>
 </div>
 
-<!-- Gráfica de distribución de partidos por fecha (gráfica de línea)-->
+{% if regression_image_base64 %}
+<div style="text-align: center;">
+    <h2 class="my-4">Análisis de Regresión entre Puntuaciones y Faltas</h2>
+    <p>El gráfico muestra la relación entre las puntuaciones promedio y las faltas promedio de los equipos, junto con una línea de regresión lineal.</p>
+    <img src="data:image/png;base64,{{ regression_image_base64 }}" alt="Gráfico de Regresión">
+</div>
+{% endif %}
+
 <div style="text-align: center;">
   <h2 class="my-4">Distribución de Partidos por Fecha</h2>
-  <p>En esta gráfica puedes ver cómo se distribuyen todos los partidos a lo largo del tiempo.
-    Cada punto en la línea indica la cantidad de partidos programados para una fecha específica.
-    Esta visualización puede ayudar a entender cuándo hay más actividad y cómo se concentran los partidos en el calendario.</p>
-
+  <p>En esta gráfica puedes ver cómo se distribuyen todos los partidos a lo largo del tiempo. Cada punto en la línea indica la cantidad de partidos programados para una fecha específica. Esta visualización puede ayudar a entender cuándo hay más actividad y cómo se concentran los partidos en el calendario.</p>
   <img src="data:image/png;base64,{{ image_base64 }}" alt="Distribución de Partidos por Fecha">
 </div>
 
-<!-- Nueva gráfica de distribución de equipos por categoría (gráfica de barras) -->
 <div style="text-align: center;">
   <h2 class="my-4">Distribución de Equipos por Categoría</h2>
-  <p>Esta gráfica muestra la cantidad de equipos en cada categoría.
-    Los equipos masculinos están representados en azul y los equipos femeninos en rosa.
-    Esto te permite ver rápidamente cómo se distribuyen los equipos según su género.</p>
-
+  <p>Esta gráfica muestra la cantidad de equipos en cada categoría. Los equipos masculinos están representados en azul y los equipos femeninos en rosa. Esto te permite ver rápidamente cómo se distribuyen los equipos según su género.</p>
   <img src="data:image/png;base64,{{ category_image_base64 }}" alt="Distribución de Equipos por Categoría">
 </div>
 
@@ -161,7 +148,6 @@ Guest
 <br>
 <br>
 
-<!-- Sección de la firma del desarrollador. -->
 <div id="mi-firma">
   <span>Created by Albeiro Burbano :)  </span>
   <a href="mailto:aburbanot@unal.edu.co">
@@ -181,7 +167,6 @@ Guest
   </a>
 </div>
 
-<!-- Añadir estilos CSS personalizados -->
 <style>
   .custom-modal-dialog {
       max-width: 100%;
@@ -190,9 +175,7 @@ Guest
   .custom-modal-content {
       height: 90vh;
   }
-</style>
 
-<style>
   .btn-ver-mapa {
       background-color: #007bff; /* Color del botón */
       color: white; /* Color del texto */

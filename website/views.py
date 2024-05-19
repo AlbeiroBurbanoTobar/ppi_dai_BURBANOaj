@@ -15,6 +15,7 @@ import numpy as np
 import requests
 import geopandas as gpd
 from shapely.geometry import Point, box
+from scipy import stats
 
 
 views = Blueprint('views', __name__)
@@ -76,6 +77,40 @@ def guest():
         
         matches = df_matches.to_dict(orient='records')
 
+    # Análisis de Regresión
+    regression_image_base64 = None
+
+    if not df_matches.empty:
+        # Calcular las características agregadas por equipo
+        team_stats = df_matches.groupby('team_a').agg({
+            'team_a_score': 'mean',
+            'faltas_team_a': 'mean'
+        }).reset_index()
+
+        # Renombrar columnas para claridad
+        team_stats.columns = ['TeamID', 'AvgScore', 'AvgFouls']
+
+        # Realizar el análisis de regresión
+        X = team_stats['AvgScore']
+        Y = team_stats['AvgFouls']
+        slope, intercept, r_value, p_value, std_err = stats.linregress(X, Y)
+
+        # Crear el gráfico de regresión
+        plt.figure()
+        plt.scatter(X, Y, color='blue', label='Datos')
+        plt.plot(X, slope * X + intercept, color='red', label=f'Regresión Lineal (R²={r_value**2:.2f})')
+        plt.xlabel('Puntuaciones Promedio')
+        plt.ylabel('Faltas Promedio')
+        plt.title('Relación entre Puntuaciones y Faltas')
+        plt.legend()
+
+        buf = io.BytesIO()
+        plt.savefig(buf, format='png')
+        buf.seek(0)
+        regression_image_base64 = base64.b64encode(buf.getvalue()).decode('utf8')
+        buf.close()
+
+    # Gráfica de distribución de partidos por fecha
     match_dates = df_matches['match_date'].value_counts().sort_index()
     fig, ax = plt.subplots()
     match_dates.plot(kind='line', ax=ax, marker='o', color='#007bff')
@@ -107,8 +142,7 @@ def guest():
     category_image_base64 = base64.b64encode(buf2.getvalue()).decode('utf8')
     buf2.close()
 
-    return render_template('guest.html', user=current_user, torneos=torneos, matches=matches, image_base64=image_base64, category_image_base64=category_image_base64)
-
+    return render_template('guest.html', user=current_user, torneos=torneos, matches=matches, image_base64=image_base64, category_image_base64=category_image_base64, regression_image_base64=regression_image_base64)
 
 @views.route('/delete-note', methods=['POST'])
 def delete_note():
