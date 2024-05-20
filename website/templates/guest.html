@@ -7,7 +7,8 @@ Guest
 {% block content %}
 <h1 align="center">Torneos</h1>
 
-<div id="tournamentCarousel" class="carousel slide" data-ride="carousel" style="max-width: 1000px; margin: auto; overflow: hidden; border-radius: 15px;">
+<div id="tournamentCarousel" class="carousel slide" data-ride="carousel" 
+     style="max-width: 1000px; margin: auto; overflow: hidden; border-radius: 15px;">
   <div class="carousel-inner">
     {% for torneo in torneos %}
       {% if torneo.deporte | lower == 'baloncesto' %}
@@ -16,24 +17,39 @@ Guest
         {% set image_url = 'https://raw.githubusercontent.com/AlbeiroBurbano/ImagenesIconos/main/futbol.jpg' %}
       {% endif %}
       
-      <div class="carousel-item {{ 'active' if loop.first }}" style="border-radius: 15px; overflow: hidden;">
-        <div style="background-image: url('{{ image_url }}'); background-size: cover; background-position: center; height: 280px; border-radius: 15px;">
-          <div style="height: 100%; background-color: rgba(0, 0, 0, 0.5); display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center;">
-            <h5 style="color: white; text-shadow: 2px 2px 4px #000000;">{{ torneo.nombre }}</h5>
-            <p style="color: white; text-shadow: 2px 2px 4px #000000;">Fecha: {{ torneo.fecha_inicio }} - {{ torneo.fecha_final }}</p>
-            <p style="color: white; text-shadow: 2px 2px 4px #000000;">Deporte: {{ torneo.deporte }}</p>
-            <p style="color: white; text-shadow: 2px 2px 4px #000000;">Equipos: {{ torneo.equipos_participantes }}</p>
+      <div class="carousel-item {{ 'active' if loop.first }}" 
+           style="border-radius: 15px; overflow: hidden;">
+        <div style="background-image: url('{{ image_url }}'); 
+                    background-size: cover; background-position: center; 
+                    height: 280px; border-radius: 15px;">
+          <div style="height: 100%; background-color: rgba(0, 0, 0, 0.5); 
+                      display: flex; flex-direction: column; justify-content: center; 
+                      align-items: center; text-align: center;">
+            <h5 style="color: white; text-shadow: 2px 2px 4px #000000;">
+              {{ torneo.nombre }}
+            </h5>
+            <p style="color: white; text-shadow: 2px 2px 4px #000000;">
+              Fecha: {{ torneo.fecha_inicio }} - {{ torneo.fecha_final }}
+            </p>
+            <p style="color: white; text-shadow: 2px 2px 4px #000000;">
+              Deporte: {{ torneo.deporte }}
+            </p>
+            <p style="color: white; text-shadow: 2px 2px 4px #000000;">
+              Equipos: {{ torneo.equipos_participantes }}
+            </p>
           </div>
         </div>
       </div>
     {% endfor %}
   </div>
 
-  <a class="carousel-control-prev" href="#tournamentCarousel" role="button" data-slide="prev">
+  <a class="carousel-control-prev" href="#tournamentCarousel" role="button" 
+     data-slide="prev">
     <span class="carousel-control-prev-icon" aria-hidden="true"></span>
     <span class="sr-only">Previous</span>
   </a>
-  <a class="carousel-control-next" href="#tournamentCarousel" role="button" data-slide="next">
+  <a class="carousel-control-next" href="#tournamentCarousel" role="button" 
+     data-slide="next">
     <span class="carousel-control-next-icon" aria-hidden="true"></span>
     <span class="sr-only">Siguiente</span>
   </a>
@@ -41,37 +57,50 @@ Guest
 
 <br>
 <div class="container" align="center">
-  <p>Selecciona un torneo de la lista desplegable y haz clic en "Más Información" para ver los detalles del torneo seleccionado.</p>
+  <p>Selecciona un torneo de la lista desplegable y haz clic en "Más Información"
+     para ver los detalles del torneo seleccionado.
+  </p>
   <label for="tournamentSelect">Selecciona un torneo:</label>
-  <select id="tournamentSelect" class="form-control" style="max-width: 300px; display: inline-block;">
+  <select id="tournamentSelect" class="form-control" 
+          style="max-width: 300px; display: inline-block;">
       {% for torneo in torneos %}
           <option value="{{ torneo.nombre }}">{{ torneo.nombre }}</option>
       {% endfor %}
   </select>
-  <button id="moreInfoBtn" class="btn btn-primary" style="margin-left: 10px;">Más Información</button>
+  <button id="moreInfoBtn" class="btn btn-primary" style="margin-left: 10px;">
+    Más Información
+  </button>
 </div>
 
-<div class="modal fade" id="tournamentInfoModal" tabindex="-1" role="dialog" aria-labelledby="tournamentInfoModalLabel" aria-hidden="true">
+<div class="modal fade" id="tournamentInfoModal" tabindex="-1" role="dialog" 
+     aria-labelledby="tournamentInfoModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-xl custom-modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="tournamentInfoModalLabel">Información del Torneo</h5>
+        <h5 class="modal-title" id="tournamentInfoModalLabel">
+          Información del Torneo
+        </h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body">
-        <p>Esta tabla muestra los detalles de los partidos programados para el torneo seleccionado, incluyendo las puntuaciones y las faltas de cada equipo.</p>
+        <p>Esta tabla muestra los detalles de los partidos programados para el torneo 
+           seleccionado, incluyendo las puntuaciones y las faltas de cada equipo.
+        </p>
         <div id="tournamentInfoContent"></div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">
+          Cerrar
+        </button>
       </div>
     </div>
   </div>
 </div>
 
-<div class="modal fade" id="mapModal" tabindex="-1" role="dialog" aria-labelledby="mapModalLabel" aria-hidden="true">
+<div class="modal fade" id="mapModal" tabindex="-1" role="dialog" 
+     aria-labelledby="mapModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -81,10 +110,13 @@ Guest
         </button>
       </div>
       <div class="modal-body">
-        <img id="mapImage" src="" alt="Mapa de la ubicación del partido" class="img-fluid">
+        <img id="mapImage" src="" alt="Mapa de la ubicación del partido" 
+             class="img-fluid">
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">
+          Cerrar
+        </button>
       </div>
     </div>
   </div>
@@ -92,7 +124,9 @@ Guest
 
 <div class="container">
   <h2 class="my-4">Calendario de Todos los Partidos</h2>
-  <p>En esta sección puedes ver el calendario de todos los partidos programados. Haz clic en "Ver Mapa" junto a cada partido para ver la ubicación del mismo.</p>
+  <p>En esta sección puedes ver el calendario de todos los partidos programados.
+     Haz clic en "Ver Mapa" junto a cada partido para ver la ubicación del mismo.
+  </p>
   <table class="table table-bordered">
     <thead>
       <tr>
@@ -116,7 +150,13 @@ Guest
         <td>{{ match.location }}</td>
         <td>{{ match.match_time }}</td>
         <td>{{ match.categoria }}</td>
-        <td><button class="btn btn-ver-mapa"  data-toggle="modal" data-target="#mapModal" onclick="loadMap('{{ match.location }}')">Ver Mapa</button></td>
+        <td>
+          <button class="btn btn-ver-mapa" data-toggle="modal" 
+                  data-target="#mapModal" 
+                  onclick="loadMap('{{ match.location }}')">
+            Ver Mapa
+          </button>
+        </td>
       </tr>
       {% endfor %}
     </tbody>
@@ -126,62 +166,107 @@ Guest
 {% if correlation_image_base64 %}
 <div style="text-align: center;">
     <h2 class="my-4">Mapa de Calor de Correlación entre Puntuaciones y Faltas</h2>
-    <p>El mapa de calor muestra la relación de correlación entre diferentes variables relacionadas con los equipos en el torneo.</p>
-    <img src="data:image/png;base64,{{ correlation_image_base64 }}" alt="Mapa de Calor de Correlación">
+    <p>El mapa de calor muestra la relación de correlación entre diferentes 
+       variables relacionadas con los equipos en el torneo.
+    </p>
+    <img src="data:image/png;base64,{{ correlation_image_base64 }}" 
+         alt="Mapa de Calor de Correlación">
     
     <!-- Botón de Ayuda -->
-    <button type="button" class="btn btn-ver-mapa"  data-toggle="modal" data-target="#helpModal">
+    <button type="button" class="btn btn-ver-mapa" data-toggle="modal" 
+            data-target="#helpModal">
       ¿Cómo Interpretar?
     </button>
 
     <!-- Modal de Ayuda -->
-    <div class="modal fade" id="helpModal" tabindex="-1" role="dialog" aria-labelledby="helpModalLabel" aria-hidden="true">
+    <div class="modal fade" id="helpModal" tabindex="-1" role="dialog" 
+         aria-labelledby="helpModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="helpModalLabel">Interpretación del Mapa de Calor de Correlación</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <h5 class="modal-title" id="helpModalLabel">
+                      Interpretación del Mapa de Calor de Correlación
+                    </h5>
+                    <button type="button" class="close" data-dismiss="modal" 
+                            aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body" style="text-align: left;">
                     <p>
-                        El siguiente mapa de calor muestra la correlación entre diferentes variables relacionadas con los equipos en el torneo. A continuación, se detallan los elementos clave y su interpretación:
+                        El siguiente mapa de calor muestra la correlación entre diferentes 
+                        variables relacionadas con los equipos en el torneo. A continuación, 
+                        se detallan los elementos clave y su interpretación:
                     </p>
                     <ol>
                         <li><strong>Coeficiente de Correlación de Pearson:</strong> 
                             <ul>
-                                <li><strong>Valor:</strong> El coeficiente de correlación de Pearson es un valor entre -1 y 1 que indica la fuerza y la dirección de la relación lineal entre dos variables.</li>
-                                <li><strong>Positivo:</strong> Un valor positivo indica que a medida que una variable aumenta, la otra también tiende a aumentar.</li>
-                                <li><strong>Negativo:</strong> Un valor negativo indica que a medida que una variable aumenta, la otra tiende a disminuir.</li>
-                                <li><strong>Cero:</strong> Un valor cercano a 0 indica que no hay una relación lineal significativa entre las dos variables.</li>
-                                <li><strong>Interpretación:</strong> Los valores cercanos a 1 o -1 indican una fuerte correlación, ya sea positiva o negativa, mientras que los valores cercanos a 0 indican poca o ninguna correlación.</li>
+                                <li><strong>Valor:</strong> El coeficiente de correlación 
+                                    de Pearson es un valor entre -1 y 1 que indica la fuerza 
+                                    y la dirección de la relación lineal entre dos variables.
+                                </li>
+                                <li><strong>Positivo:</strong> Un valor positivo indica que 
+                                    a medida que una variable aumenta, la otra también tiende 
+                                    a aumentar.
+                                </li>
+                                <li><strong>Negativo:</strong> Un valor negativo indica que 
+                                    a medida que una variable aumenta, la otra tiende a 
+                                    disminuir.
+                                </li>
+                                <li><strong>Cero:</strong> Un valor cercano a 0 indica que 
+                                    no hay una relación lineal significativa entre las dos 
+                                    variables.
+                                </li>
+                                <li><strong>Interpretación:</strong> Los valores cercanos a 
+                                    1 o -1 indican una fuerte correlación, ya sea positiva o 
+                                    negativa, mientras que los valores cercanos a 0 indican 
+                                    poca o ninguna correlación.
+                                </li>
                             </ul>
                         </li>
                         <li><strong>P-valor:</strong> 
                             <ul>
-                                <li><strong>Valor:</strong> El p-valor indica la probabilidad de que la correlación observada ocurra por azar.</li>
-                                <li><strong>Significativo:</strong> Un p-valor bajo (típicamente menor que 0.05) sugiere que la correlación observada es estadísticamente significativa.</li>
-                                <li><strong>No Significativo:</strong> Un p-valor alto sugiere que la correlación podría ser debida al azar y no refleja una relación verdadera entre las variables.</li>
+                                <li><strong>Valor:</strong> El p-valor indica la probabilidad 
+                                    de que la correlación observada ocurra por azar.
+                                </li>
+                                <li><strong>Significativo:</strong> Un p-valor bajo 
+                                    (típicamente menor que 0.05) sugiere que la correlación 
+                                    observada es estadísticamente significativa.
+                                </li>
+                                <li><strong>No Significativo:</strong> Un p-valor alto 
+                                    sugiere que la correlación podría ser debida al azar y no 
+                                    refleja una relación verdadera entre las variables.
+                                </li>
                             </ul>
                         </li>
                         <li><strong>Colores del Mapa de Calor:</strong> 
                             <ul>
-                                <li><strong>Rojo Intenso:</strong> Indica una fuerte correlación positiva.</li>
-                                <li><strong>Azul Intenso:</strong> Indica una fuerte correlación negativa.</li>
-                                <li><strong>Colores Intermedios:</strong> Indican correlaciones más débiles.</li>
-                                <li><strong>Blanco:</strong> Indica ausencia de correlación.</li>
+                                <li><strong>Rojo Intenso:</strong> Indica una fuerte 
+                                    correlación positiva.
+                                </li>
+                                <li><strong>Azul Intenso:</strong> Indica una fuerte 
+                                    correlación negativa.
+                                </li>
+                                <li><strong>Colores Intermedios:</strong> Indican 
+                                    correlaciones más débiles.
+                                </li>
+                                <li><strong>Blanco:</strong> Indica ausencia de correlación.
+                                </li>
                             </ul>
                         </li>
                     </ol>
 
                     <p>
-                        El mapa de calor permite identificar rápidamente qué variables están correlacionadas y la fuerza de sus relaciones. 
-                        Este análisis es útil para comprender cómo diferentes métricas (como puntuaciones y faltas) están relacionadas.
+                        El mapa de calor permite identificar rápidamente qué variables están 
+                        correlacionadas y la fuerza de sus relaciones. Este análisis es útil 
+                        para comprender cómo diferentes métricas (como puntuaciones y faltas) 
+                        están relacionadas.
                     </p>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                      Cerrar
+                    </button>
                 </div>
             </div>
         </div>
@@ -192,14 +277,23 @@ Guest
 
 <div style="text-align: center;">
   <h2 class="my-4">Distribución de Partidos por Fecha</h2>
-  <p>En esta gráfica puedes ver cómo se distribuyen todos los partidos a lo largo del tiempo. Cada punto en la línea indica la cantidad de partidos programados para una fecha específica. Esta visualización puede ayudar a entender cuándo hay más actividad y cómo se concentran los partidos en el calendario.</p>
-  <img src="data:image/png;base64,{{ image_base64 }}" alt="Distribución de Partidos por Fecha">
+  <p>En esta gráfica puedes ver cómo se distribuyen todos los partidos a lo largo 
+     del tiempo. Cada punto en la línea indica la cantidad de partidos programados 
+     para una fecha específica. Esta visualización puede ayudar a entender cuándo 
+     hay más actividad y cómo se concentran los partidos en el calendario.
+  </p>
+  <img src="data:image/png;base64,{{ image_base64 }}" 
+       alt="Distribución de Partidos por Fecha">
 </div>
 
 <div style="text-align: center;">
   <h2 class="my-4">Distribución de Equipos por Categoría</h2>
-  <p>Esta gráfica muestra la cantidad de equipos en cada categoría. Los equipos masculinos están representados en azul y los equipos femeninos en rosa. Esto te permite ver rápidamente cómo se distribuyen los equipos según su género.</p>
-  <img src="data:image/png;base64,{{ category_image_base64 }}" alt="Distribución de Equipos por Categoría">
+  <p>Esta gráfica muestra la cantidad de equipos en cada categoría. Los equipos 
+     masculinos están representados en azul y los equipos femeninos en rosa. Esto 
+     te permite ver rápidamente cómo se distribuyen los equipos según su género.
+  </p>
+  <img src="data:image/png;base64,{{ category_image_base64 }}" 
+       alt="Distribución de Equipos por Categoría">
 </div>
 
 <br>
@@ -207,6 +301,7 @@ Guest
 <br>
 <br>
 
+<!-- Sección de la firma del desarrollador. -->
 <div id="mi-firma">
   <span>Created by Albeiro Burbano :)  </span>
   <a href="mailto:aburbanot@unal.edu.co">
@@ -224,7 +319,6 @@ Guest
   <a href="http://www.linkedin.com/in/albeiro-jose-burbano-tobar-759ba4297">
     <img src="../static/link-icon.png" alt="Mira el perfil de linkedin" style="width: 24px; height: 24px; vertical-align: middle;">
   </a>
-  <br>
 </div>
 
 <style>
@@ -248,6 +342,10 @@ Guest
 </style>
 
 <script>
+/**
+ * Maneja el evento de clic en el botón "Más Información" para mostrar los 
+ * detalles del torneo seleccionado.
+ */
 document.getElementById('moreInfoBtn').addEventListener('click', function() {
     var select = document.getElementById('tournamentSelect');
     var selectedTournament = select.options[select.selectedIndex].value;
@@ -279,6 +377,10 @@ document.getElementById('moreInfoBtn').addEventListener('click', function() {
         .catch(error => console.error('Error:', error));
 });
 
+/**
+ * Carga el mapa de la ubicación del partido.
+ * @param {string} address - La dirección del partido.
+ */
 function loadMap(address) {
   fetch(`/get-map/${address}`)
     .then(response => response.json())

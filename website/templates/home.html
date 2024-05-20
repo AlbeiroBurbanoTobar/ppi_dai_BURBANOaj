@@ -65,7 +65,8 @@ Home
                 <td>Promedio de Edad de los Jugadores</td>
                 <td>
                     {% if avg_age is not none %}
-                        El promedio de edad de tus jugadores es: {{ avg_age|round(2) }} años.
+                        El promedio de edad de tus jugadores es: 
+                        {{ avg_age|round(2) }} años.
                     {% else %}
                         No tienes jugadores registrados.
                     {% endif %}
@@ -91,51 +92,51 @@ Home
 
         <!-- Formulario para agregar una nueva nota. -->
         <form method="POST" class="my-2">
-            <textarea name="note" id="note" class="form-control mb-2" placeholder="Escribe una nueva nota..."></textarea>
+            <textarea name="note" id="note" class="form-control mb-2" 
+                      placeholder="Escribe una nueva nota..."></textarea>
             <div class="text-center">
                 <button type="submit" class="btn btn-primary">Agregar nota</button>
             </div>
         </form>
     </ul>
 </div>
-<div class="container">
-    <!-- Tu tabla existente aquí -->
-    <table>
-        <!-- contenido de la tabla -->
-    </table>
 
-    <div class="container">
-        <!-- Tu tabla existente aquí -->
-        <table>
-            <!-- contenido de la tabla -->
-        </table>
-    
-        <!-- Agregar el mapa debajo de la tabla -->
-        <div>
-     
-            {% if team_map_base64 %}
+<!-- Sección para el mapa de ubicaciones de equipos -->
+<div class="container">
+    <!-- Agregar el mapa debajo de la tabla -->
+    <div>
+        {% if team_map_base64 %}
             <h2>Mapa de Ubicaciones de los Equipos</h2>
-            <p>Este gráfico muestra las ubicaciones geográficas de los equipos registrados en nuestro sistema. 
-                Cada punto azul en el mapa representa la ubicación de un equipo. Los datos de ubicación se obtienen a partir 
-                de las direcciones proporcionadas y se geocodifican para obtener las coordenadas exactas.</p>
-    <p>El mapa es útil para visualizar la distribución geográfica de los equipos y puede ayudar en varios aspectos, como:</p>
-    <ul>
-        <li>Identificar regiones con alta o baja concentración de equipos.</li>
-        <li>Planificar eventos, torneos y competencias considerando la localización de los equipos.</li>
-        <li>Facilitar la logística y el transporte para encuentros entre equipos.</li>
-        <li>Analizar la cobertura y expansión de los equipos en diferentes áreas geográficas.</li>
-    </ul>
-                <img src="data:image/png;base64,{{ team_map_base64 }}" alt="Mapa de Ubicaciones de los Equipos">
-            {% else %}
-                <p>No hay datos disponibles para mostrar el mapa.</p>
-            {% endif %}
-        </div>
+            <p>Este gráfico muestra las ubicaciones geográficas de los equipos 
+               registrados en nuestro sistema. Cada punto azul en el mapa representa 
+               la ubicación de un equipo. Los datos de ubicación se obtienen a partir 
+               de las direcciones proporcionadas y se geocodifican para obtener las 
+               coordenadas exactas.</p>
+            <p>El mapa es útil para visualizar la distribución geográfica de los 
+               equipos y puede ayudar en varios aspectos, como:</p>
+            <ul>
+                <li>Identificar regiones con alta o baja concentración de equipos.</li>
+                <li>Planificar eventos, torneos y competencias considerando la 
+                    localización de los equipos.</li>
+                <li>Facilitar la logística y el transporte para encuentros entre 
+                    equipos.</li>
+                <li>Analizar la cobertura y expansión de los equipos en diferentes 
+                    áreas geográficas.</li>
+            </ul>
+            <img src="data:image/png;base64,{{ team_map_base64 }}" 
+                 alt="Mapa de Ubicaciones de los Equipos">
+        {% else %}
+            <p>No hay datos disponibles para mostrar el mapa.</p>
+        {% endif %}
     </div>
+</div>
+
 <!-- Sección para mostrar la gráfica de frecuencia de árbitros -->
 {% if arbitros_img_base64 %}
 <div id="arbitros-frecuencia" class="text-center my-4">
     <h2>Frecuencia de Árbitros en los Partidos</h2>
-    <img src="data:image/png;base64,{{ arbitros_img_base64 }}" alt="Frecuencia de Árbitros" class="img-fluid">
+    <img src="data:image/png;base64,{{ arbitros_img_base64 }}" 
+         alt="Frecuencia de Árbitros" class="img-fluid">
 </div>
 {% endif %}
 
@@ -144,53 +145,84 @@ Home
 <div id="clusters-frecuencia" class="text-center my-4">
     <h2>Clusters de Equipos Basados en Puntuaciones y Faltas
         <!-- Botón de ayuda -->
-        <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#dendrogramHelpModal" style="background-color: #007bff;">¿Cómo interpretar?</button>
+        <button type="button" class="btn btn-info btn-sm" data-toggle="modal" 
+                data-target="#dendrogramHelpModal" style="background-color: #007bff;">
+            ¿Cómo interpretar?
+        </button>
     </h2>
-    <img src="data:image/png;base64,{{ clusters_img_base64 }}" alt="Clusters de Equipos" class="img-fluid">
+    <img src="data:image/png;base64,{{ clusters_img_base64 }}" 
+         alt="Clusters de Equipos" class="img-fluid">
 </div>
 {% endif %}
 
 <!-- Modal de Ayuda -->
-<div class="modal fade" id="dendrogramHelpModal" tabindex="-1" role="dialog" aria-labelledby="dendrogramHelpModalLabel" aria-hidden="true">
+<div class="modal fade" id="dendrogramHelpModal" tabindex="-1" role="dialog" 
+     aria-labelledby="dendrogramHelpModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="dendrogramHelpModalLabel">¿Cómo interpretar el dendrograma?</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <h5 class="modal-title" id="dendrogramHelpModalLabel">
+                  ¿Cómo interpretar el dendrograma?
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" 
+                        aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
-                <p>El dendrograma es una herramienta de visualización utilizada para mostrar el resultado del análisis de clustering jerárquico. Aquí se explica cómo interpretarlo:</p>
+                <p>El dendrograma es una herramienta de visualización utilizada para 
+                   mostrar el resultado del análisis de clustering jerárquico. Aquí se 
+                   explica cómo interpretarlo:
+                </p>
                 <ul>
                     <li><strong>Ejes del Dendrograma:</strong>
                         <ul>
-                            <li><strong>Eje X (Horizontal):</strong> Representa las etiquetas de los partidos. Cada etiqueta corresponde a un partido o a un grupo de partidos.</li>
-                            <li><strong>Eje Y (Vertical):</strong> Representa la distancia o disimilitud entre los partidos o grupos de partidos. Cuanto mayor es la altura en 
-                                el eje Y donde se unen dos grupos, mayor es la disimilitud entre ellos.</li>
+                            <li><strong>Eje X (Horizontal):</strong> Representa las 
+                                etiquetas de los partidos. Cada etiqueta corresponde a un 
+                                partido o a un grupo de partidos.
+                            </li>
+                            <li><strong>Eje Y (Vertical):</strong> Representa la distancia 
+                                o disimilitud entre los partidos o grupos de partidos. 
+                                Cuanto mayor es la altura en el eje Y donde se unen dos 
+                                grupos, mayor es la disimilitud entre ellos.
+                            </li>
                         </ul>
                     </li>
                     <li><strong>Ramas del Dendrograma:</strong>
                         <ul>
-                            <li><strong>Ramas y Hojas:</strong> Cada rama del dendrograma representa un grupo de partidos.
-                                 Las hojas al final de las ramas representan los partidos individuales.</li>
-                            <li><strong>Unión de Ramas:</strong> El punto en el que dos ramas se unen indica el nivel de 
-                                similitud entre los grupos que se unen. Cuanto más baja es la unión, más similares son los grupos.
-                                 Por ejemplo, si dos partidos se unen a una altura baja, significa que tienen puntuaciones y faltas similares.</li>
+                            <li><strong>Ramas y Hojas:</strong> Cada rama del dendrograma 
+                                representa un grupo de partidos. Las hojas al final de las 
+                                ramas representan los partidos individuales.
+                            </li>
+                            <li><strong>Unión de Ramas:</strong> El punto en el que dos 
+                                ramas se unen indica el nivel de similitud entre los grupos 
+                                que se unen. Cuanto más baja es la unión, más similares son 
+                                los grupos. Por ejemplo, si dos partidos se unen a una 
+                                altura baja, significa que tienen puntuaciones y faltas 
+                                similares.
+                            </li>
                         </ul>
                     </li>
                     <li><strong>Distancia:</strong>
                         <ul>
-                            <li><strong>Altura de las Uniones:</strong> La altura a la que se unen dos grupos indica la distancia o
-                                 disimilitud entre ellos. Una unión más baja significa que los partidos en esos grupos son más similares
-                                  entre sí, mientras que una unión más alta indica que son más diferentes.</li>
+                            <li><strong>Altura de las Uniones:</strong> La altura a la que 
+                                se unen dos grupos indica la distancia o disimilitud entre 
+                                ellos. Una unión más baja significa que los partidos en esos 
+                                grupos son más similares entre sí, mientras que una unión 
+                                más alta indica que son más diferentes.
+                            </li>
                         </ul>
                     </li>
                 </ul>
-                <p>Utiliza esta información para identificar grupos naturales, analizar similitudes y planificar estrategias basadas en el rendimiento de los partidos.</p>
+                <p>Utiliza esta información para identificar grupos naturales, analizar 
+                   similitudes y planificar estrategias basadas en el rendimiento de los 
+                   partidos.
+                </p>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                  Cerrar
+                </button>
             </div>
         </div>
     </div>
