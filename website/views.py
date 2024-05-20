@@ -26,7 +26,7 @@ from sklearn.preprocessing import StandardScaler
 
 
 views = Blueprint('views', __name__)
- 
+
 @views.route('/', methods=['GET', 'POST'])
 @login_required
 def home():
@@ -135,8 +135,8 @@ def home():
         features = ['team_a_score', 'team_b_score', 'faltas_team_a', 'faltas_team_b']
         df_features = user_partidos[features].dropna()
 
-        # Verificar si hay suficientes datos para escalar
-        if not df_features.empty:
+        # Verificar si hay suficientes datos para escalar y aplicar clustering
+        if not df_features.empty and len(df_features) > 1:
             scaler = StandardScaler()
             scaled_features = scaler.fit_transform(df_features)
 
@@ -167,6 +167,7 @@ def home():
             plt.close()
 
     return render_template("home.html", user=current_user, avg_time=avg_time, earliest_time=earliest_time, latest_time=latest_time, avg_age=avg_age, user_id=user_id, num_partidos=num_partidos, num_jugadores=num_jugadores, arbitros_img_base64=arbitros_img_base64, clusters_img_base64=clusters_img_base64)
+
 
 
 @views.route('/guest')
