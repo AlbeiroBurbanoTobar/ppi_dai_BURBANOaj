@@ -1,6 +1,6 @@
 match_id,user_id,tournament_name,team_a,team_b,match_date,referee,match_time,location,categoria,team_a_score,team_b_score,faltas_team_a,faltas_team_b
 089e4e53-cece-47e3-893f-4dd011604b44,1,NBA,1-4,1-3,2024-05-18,Juan Reyes,11:51,Pasto,Masculino,3,1,1,3
-9c72eb07-97ca-4f05-8941-e5dcd2fba944,1,UNAL febrero,1-2,1-1,2024-05-18,Juan Reyes,13:15,Pasto,Femenino,0,1,1,2
+9c72eb07-97ca-4f05-8941-e5dcd2fba944,1,UNAL febrero,1-2,1-1,2024-05-18,Juan Reyes,13:15,Pasto,Femenino,5,1,7,2
 19367755-c454-4dfc-9616-53a77cd665ae,1,UNAL febrero,1-2,1-1,2024-05-01,Juan Reyes,23:06,Bello,Femenino,4,3,5,8
 1f85a81f-dba9-479f-9da6-5e391002f356,1,Los Yakuza,1-4,1-3,2024-05-19,Juan Reyes,08:07,Medellín,Masculino,10,9,6,7
 e9ff2b46-be39-4aec-901c-5fa04a8613e9,1,Reoginal,1-3,1-4,2024-06-03,Juan Reyes,08:08,Pasto,Masculino,0,0,0,0
@@ -8,7 +8,6 @@ e9ff2b46-be39-4aec-901c-5fa04a8613e9,1,Reoginal,1-3,1-4,2024-06-03,Juan Reyes,08
 c6a685bc-0a10-46c4-ad93-3c08329f6884,1,Reoginal,1-4,1-3,2024-05-20,Juan Reyes,00:23,Pasto,Masculino,0,0,0,0
 0da0d0f6-f40e-4077-a9ee-cdb698081267,10,Torneo Juvenil,10-5,10-6,2024-05-19,Juan Reyes,05:57,"Bogotá, Colombia",Masculino,8,9,3,4
 d6415c04-9c65-485c-bbfc-4f5afdbe8f2d,10,Torneo Juvenil,10-6,10-5,2024-05-15,Juan Reyes,09:33,"Medellín, Antioquia, Colombia",Masculino,12,20,14,9
-b7a2efff-d35c-4eb3-89c4-841f4ec4d5a6,10,Torneo Juvenil,10-5,10-5,2024-05-22,Juan Reyes,19:35,"Ricaurte, Nariño, Colombia",Masculino,0,0,0,0
-08c1f3ad-0417-433a-9dde-b0055d9bb57c,1,Club ASCII,1-2,1-1,2024-06-04,Mariano Ospina,18:16,"Cartagena, Bolivar, Colombia",Femenino,0,0,0,0
 ac65069f-14a5-4979-a56e-aba01ac20a33,11,El Fin esta Cerca,11-8,11-7,2024-05-19,Heidy Cruel,08:31,"Quito, Ecuador",Masculino,15,14,10,8
 c422a009-80c7-4f67-9db6-aa34882ecf17,11,El Fin esta Cerca,11-8,11-7,2024-05-18,Juan Manuel Oviedo,10:38,"Quito, Ecuador",Masculino,6,2,2,0
+8b186922-5085-422e-a866-88140b6c3c15,14,Femenino Unal,14-11,14-10,2024-05-14,Heidy Cruel,12:08,"Bogotá, Colombia",Femenino,20,14,2,1

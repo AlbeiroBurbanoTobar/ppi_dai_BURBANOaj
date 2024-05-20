@@ -38,7 +38,8 @@ class User(db.Model, UserMixin):
     torneos = db.relationship('Torneo', back_populates='creador')
     equipos = db.relationship('Team', back_populates='creador')
 
-
+    # models.py
+from . import db
 class Torneo(db.Model):
     """Representa un torneo en la aplicación.
 
@@ -63,6 +64,8 @@ class Torneo(db.Model):
     # Relación inversa para acceder a los torneos desde el usuario
     creador = db.relationship('User', back_populates='torneos')
 
+    # models.py
+from . import db
 
 
 class Team(db.Model):
