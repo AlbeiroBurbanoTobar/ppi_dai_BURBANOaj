@@ -63,11 +63,22 @@ class Torneo(db.Model):
     # Relación inversa para acceder a los torneos desde el usuario
     creador = db.relationship('User', back_populates='torneos')
 
-    # models.py
-from . import db
+
 
 class Team(db.Model):
-    """Representa un equipo en la base de datos."""
+    """Representa un equipo en la base de datos.
+
+    Atributos:
+        id (int): Identificador único del equipo.
+        nombre (str): Nombre del equipo.
+        capitan (str): Nombre del capitán del equipo.
+        contacto (str): Información de contacto del capitán.
+        categoria (str): Categoría del equipo (ej. Masculino, Femenino).
+        ubicacion (str): Ubicación del equipo.
+        user_id (int): Identificador del usuario que creó el equipo.
+        creador (User): Relación con el usuario creador del equipo.
+    """
+    
     id = db.Column(db.Integer, primary_key=True)
     nombre = db.Column(db.String(150), nullable=False)
     capitan = db.Column(db.String(150), nullable=False)
@@ -79,13 +90,26 @@ class Team(db.Model):
     # Relación inversa para acceder al usuario que creó el equipo
     creador = db.relationship('User', back_populates='equipos')
 
+
 class Player(db.Model):
+    """Representa un jugador en la base de datos.
+
+    Atributos:
+        id (int): Identificador único del jugador.
+        first_name (str): Nombre del jugador.
+        last_name (str): Apellido del jugador.
+        age (int): Edad del jugador.
+        team_id (int): Identificador del equipo al que pertenece el jugador.
+        team (Team): Relación con el equipo al que pertenece el jugador.
+    """
+    
     id = db.Column(db.Integer, primary_key=True)
     first_name = db.Column(db.String(100), nullable=False)
     last_name = db.Column(db.String(100), nullable=False)
     age = db.Column(db.Integer, nullable=False)
     team_id = db.Column(db.Integer, db.ForeignKey('team.id'), nullable=False)
 
+    # Relación para acceder al equipo al que pertenece el jugador
     team = db.relationship('Team', backref=db.backref('players', lazy=True))
 
 
