@@ -27,6 +27,53 @@ from sklearn.preprocessing import StandardScaler
 
 views = Blueprint('views', __name__)
 
+
+def generate_team_map(df_teams):
+    geometry = []
+    addresses = []
+
+    for location in df_teams['Location']:
+        coords = get_coordinates(location)
+        if coords:
+            lat, lon = coords
+            point = Point(lon, lat)
+            geometry.append(point)
+            addresses.append(location)
+        else:
+            geometry.append(None)
+            addresses.append(location)
+
+    gdf = gpd.GeoDataFrame(df_teams, geometry=geometry)
+
+    world = gpd.read_file(gpd.datasets.get_path('naturalearth_lowres'))
+
+    fig, ax = plt.subplots(figsize=(10, 6))
+    world.plot(ax=ax, color='lightgray')
+    gdf = gdf.dropna(subset=['geometry'])
+
+    if not gdf.empty:
+        gdf.plot(ax=ax, color='blue', markersize=50, label='Equipos')
+
+        xlim = (gdf.geometry.x.min() - 5, gdf.geometry.x.max() + 5)
+        ylim = (gdf.geometry.y.min() - 5, gdf.geometry.y.max() + 5)
+        ax.set_xlim(xlim)
+        ax.set_ylim(ylim)
+    else:
+        ax.text(0.5, 0.5, 'No hay datos de equipos disponibles.', horizontalalignment='center', verticalalignment='center', transform=ax.transAxes, fontsize=12)
+
+    plt.title('Ubicaciones de los Equipos')
+    plt.xlabel('Longitud')
+    plt.ylabel('Latitud')
+    plt.legend()
+
+    buf = io.BytesIO()
+    plt.savefig(buf, format='png')
+    buf.seek(0)
+    image_base64 = base64.b64encode(buf.getvalue()).decode('utf8')
+    buf.close()
+
+    return image_base64
+
 @views.route('/', methods=['GET', 'POST'])
 @login_required
 def home():
@@ -50,7 +97,7 @@ def home():
 
     avg_time, earliest_time, latest_time, avg_age = None, None, None, None
     num_partidos, num_jugadores = 0, 0
-    arbitros_img_base64, clusters_img_base64 = None, None
+    arbitros_img_base64, clusters_img_base64, team_map_base64 = None, None, None
 
     if os.path.exists(partidos_csv_path) and os.path.exists(players_csv_path) and os.path.exists(teams_csv_path):
         df_partidos = pd.read_csv(partidos_csv_path)
@@ -62,6 +109,9 @@ def home():
 
         # Filtrar equipos que pertenecen al usuario actual
         user_teams = df_teams[df_teams['UserID'] == user_id]
+
+        # Generar el mapa de los equipos
+        team_map_base64 = generate_team_map(user_teams)
 
         # Obtener los TeamIDs de los equipos del usuario
         user_team_ids = user_teams['TeamID']
@@ -166,9 +216,7 @@ def home():
             buf.close()
             plt.close()
 
-    return render_template("home.html", user=current_user, avg_time=avg_time, earliest_time=earliest_time, latest_time=latest_time, avg_age=avg_age, user_id=user_id, num_partidos=num_partidos, num_jugadores=num_jugadores, arbitros_img_base64=arbitros_img_base64, clusters_img_base64=clusters_img_base64)
-
-
+    return render_template("home.html", user=current_user, avg_time=avg_time, earliest_time=earliest_time, latest_time=latest_time, avg_age=avg_age, user_id=user_id, num_partidos=num_partidos, num_jugadores=num_jugadores, arbitros_img_base64=arbitros_img_base64, clusters_img_base64=clusters_img_base64, team_map_base64=team_map_base64)
 
 @views.route('/guest')
 def guest():

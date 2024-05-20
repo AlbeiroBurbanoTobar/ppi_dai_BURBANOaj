@@ -98,7 +98,39 @@ Home
         </form>
     </ul>
 </div>
+<div class="container">
+    <!-- Tu tabla existente aquí -->
+    <table>
+        <!-- contenido de la tabla -->
+    </table>
 
+    <div class="container">
+        <!-- Tu tabla existente aquí -->
+        <table>
+            <!-- contenido de la tabla -->
+        </table>
+    
+        <!-- Agregar el mapa debajo de la tabla -->
+        <div>
+     
+            {% if team_map_base64 %}
+            <h2>Mapa de Ubicaciones de los Equipos</h2>
+            <p>Este gráfico muestra las ubicaciones geográficas de los equipos registrados en nuestro sistema. 
+                Cada punto azul en el mapa representa la ubicación de un equipo. Los datos de ubicación se obtienen a partir 
+                de las direcciones proporcionadas y se geocodifican para obtener las coordenadas exactas.</p>
+    <p>El mapa es útil para visualizar la distribución geográfica de los equipos y puede ayudar en varios aspectos, como:</p>
+    <ul>
+        <li>Identificar regiones con alta o baja concentración de equipos.</li>
+        <li>Planificar eventos, torneos y competencias considerando la localización de los equipos.</li>
+        <li>Facilitar la logística y el transporte para encuentros entre equipos.</li>
+        <li>Analizar la cobertura y expansión de los equipos en diferentes áreas geográficas.</li>
+    </ul>
+                <img src="data:image/png;base64,{{ team_map_base64 }}" alt="Mapa de Ubicaciones de los Equipos">
+            {% else %}
+                <p>No hay datos disponibles para mostrar el mapa.</p>
+            {% endif %}
+        </div>
+    </div>
 <!-- Sección para mostrar la gráfica de frecuencia de árbitros -->
 {% if arbitros_img_base64 %}
 <div id="arbitros-frecuencia" class="text-center my-4">
