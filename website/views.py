@@ -27,7 +27,6 @@ from sklearn.preprocessing import StandardScaler
 
 views = Blueprint('views', __name__)
  
-
 @views.route('/', methods=['GET', 'POST'])
 @login_required
 def home():
@@ -135,34 +134,37 @@ def home():
         # Aplicar clustering jerárquico a los equipos basado en las puntuaciones y faltas
         features = ['team_a_score', 'team_b_score', 'faltas_team_a', 'faltas_team_b']
         df_features = user_partidos[features].dropna()
-        scaler = StandardScaler()
-        scaled_features = scaler.fit_transform(df_features)
 
-        # Usar clustering jerárquico con SciPy
-        linked = linkage(scaled_features, method='ward')
+        # Verificar si hay suficientes datos para escalar
+        if not df_features.empty:
+            scaler = StandardScaler()
+            scaled_features = scaler.fit_transform(df_features)
 
-        # Crear el dendrograma con etiquetas más descriptivas
-        plt.figure(figsize=(14, 8))  # Reducir el tamaño del gráfico
-        dendrogram(linked,
-                   orientation='top',
-                   labels=list(user_partidos['team_names']),
-                   distance_sort='descending',
-                   show_leaf_counts=True)
-        plt.title('Dendrograma de Equipos Basado en Puntuaciones y Faltas')
-        plt.xlabel('Equipos')
-        plt.ylabel('Distancia')
-        plt.xticks(rotation=45, ha='right', fontsize=10)  # Rotar las etiquetas y ajustar su tamaño
-        plt.tight_layout()  # Ajustar el diseño para evitar etiquetas cortadas
+            # Usar clustering jerárquico con SciPy
+            linked = linkage(scaled_features, method='ward')
 
-        # Guardar la imagen en un buffer
-        buf = io.BytesIO()
-        plt.savefig(buf, format='png')
-        buf.seek(0)
+            # Crear el dendrograma con etiquetas más descriptivas
+            plt.figure(figsize=(14, 8))  # Reducir el tamaño del gráfico
+            dendrogram(linked,
+                       orientation='top',
+                       labels=list(user_partidos['team_names']),
+                       distance_sort='descending',
+                       show_leaf_counts=True)
+            plt.title('Dendrograma de Equipos Basado en Puntuaciones y Faltas')
+            plt.xlabel('Equipos')
+            plt.ylabel('Distancia')
+            plt.xticks(rotation=45, ha='right', fontsize=10)  # Rotar las etiquetas y ajustar su tamaño
+            plt.tight_layout()  # Ajustar el diseño para evitar etiquetas cortadas
 
-        # Codificar la imagen en base64
-        clusters_img_base64 = base64.b64encode(buf.read()).decode('utf-8')
-        buf.close()
-        plt.close()
+            # Guardar la imagen en un buffer
+            buf = io.BytesIO()
+            plt.savefig(buf, format='png')
+            buf.seek(0)
+
+            # Codificar la imagen en base64
+            clusters_img_base64 = base64.b64encode(buf.read()).decode('utf-8')
+            buf.close()
+            plt.close()
 
     return render_template("home.html", user=current_user, avg_time=avg_time, earliest_time=earliest_time, latest_time=latest_time, avg_age=avg_age, user_id=user_id, num_partidos=num_partidos, num_jugadores=num_jugadores, arbitros_img_base64=arbitros_img_base64, clusters_img_base64=clusters_img_base64)
 
